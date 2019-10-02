@@ -7,7 +7,6 @@
 3. If using pdf or images upload them to the assets folder.
 4. DO NOT erase or mess with any of the other folders and/or files without consulting with the organisation, as they are necessary for the website structure, layout and integrity.
 
-SPECIAL NOTE: When creating links to .md files within this project replace .md by .html
 
 ## Deployment instructions
 
