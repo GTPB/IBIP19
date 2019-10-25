@@ -11,7 +11,7 @@ Due to the novelty of the field, the complexity of the analyses, and the volume 
 
 ## A word of caution
 
-Please note that this tutorial starts from the results of proteomic and genomic analyses, and does not cover the details of respective bioinformatic pipelines, like the calling of variants. Please note also that the generation and analysis of proteomic data for proteogenomic application differ from standard proteomic analyses, requiring specific methods and expertise. Notably, the identification of alternative products of transcription/translation and the calling of variants in proteomics data require high coverage and high resolution proteomic analyses. These analyses also require the use of complex bioinformatic workflows in high performance environments. Finally, they can benefit from tailoring the experimental workflow in relationship to the bioinformatic analysis [(4)](#references).
+Please note that this tutorial starts from the results of proteomic and genomic analyses, and does not cover the details of respective bioinformatic pipelines, like the calling of variants. Please note also that the generation and analysis of proteomic data for proteogenomic application differ from standard proteomic analyses, requiring specific methods and expertise. Notably, the identification of non-canonical genetic products of transcription/translation and the calling of variants in proteomics data require high coverage and high resolution proteomic analyses. These analyses also require the use of complex bioinformatic workflows in high performance environments. Finally, they can benefit from tailoring the experimental workflow in relationship to the bioinformatic analysis [(4)](#references).
 
 Note that establishing a proteogenomic workflow, in both wet- and dry-lab is a long-term endeavor. If you plan to conduct a proteogenomic experiment, please give particular attention to the following questions:
 - Do I have enough sample material, replicates, and controls?
@@ -20,20 +20,33 @@ Note that establishing a proteogenomic workflow, in both wet- and dry-lab is a l
 
 When in doubt, consider running a small pilot experiment to benchmark the performance of your analytical set-up. Also, prioritize proteomics labs that have experience with proteogenomic analyses and analyzing the data.
 
+## Proteogenomics Lexicon
+
+![From_Genes_To_Proteoforms](proteogenomics/resources/images/Insulin.png?raw=true "Insulin from gene to proteoforms")
+> The production of human insulin from the transcript INS-201 according to Ensembl release 97. (a) The transcript is coded by three exons on chromosome eleven, colored in yellow, orange, and dark red. The translated sequence is underlined. Sequence variation in the translated sequence can result in sequence variations in the amino acid sequence, and hence different proteoforms. (b) The sequence obtained after translation represents the raw proteoform of insulin, called preproinsulin, which requires posttranslational maturation to obtain the mature form of insulin. Amino acids are colored according to the coding exons and the residue overlapping splice site is underlined. (c) The signal peptide is cleaved, yielding proinsulin, and cysteines cross-linked by disulphide bonds, making a new proteoform of insulin. (d) Proteases cleave a large fragment of the sequence, the C-peptide. The C-peptide is often used as a proxy to measure insulin production. (e) Proteases cleave pairs of amino-acids, yielding the mature form of insulin. (f) The mature form of insulin consists of two cross-linked peptides. It can be further modified, yielding even more proteoforms. From [(5)](#references), adapted from [en.wikipedia.org/wiki/Insulin](https://en.wikipedia.org/wiki/Insulin#/media/File:Insulin_path.svg).
+
+- _Variant, Mutation, Alteration_: A genetic variant or mutation refers to a variation in the genetic sequence. When the variation is not inherited, it is called alteration. Variants involving the substitution of a single nucleotide are called single-nucleotide polymorphism (SNP) or single-nucleotide variant (SNV). SNP refers to variants where each version is carried by more than 1% of the population. When a variation of one amino acid is detected in the proteome, it is refered to as single amino acid variant (SAV or SAAV). Variants involving the deletion or insertion of genetic code are called indels. Variants involving the repeat of sections of the genome are examples of structural variation, and called Copy-number variation (CNV). When the variation is not inherited, it is called copy-number alteration (CNA).
+
+- _Peptides, Proteins, isoforms, and proteoforms_: peptides and proteins are short and long chains of amino acids, respectively. Proteins are generally associated to a gene which codes their amino acid chain. Differences in splicing yield different isoforms for most proteins. During their lifetime, proteins undergo structural modification: cleavage, folding, cross-linking, post-translational modification (PTM), etc. These modifications yield very different forms for each protein, called proteoforms [(6)](#references).
+
+- _Non-canonical genetic product_: Peptide or protein produced from regions of the genome that are canonically non-coding.
+
 ## Tutorials
 
-- [Novel peptides](): mapping proteomics results to non-coding loci.
+- [Novel peptides](proteogenomics/novel_peptides.md): mapping proteomics results to non-coding regions of the genome.
 
-- [Variation Analysis](): studying sequence and splicing variation in proteomics data.
+- [Variation Analysis](proteogenomics/variation_analysis.md): studying sequence and splicing variation in proteomics data.
 
-- [CNA-Protein](): linking structural variants and protein levels to study CNA dampening/silencing.
+- [CNA-Protein](proteogenomics/can_protein.md): linking structural variants and protein levels to study CNA dampening/silencing.
 
-- [RNA-Protein](): compatring RNA and protein levels to identify key biological mechanisms.
+- [RNA-Protein](proteogenomics/rna_protein.md): compatring RNA and protein levels to identify key biological mechanisms.
 
 
 ## References
 
-(1) [Proteogenomics: concepts, applications and computational strategies](https://www.ncbi.nlm.nih.gov/pubmed/25357241)
-(2) [Proteogenomic mapping as a complementary method to perform genome annotation](https://www.ncbi.nlm.nih.gov/pubmed/14730672)
-(3) [Proteogenomics from a bioinformatics angle: A growing field](https://www.ncbi.nlm.nih.gov/pubmed/26670565)
-(4) [HiRIEF LC-MS enables deep proteome coverage and unbiased proteogenomics](https://www.ncbi.nlm.nih.gov/pubmed/24240322)
+(1) [_Proteogenomics: concepts, applications and computational strategies_](https://www.ncbi.nlm.nih.gov/pubmed/25357241)
+(2) [_Proteogenomic mapping as a complementary method to perform genome annotation_](https://www.ncbi.nlm.nih.gov/pubmed/14730672)
+(3) [_Proteogenomics from a bioinformatics angle: A growing field_](https://www.ncbi.nlm.nih.gov/pubmed/26670565)
+(4) [_HiRIEF LC-MS enables deep proteome coverage and unbiased proteogenomics_](https://www.ncbi.nlm.nih.gov/pubmed/24240322)
+(5) [_Proteomics_](rcs.org) in [_Processing Metabolomics and Proteomics Data_](rcs.org)
+(6) [_Proteoform: a single term describing protein complexity_](https://www.ncbi.nlm.nih.gov/pubmed/23443629)
