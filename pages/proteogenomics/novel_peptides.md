@@ -33,6 +33,10 @@ installed.
 library(dplyr)
 ```
 
+We will use [dplyr](dplyr.tidyverse.org) to transform data, we recommend
+this [cheat
+sheet](https://github.com/rstudio/cheatsheets/blob/master/data-transformation.pdf).
+
 ## Data set
 
 In this tutorial, we will analyze the non-canonical genomic products
@@ -69,38 +73,45 @@ novelPeptidesDF <- read.table(
 ##### :pencil2: Find the different classes of loci represented.
 
 ``` r
-knitr::kable(
-    as.data.frame(
+classesDF <- as.data.frame(
         table(
             novelPeptidesDF$class
             )
-        )
+        ) %>%
+    rename(
+        Class = Var1,
+        n_loci = Freq
+    ) %>%
+    arrange(
+        desc(n_loci)
     )
+
+knitr::kable(classesDF)
 ```
 
-| Var1                     | Freq |
-| :----------------------- | ---: |
-| exonic                   |   17 |
-| exonic-intronic          |    4 |
-| exonic-ncRNA\_exonic     |    2 |
-| exonic-splicing          |    1 |
-| exonic-upstream          |    1 |
-| exonic-UTR5              |   12 |
-| intergenic               |  172 |
-| intergenic-ncRNA\_exonic |    1 |
-| intronic                 |   91 |
-| intronic-exonic          |   10 |
-| ncRNA\_exonic            |   18 |
-| ncRNA\_exonic-exonic     |    1 |
-| ncRNA\_intronic          |   22 |
-| splicing-intronic        |    1 |
-| upstream                 |    3 |
-| UTR3                     |    1 |
-| UTR5                     |   16 |
-| UTR5-exonic              |   14 |
-| UTR5-upstream            |    1 |
+| Class                    | n\_loci |
+| :----------------------- | ------: |
+| intergenic               |     172 |
+| intronic                 |      91 |
+| ncRNA\_intronic          |      22 |
+| ncRNA\_exonic            |      18 |
+| exonic                   |      17 |
+| UTR5                     |      16 |
+| UTR5-exonic              |      14 |
+| exonic-UTR5              |      12 |
+| intronic-exonic          |      10 |
+| exonic-intronic          |       4 |
+| upstream                 |       3 |
+| exonic-ncRNA\_exonic     |       2 |
+| exonic-splicing          |       1 |
+| exonic-upstream          |       1 |
+| intergenic-ncRNA\_exonic |       1 |
+| ncRNA\_exonic-exonic     |       1 |
+| splicing-intronic        |       1 |
+| UTR3                     |       1 |
+| UTR5-upstream            |       1 |
 
-##### [:thought\_balloon:](answers.md#thought_balloon-based-on-you-knowledge-of-peptide-and-protein-identification-can-you-anticipate-challenges-posed-by-these-proteogenomic-databases) *How can we speculate on these different classes of loci yielding detectable peptides?*
+##### [:thought\_balloon:](answers.md#thought_balloon-how-can-we-speculate-on-these-different-classes-of-loci-yielding-detectable-peptides) *How can we speculate on these different classes of loci yielding detectable peptides?*
 
 ## References
 

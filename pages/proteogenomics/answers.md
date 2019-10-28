@@ -59,7 +59,9 @@ This document contains two tables, a list of novel peptides and a list of peptid
 | TMT intensity | Intensity of the fragment ions from the different TMT channels. |
 
 
-##### [:thought_balloon:](novel_peptides.md#thought_balloon-based-on-you-knowledge-of-peptide-and-protein-identification-can-you-anticipate-challenges-posed-by-these-proteogenomic-databases) _How can we speculate on these different classes of loci yielding detectable peptides?_
+##### [:thought_balloon:](novel_peptides.md#thought_balloon-how-can-we-speculate-on-these-different-classes-of-loci-yielding-detectable-peptides) _How can we speculate on these different classes of loci yielding detectable peptides?_
+
+
 
 
 ## References
