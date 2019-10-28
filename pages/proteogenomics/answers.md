@@ -20,11 +20,11 @@ This document contains two tables, a list of novel peptides and a list of peptid
 | Peptide Sequence | The amino acid sequence of the identified peptide. |
 | MSGF+ SpecEva | The score (e-value) produced by the search engine (ms-gf+) when evaluating the match between the peptide and the fragmentation spectrum. The lower, the better. |
 | # PSMs | The number of spectra where this peptide was matched. The more, the better. |
-| Annotation - GRCh37 - hg19 | The annotation of the genetic locus coding the peptide. _GRCh37 - hg19_ corresponds to the build of the genome used for the analysis. |
+| Annotation - GRCh37 - hg19 | The annotation of the genetic locus coding the peptide. _GRCh37/hg19_ corresponds to the build of the genome used for the analysis. |
 | Chromosome, start, end, strand, locus number | Genomic coordinates of the locus coding the peptide in the GRCh37 build. |
 | Category and sequence similarity to known proteins | Quality control report on possible mismatch with other proteins. Note that this is provided at two different steps of the bioinformatic pipeline. See _Proteogenomics search and Class-specific FDR_ in the [Supplementary Information](../resources/Johansson_et_al_breast_cancer_quantitative_proteome_and_proteogenomic_landscape/supplementary_information.pdf). |
 | Peptide explained by nsSNP in CanProVar 2.0 | Known variation that could explain the peptide. |
-| hg38_coordinates | Genomic coordinates of the locus coding the peptide in the GRCh38 build. |
+| hg38_coordinates | Genomic coordinates of the locus coding the peptide in the _GRCh38/hg38_ build. |
 | (closest) matched protein | Protein best matched with this peptide. |
 | Nterm.seq.3aa. - Aligned sequence - Cterm.seq.3aa. | Sequence, upstream, and downstream amino acids in the mached protein. |
 | Identity | Identity score between the peptide and its matched counterpart. The higher the better. |
@@ -59,9 +59,22 @@ This document contains two tables, a list of novel peptides and a list of peptid
 | TMT intensity | Intensity of the fragment ions from the different TMT channels. |
 
 
-##### [:thought_balloon:](novel_peptides.md#thought_balloon-how-can-we-speculate-on-these-different-classes-of-loci-yielding-detectable-peptides) _Can you speculate on how these different classes of loci can yield detectable peptides?_
+##### [:thought_balloon:](novel_peptides.md#thought_balloon-can-you-speculate-on-how-these-different-classes-of-loci-can-yield-detectable-peptides) _Can you speculate on how these different classes of loci can yield detectable peptides?_
 
+Mutations can yield new coding regions through alteration of start, stop, and splicing information. Exons can hence be extended by upstream and downstream regions, extending canonical sequences and disrupting splicing. Alternatively, completely new peptides or proteins can be created from intergenic regions.
 
+##### [:thought_balloon:](novel_peptides.md#thought_balloon-what-do-these-categories-represent) _What do these categories represent?_
+
+| Category | # Peptides | Description |
+| -------- | ----------- |
+| pseudogene | 93 | Pseudogenes are segments of DNA related to real genes but have lost functionality. |
+| 5UTR | 43 | 5′ untranslated region (5′ UTR) is directly upstream of the translated region. |
+| intronic | 33 | Introns are nucleotide sequence removed by RNA splicing. |
+| exonic.Alt.ORF | 18 | Exons from alternative open reading frames. |
+| exon_extension | 14 | Extension of exon. |
+| ncRNA | 12 | Non-coding RNA |
+| intergenic | 2 | Intergenic section |
+| 3UTR | 1 | 3′ untranslated region (3′ UTR) is directly downstream of the translated region. |
 
 
 ## References

@@ -79,39 +79,86 @@ classesDF <- as.data.frame(
             )
         ) %>%
     rename(
-        Class = Var1,
-        n_loci = Freq
+        class = Var1,
+        n_peptides = Freq
     ) %>%
     arrange(
-        desc(n_loci)
+        desc(n_peptides)
     )
 
 knitr::kable(classesDF)
 ```
 
-| Class                    | n\_loci |
-| :----------------------- | ------: |
-| intergenic               |     172 |
-| intronic                 |      91 |
-| ncRNA\_intronic          |      22 |
-| ncRNA\_exonic            |      18 |
-| exonic                   |      17 |
-| UTR5                     |      16 |
-| UTR5-exonic              |      14 |
-| exonic-UTR5              |      12 |
-| intronic-exonic          |      10 |
-| exonic-intronic          |       4 |
-| upstream                 |       3 |
-| exonic-ncRNA\_exonic     |       2 |
-| exonic-splicing          |       1 |
-| exonic-upstream          |       1 |
-| intergenic-ncRNA\_exonic |       1 |
-| ncRNA\_exonic-exonic     |       1 |
-| splicing-intronic        |       1 |
-| UTR3                     |       1 |
-| UTR5-upstream            |       1 |
+| class                    | n\_peptides |
+| :----------------------- | ----------: |
+| intergenic               |         172 |
+| intronic                 |          91 |
+| ncRNA\_intronic          |          22 |
+| ncRNA\_exonic            |          18 |
+| exonic                   |          17 |
+| UTR5                     |          16 |
+| UTR5-exonic              |          14 |
+| exonic-UTR5              |          12 |
+| intronic-exonic          |          10 |
+| exonic-intronic          |           4 |
+| upstream                 |           3 |
+| exonic-ncRNA\_exonic     |           2 |
+| exonic-splicing          |           1 |
+| exonic-upstream          |           1 |
+| intergenic-ncRNA\_exonic |           1 |
+| ncRNA\_exonic-exonic     |           1 |
+| splicing-intronic        |           1 |
+| UTR3                     |           1 |
+| UTR5-upstream            |           1 |
 
-##### [:thought\_balloon:](answers.md#thought_balloon-how-can-we-speculate-on-these-different-classes-of-loci-yielding-detectable-peptides) *How can we speculate on these different classes of loci yielding detectable peptides?*
+##### [:thought\_balloon:](answers.md#thought_balloon-can-you-speculate-on-how-these-different-classes-of-loci-can-yield-detectable-peptides) *Can you speculate on how these different classes of loci can yield detectable peptides?*
+
+##### :pencil2: For the non-intergenic peptides, find the different categories of associated genes.
+
+``` r
+novelPeptidesDF %>% 
+    filter(
+        class != "intergenic"
+    ) %>%
+    select(
+        nearest_gene, category
+    ) -> geneDF
+
+categoriesDF <- as.data.frame(
+        table(
+            geneDF$category
+            )
+        ) %>%
+    rename(
+        category = Var1,
+        n_peptides = Freq
+    ) %>%
+    arrange(
+        desc(n_peptides)
+    )
+
+knitr::kable(categoriesDF)
+```
+
+| category        | n\_peptides |
+| :-------------- | ----------: |
+| pseudogene      |          93 |
+| 5UTR            |          43 |
+| intronic        |          33 |
+| exonic.Alt.ORF  |          18 |
+| exon\_extension |          14 |
+| ncRNA           |          12 |
+| intergenic      |           2 |
+| 3UTR            |           1 |
+
+##### [:thought\_balloon:](answers.md#thought_balloon-what-do-these-categories-represent) *What do these categories represent?*
+
+##### :pencil2: Select peptides from the different classes and categories, and inspect the genetic landscape at these positions using the Ensembl or UCSC genome browsers.
+
+[Example for locus \#9
+(Intronic)](grch37.ensembl.org/Homo_sapiens/Location/View?r=1:51913622-51913666)
+
+##### :speech\_balloon: Can you speculate on the function or effect of these novel peptides in cancer biology? How can these be used in a clinical setup?
 
 ## References
 
