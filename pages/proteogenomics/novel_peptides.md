@@ -153,10 +153,7 @@ knitr::kable(categoriesDF)
 
 ##### [:thought\_balloon:](answers.md#thought_balloon-what-do-these-categories-represent) *What do these categories represent?*
 
-##### :pencil2: Select peptides from the different classes and categories, and inspect the genetic landscape at these positions using the Ensembl or UCSC genome browsers.
-
-[Example for locus \#9
-(Intronic)](grch37.ensembl.org/Homo_sapiens/Location/View?r=1:51913622-51913666)
+##### :pencil2: Select peptides from the different classes and categories, and inspect the genetic landscape at these positions using the Ensembl or UCSC genome browsers. [Example for locus \#9 (Intronic)](https://grch37.ensembl.org/Homo_sapiens/Location/View?r=1:51913622-51913666)
 
 ##### :speech\_balloon: Can you speculate on the function or effect of these novel peptides in cancer biology? How can these be used in a clinical setup?
 
