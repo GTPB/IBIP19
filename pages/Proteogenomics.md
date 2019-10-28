@@ -31,6 +31,14 @@ When in doubt, consider running a small pilot experiment to benchmark the perfor
 
 - _Non-canonical genetic product_: Peptide or protein produced from regions of the genome that are canonically non-coding.
 
+## Legend
+
+You will find the following icons throughout the text:
+
+* :pencil2: : You need to do something
+* :thought_balloon: : A question to trigger your attention on an important point of detail. Clicking the icon takes you to the answer.
+* :speech_balloon: : Something you might want to discuss with someone else (or yourself).
+
 ## Tutorials
 
 - [Novel peptides](proteogenomics/novel_peptides.md): mapping proteomics results to non-coding regions of the genome.
@@ -45,8 +53,12 @@ When in doubt, consider running a small pilot experiment to benchmark the perfor
 ## References
 
 (1) [_Proteogenomics: concepts, applications and computational strategies_](https://www.ncbi.nlm.nih.gov/pubmed/25357241)
+
 (2) [_Proteogenomic mapping as a complementary method to perform genome annotation_](https://www.ncbi.nlm.nih.gov/pubmed/14730672)
+
 (3) [_Proteogenomics from a bioinformatics angle: A growing field_](https://www.ncbi.nlm.nih.gov/pubmed/26670565)
+
 (4) [_HiRIEF LC-MS enables deep proteome coverage and unbiased proteogenomics_](https://www.ncbi.nlm.nih.gov/pubmed/24240322)
+
 (5) [_Proteomics_](rcs.org) in [_Processing Metabolomics and Proteomics Data_](rcs.org)
 (6) [_Proteoform: a single term describing protein complexity_](https://www.ncbi.nlm.nih.gov/pubmed/23443629)
