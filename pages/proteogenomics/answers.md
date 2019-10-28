@@ -17,7 +17,7 @@ _What do the different columns in the table represent?_
 
 This document contains two tables, a list of novel peptides and a list of peptides containing single amino acid variats (SAAV).
 
-#### Novel Peptides
+- Novel Peptides
 
 | Column Name | Description |
 | ----------- | ----------- |
@@ -41,7 +41,7 @@ This document contains two tables, a list of novel peptides and a list of peptid
 | TMT quantification | Abundance of the peptide in the different tumors screened. |
 | Orthogonal data | Additional data on the peptide: see _Orthogonal validation data of proteogenomics searches_ in the [Supplementary Information](../resources/Johansson_et_al_breast_cancer_quantitative_proteome_and_proteogenomic_landscape/supplementary_information.pdf). |
 
-#### SAAV
+- SAAV
 
 | Column Name | Description |
 | ----------- | ----------- |
