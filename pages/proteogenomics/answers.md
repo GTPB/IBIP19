@@ -66,7 +66,7 @@ Mutations can yield new coding regions through alteration of start, stop, and sp
 ##### [:thought_balloon:](novel_peptides.md#thought_balloon-what-do-these-categories-represent) _What do these categories represent?_
 
 | Category | # Peptides | Description |
-| -------- | ----------- |
+| -------- | ---------- | ----------- |
 | pseudogene | 93 | Pseudogenes are segments of DNA related to real genes but have lost functionality. |
 | 5UTR | 43 | 5′ untranslated region (5′ UTR) is directly upstream of the translated region. |
 | intronic | 33 | Introns are nucleotide sequence removed by RNA splicing. |
