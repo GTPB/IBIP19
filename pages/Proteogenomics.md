@@ -36,8 +36,10 @@ When in doubt, consider running a small pilot experiment to benchmark the perfor
 You will find the following icons throughout the text:
 
 * :pencil2: : You need to do something
-* :thought_balloon: : A question to trigger your attention on an important point of detail. Clicking the icon takes you to the answer.
 * :speech_balloon: : Something you might want to discuss with someone else (or yourself).
+* :thought_balloon: : A question to trigger your attention on an important point of detail. Clicking the icon takes you to the answer and more literature on the subject. 
+
+Please note that questions rarely trigger a yes/no answer. The answers provided represent important elements to take into account when analyzing data, but are by no means exhaustive or universal.
 
 ## Tutorials
 
@@ -61,4 +63,5 @@ You will find the following icons throughout the text:
 (4) [_HiRIEF LC-MS enables deep proteome coverage and unbiased proteogenomics_](https://www.ncbi.nlm.nih.gov/pubmed/24240322)
 
 (5) [_Proteomics_](rcs.org) in [_Processing Metabolomics and Proteomics Data_](rcs.org)
+
 (6) [_Proteoform: a single term describing protein complexity_](https://www.ncbi.nlm.nih.gov/pubmed/23443629)
