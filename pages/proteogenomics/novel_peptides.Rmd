@@ -81,7 +81,7 @@ knitr::kable(classesDF)
 
 ```
 
-##### [:thought_balloon:](answers.md#thought_balloon-how-can-we-speculate-on-these-different-classes-of-loci-yielding-detectable-peptides) _How can we speculate on these different classes of loci yielding detectable peptides?_
+##### [:thought_balloon:](answers.md#thought_balloon-how-can-we-speculate-on-these-different-classes-of-loci-yielding-detectable-peptides) _Can you speculate on how these different classes of loci can yield detectable peptides?_
 
 ## References
 
