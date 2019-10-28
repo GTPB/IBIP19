@@ -29,6 +29,10 @@ run this tutorial.
 You will need the following libraries, please make sure that they are
 installed.
 
+``` r
+library(dplyr)
+```
+
 ## Data set
 
 In this tutorial, we will analyze the non-canonical genomic products
@@ -50,6 +54,8 @@ For this tutorial, the *Novel Peptides* table was extracted to an
 R-friendly text format, and is available
 [here](resources/data/novel_peptides.txt).
 
+##### :pencil2: Load the data in R as in the code below.
+
 ``` r
 novelPeptidesDF <- read.table(
     file = "resources/data/novel_peptides.txt",
@@ -60,7 +66,41 @@ novelPeptidesDF <- read.table(
 )
 ```
 
-##### :pencil2:
+##### :pencil2: Find the different classes of loci represented.
+
+``` r
+knitr::kable(
+    as.data.frame(
+        table(
+            novelPeptidesDF$class
+            )
+        )
+    )
+```
+
+| Var1                     | Freq |
+| :----------------------- | ---: |
+| exonic                   |   17 |
+| exonic-intronic          |    4 |
+| exonic-ncRNA\_exonic     |    2 |
+| exonic-splicing          |    1 |
+| exonic-upstream          |    1 |
+| exonic-UTR5              |   12 |
+| intergenic               |  172 |
+| intergenic-ncRNA\_exonic |    1 |
+| intronic                 |   91 |
+| intronic-exonic          |   10 |
+| ncRNA\_exonic            |   18 |
+| ncRNA\_exonic-exonic     |    1 |
+| ncRNA\_intronic          |   22 |
+| splicing-intronic        |    1 |
+| upstream                 |    3 |
+| UTR3                     |    1 |
+| UTR5                     |   16 |
+| UTR5-exonic              |   14 |
+| UTR5-upstream            |    1 |
+
+##### [:thought\_balloon:](answers.md#thought_balloon-based-on-you-knowledge-of-peptide-and-protein-identification-can-you-anticipate-challenges-posed-by-these-proteogenomic-databases) *How can we speculate on these different classes of loci yielding detectable peptides?*
 
 ## References
 
