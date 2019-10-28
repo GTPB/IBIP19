@@ -5,19 +5,19 @@ title: Answers-Proteogenomics
 
 # Answers - Proteogenomics
 
-#### 1.1
+### 1.1
 
 _Based on you knowledge of peptide and protein identification, can you anticipate challenges posed by these proteogenomic databases?_
 
 The first challenge posed by proteogenomic databases is that they are very large, and therefore require much more computational power. The inflation in the collection of possible sequences, called search space, also increases the probability that two peptide sequences are similar, hence reducing the discrimination power of search engines. Thus reduced discrimination power results in a reduced identification rate at fixed error rate [(1)](#references). The estimation of error rates in proteomics usually relies on the target-decoy approach [(2)](#references), which is very reliable to track random matches, but not the errors due to partial matches [(3)](#references). Consequently, error rate estimation is very challenging in proteogenomic databases and requires spectrum-level inspection of the matches [(4)](#references). Finally, The increased number of similar sequences reduces the probability to find peptides unique to a protein, hence complexifying protein inference [(5)](#references).
 
-#### 1.2
+### 1.2
 
 _What do the different columns in the table represent?_
 
 This document contains two tables, a list of novel peptides and a list of peptides containing single amino acid variats (SAAV).
 
-** Novel Peptides **
+#### Novel Peptides
 
 | Column Name | Description |
 | ----------- | ----------- |
@@ -41,7 +41,7 @@ This document contains two tables, a list of novel peptides and a list of peptid
 | TMT quantification | Abundance of the peptide in the different tumors screened. |
 | Orthogonal data | Additional data on the peptide: see _Orthogonal validation data of proteogenomics searches_ in the [Supplementary Information](../resources/Johansson_et_al_breast_cancer_quantitative_proteome_and_proteogenomic_landscape/supplementary_information.pdf). |
 
-** SAAV **
+#### SAAV
 
 | Column Name | Description |
 | ----------- | ----------- |
