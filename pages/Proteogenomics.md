@@ -41,13 +41,13 @@ You will find the following icons throughout the text:
 
 ## Tutorials
 
-- [Novel peptides](proteogenomics/novel_peptides.md): mapping proteomics results to non-coding regions of the genome.
+- [1. Novel peptides](proteogenomics/novel_peptides.md): mapping proteomics results to non-coding regions of the genome.
 
-- [Variation Analysis](proteogenomics/variation_analysis.md): studying sequence and splicing variation in proteomics data.
+- [2. Variation Analysis](proteogenomics/variation_analysis.md): studying sequence and splicing variation in proteomics data.
 
-- [CNA-Protein](proteogenomics/can_protein.md): linking structural variants and protein levels to study CNA dampening/silencing.
+- [3. CNA-Protein](proteogenomics/can_protein.md): linking structural variants and protein levels to study CNA dampening/silencing.
 
-- [RNA-Protein](proteogenomics/rna_protein.md): compatring RNA and protein levels to identify key biological mechanisms.
+- [4. RNA-Protein](proteogenomics/rna_protein.md): compatring RNA and protein levels to identify key biological mechanisms.
 
 
 ## References
