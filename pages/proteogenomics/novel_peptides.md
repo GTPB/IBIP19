@@ -13,7 +13,7 @@ Mutations in the genome can alter the sequence so that non-coding sections becom
 
 In this tutorial, we will analyze the non-canonical genomic products identified in breast cancer by Johansson _et al._ [(2)](#references). Note that this tutorial does not cover the database generation, search, and validation of identification results. These bioinformatic procedures are very demanding and we strongly advise to make sure that they are in place at your lab or at the facility processing the data before conducting any proteogenomic experiment. The proteogenomic identification results by Johansson _et al._ [(2)](#references) are reported in Supplementary Data 6, available [here](../resources/Johansson_et_al_breast_cancer_quantitative_proteome_and_proteogenomic_landscape) in the course repository.
 
-[:speech_balloon:](answers.md#12) 1.2 - _What do the different column represent?_
+[:speech_balloon:](answers.md#12) 1.2 - _What do the different columns in the table represent?_
 
 
 ## References

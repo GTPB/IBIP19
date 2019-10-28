@@ -39,7 +39,7 @@ Strictly speaking, there are no pre-requisites. Prior knowledge that will be use
 - Quantitative profiling of protein complexes
 - Comparison of different platforms for functional enrichment of biological pathways and their network representation
 
-### [Day 4](pages/day4.md): back to the genome
+### [Day 4](pages/proteogenomics.md): back to the genome
 - How do I map my proteomics results to the genome?
 - How do I find the effect of genomic variation to the genome?
 - How do I match genomics, transcriptomics, and proteomics data and what to expect from the results?
