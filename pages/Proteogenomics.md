@@ -37,7 +37,7 @@ You will find the following icons throughout the text:
 
 * :pencil2: : You need to do something
 * :speech_balloon: : Something you might want to discuss with someone else (or yourself).
-* :thought_balloon: : A question to trigger your attention on an important point of detail. Clicking the icon takes you to the answer and more literature on the subject. 
+* :thought_balloon: : A question to trigger your attention on an important point of detail. Clicking the icon takes you to the answer and more literature on the subject. Clicking the icon in the answer takes you back to the question.
 
 Please note that questions rarely trigger a yes/no answer. The answers provided represent important elements to take into account when analyzing data, but are by no means exhaustive or universal.
 
