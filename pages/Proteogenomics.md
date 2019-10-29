@@ -23,6 +23,7 @@ When in doubt, consider running a small pilot experiment to benchmark the perfor
 ## Proteogenomics Lexicon
 
 ![From_Genes_To_Proteoforms](proteogenomics/resources/images/Insulin.png?raw=true "Insulin from gene to proteoforms")
+
 > The production of human insulin from the transcript INS-201 according to Ensembl release 97. (a) The transcript is coded by three exons on chromosome eleven, colored in yellow, orange, and dark red. The translated sequence is underlined. Sequence variation in the translated sequence can result in sequence variations in the amino acid sequence, and hence different proteoforms. (b) The sequence obtained after translation represents the raw proteoform of insulin, called preproinsulin, which requires posttranslational maturation to obtain the mature form of insulin. Amino acids are colored according to the coding exons and the residue overlapping splice site is underlined. (c) The signal peptide is cleaved, yielding proinsulin, and cysteines cross-linked by disulphide bonds, making a new proteoform of insulin. (d) Proteases cleave a large fragment of the sequence, the C-peptide. The C-peptide is often used as a proxy to measure insulin production. (e) Proteases cleave pairs of amino-acids, yielding the mature form of insulin. (f) The mature form of insulin consists of two cross-linked peptides. It can be further modified, yielding even more proteoforms. From [(5)](#references), adapted from [en.wikipedia.org/wiki/Insulin](https://en.wikipedia.org/wiki/Insulin#/media/File:Insulin_path.svg).
 
 - _Variant, Mutation, Alteration_: A genetic variant or mutation refers to a variation in the genetic sequence. When the variation is not inherited, it is called alteration. Variants involving the substitution of a single nucleotide are called single-nucleotide polymorphism (SNP) or single-nucleotide variant (SNV). SNP refers to variants where each version is carried by more than 1% of the population. When a variation of one amino acid is detected in the proteome, it is refered to as single amino acid variant (SAV or SAAV). Variants involving the deletion or insertion of genetic code are called indels. Variants involving the repeat of sections of the genome are examples of structural variation, and called Copy-number variation (CNV). When the variation is not inherited, it is called copy-number alteration (CNA).
@@ -40,6 +41,22 @@ You will find the following icons throughout the text:
 * :thought_balloon: : A question to trigger your attention on an important point of detail. Clicking the icon takes you to the answer and more literature on the subject. Clicking the icon in the answer takes you back to the question.
 
 Please note that questions rarely trigger a yes/no answer. The answers provided represent important elements to take into account when analyzing data, but are by no means exhaustive or universal.
+
+
+## Processing
+
+This tutorial is organized in notebooks that contains [R](r-project.org) code that can be run directly from the _Rmd_ file. It assumes that the R working directory is the proteogenomics folder of the repository, _e.g._ `/myfolder/IBIP19/pages/proteogenomics`. We recommend using RStudio to run this tutorial.
+
+
+## Libraries
+
+You will need the following libraries, please make sure that they are installed.
+
+- We will use [tidyr](tidyr.tidyverse.org) to import data, we recommend this [cheat sheet](https://github.com/rstudio/cheatsheets/blob/master/data-import.pdf).
+- We will use [dplyr](dplyr.tidyverse.org) to transform data, we recommend this [cheat sheet](https://github.com/rstudio/cheatsheets/blob/master/data-transformation.pdf).
+- We will use [ggplot2](ggplot2.tidyverse.org) to plot data, we recommend this [cheat sheet](https://github.com/rstudio/cheatsheets/blob/master/data-visualization-2.1.pdf).
+- We will use [scico](https://github.com/thomasp85/scico) for color palette. Scico is based on [Scientific Colour-Maps](http://www.fabiocrameri.ch/colourmaps.php) that are perceptually uniform, perceptually ordered, colour-vision-deficiency friendly, readable as black-and-white print, and therefore perfectly suited for scientific illustrations. 
+
 
 ## Tutorials
 
