@@ -19,7 +19,7 @@ In the [previous chapter](novel_peptides.md), novel peptides were identified by 
 
 ![Figure_7h](resources/images/Fig7h.png?raw=true "Johansson et al. Fig 7h")
 
-##### [:thought_balloon:](answers.md#thought_balloon-based-on-you-knowledge-of-peptide-and-protein-identification-can-you-anticipate-challenges-posed-by-these-proteogenomic-databases) _If we assume a linear relationship between number of alleles and peptide abundance, what should be the distribution of intensities?_
+##### [:thought_balloon:](answers.md#thought_balloon-if-we-assume-a-linear-relationship-between-number-of-alleles-and-peptide-abundance-what-should-be-the-distribution-of-intensities) _If we assume a linear relationship between number of alleles and peptide abundance, what should be the distribution of intensities?_
 
 ## References
 

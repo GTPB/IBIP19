@@ -15,7 +15,7 @@ and alternative alleles of corresponding SNPs for each genotype.
 ![Figure\_7h](resources/images/Fig7h.png?raw=true
 "Johansson et al. Fig 7h")
 
-##### [:thought\_balloon:](answers.md#thought_balloon-based-on-you-knowledge-of-peptide-and-protein-identification-can-you-anticipate-challenges-posed-by-these-proteogenomic-databases) *If we assume a linear relationship between number of alleles and peptide abundance, what should be the distribution of intensities?*
+##### [:thought\_balloon:](answers.md#thought_balloon-if-we-assume-a-linear-relationship-between-number-of-alleles-and-peptide-abundance-what-should-be-the-distribution-of-intensities) *If we assume a linear relationship between number of alleles and peptide abundance, what should be the distribution of intensities?*
 
 ## References
 

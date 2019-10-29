@@ -81,7 +81,7 @@ Mutations can yield new coding regions through alteration of start, stop, and sp
 
 ## 2. Variation Analysis
 
-##### [:thought_balloon:](answers.md#thought_balloon-based-on-you-knowledge-of-peptide-and-protein-identification-can-you-anticipate-challenges-posed-by-these-proteogenomic-databases) _If we assume a linear relationship between number of alleles and peptide abundance, what should be the distribution of intensities?_
+##### [:thought_balloon:](variation_analysis.md#thought_balloon-if-we-assume-a-linear-relationship-between-number-of-alleles-and-peptide-abundance-what-should-be-the-distribution-of-intensities) _If we assume a linear relationship between number of alleles and peptide abundance, what should be the distribution of intensities?_
 
 ![peptide_per_allele](resources/images/peptideAllelePlot.png?raw=true "Peptide intensity vs genotype")
 
