@@ -1,9 +1,19 @@
 ---
-layout: page
-title: Variation Analysis
+title: "Variation Analysis"
+author: Marc Vaudel
+date: 2019-10-28
+output: 
+    github_document:
+    toc: true
+    toc_depth: 1
 ---
 
-# Variation Analysis
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+# 1. Variation Analysis
 
 Bla [(1)](#references). 
 
