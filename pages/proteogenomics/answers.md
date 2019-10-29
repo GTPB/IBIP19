@@ -5,6 +5,8 @@ title: Answers-Proteogenomics
 
 # Answers - Proteogenomics
 
+## 1. Novel Peptides
+
 ##### [:thought_balloon:](novel_peptides.md#thought_balloon-based-on-you-knowledge-of-peptide-and-protein-identification-can-you-anticipate-challenges-posed-by-these-proteogenomic-databases) _Based on you knowledge of peptide and protein identification, can you anticipate challenges posed by these proteogenomic databases?_
 
 The first challenge posed by proteogenomic databases is that they are very large, and therefore require much more computational power. The inflation in the collection of possible sequences, called search space, also increases the probability that two peptide sequences are similar, hence reducing the discrimination power of search engines. Thus reduced discrimination power results in a reduced identification rate at fixed error rate [(1)](#references). The estimation of error rates in proteomics usually relies on the target-decoy approach [(2)](#references), which is very reliable to track random matches, but not the errors due to partial matches [(3)](#references). Consequently, error rate estimation is very challenging in proteogenomic databases and requires spectrum-level inspection of the matches [(4)](#references). Finally, The increased number of similar sequences reduces the probability to find peptides unique to a protein, hence complexifying protein inference [(5)](#references).
@@ -76,6 +78,14 @@ Mutations can yield new coding regions through alteration of start, stop, and sp
 | intergenic | 2 | Intergenic section |
 | 3UTR | 1 | 3′ untranslated region (3′ UTR) is directly downstream of the translated region. |
 
+
+## 2. Variation Analysis
+
+##### [:thought_balloon:](answers.md#thought_balloon-based-on-you-knowledge-of-peptide-and-protein-identification-can-you-anticipate-challenges-posed-by-these-proteogenomic-databases) _If we assume a linear relationship between number of alleles and peptide abundance, what should be the distribution of intensities?_
+
+![peptide_per_allele](resources/images/peptideAllelePlot.png?raw=true "Peptide intensity vs genotype")
+
+Under this hypothesis: (1) if the genotype is homozygous for the reference or alternative allele, one would expect only peptides presenting the reference or alternative amino acid, respectively; (2) if the genotype is heterozygous, one would expect a 50-50 intensity distribution.
 
 ## References
 

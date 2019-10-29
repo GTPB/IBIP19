@@ -164,6 +164,9 @@ novelPeptidesDF <- read.table(
     ) %>%
     mutate(
         patientId = paste("Patient", patientNumber)
+    ) %>%
+    arrange(
+        abs(tumor - control)
     )
 
 ```
