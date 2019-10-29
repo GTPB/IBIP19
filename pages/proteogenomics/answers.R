@@ -29,7 +29,7 @@ peptideAllelePlot <- ggplot(
         name = "Genotype"
     ) + 
     scale_y_continuous(
-        name = "Peptide Intensity [%]",
+        name = "Peptide Abundance [%]",
         breaks = (-2:2)*50,
         labels = abs((-2:2)*50)
     ) +

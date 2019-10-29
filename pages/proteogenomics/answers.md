@@ -81,11 +81,11 @@ Mutations can yield new coding regions through alteration of start, stop, and sp
 
 ## 2. Variation Analysis
 
-##### [:thought_balloon:](variation_analysis.md#thought_balloon-if-we-assume-a-linear-relationship-between-number-of-alleles-and-peptide-abundance-what-should-be-the-distribution-of-intensities) _If we assume a linear relationship between number of alleles and peptide abundance, what should be the distribution of intensities?_
+##### [:thought_balloon:](variation_analysis.md#thought_balloon-if-we-assume-a-linear-relationship-between-number-of-alleles-and-peptide-abundance-what-should-be-the-peptide-distribution-for-each-genotype) _If we assume a linear relationship between number of alleles and peptide abundance, what should be the peptide distribution for each genotype?_
 
-![peptide_per_allele](resources/images/peptideAllelePlot.png?raw=true "Peptide intensity vs genotype")
+![peptide_per_allele](resources/images/peptideAllelePlot.png?raw=true "Peptide abundance vs genotype")
 
-Under this hypothesis: (1) if the genotype is homozygous for the reference allele, _AA_, one would expect only peptides carrying the reference amino acid; (2) if the genotype is heterozygous, AB, one would expect a 50-50 intensity distribution between peptides carrying the reference and alternative amino acids; (3) if the genotype is homozygous for the alternative allele, _BB_, one would expect only peptides carrying the alternative amino acid.
+Under this hypothesis: (1) if the genotype is homozygous for the reference allele, _AA_, one would expect only peptides carrying the reference amino acid; (2) if the genotype is heterozygous, AB, one would expect a 50-50 distribution between peptides carrying the reference and alternative amino acids; (3) if the genotype is homozygous for the alternative allele, _BB_, one would expect only peptides carrying the alternative amino acid.
 
 ## References
 

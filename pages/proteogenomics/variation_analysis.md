@@ -16,14 +16,14 @@ and alternative alleles of corresponding SNPs for each genotype.
 "Johansson et al. Fig 7h") \> Figure 7h in Johansson *et al.*
 [(1)](#references).
 
-##### [:thought\_balloon:](answers.md#thought_balloon-if-we-assume-a-linear-relationship-between-number-of-alleles-and-peptide-abundance-what-should-be-the-distribution-of-intensities) *If we assume a linear relationship between number of alleles and peptide abundance, what should be the distribution of intensities?*
+##### [:thought\_balloon:](answers.md#thought_balloon-if-we-assume-a-linear-relationship-between-number-of-alleles-and-peptide-abundance-what-should-be-the-peptide-distribution-for-each-genotype) *If we assume a linear relationship between number of alleles and peptide abundance, what should be the peptide distribution for each genotype?*
 
 Note that the genotyping data corresponding to the peptide intensities
 were not made available, but more examples can be found in
 [Supplementary Figure
 15](../resources/Johansson_et_al_breast_cancer_quantitative_proteome_and_proteogenomic_landscape/supplementary_information.pdf).
 
-##### :speech\_balloon: Do the results presented follow a linear trend? What can affect the linearity of this relationship?
+##### :speech\_balloon: Do the results presented follow a linear trend? What can affect the linearity of the relationship between number of alleles and intensity distribution?
 
 ## References
 
