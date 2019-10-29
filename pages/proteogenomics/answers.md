@@ -85,7 +85,7 @@ Mutations can yield new coding regions through alteration of start, stop, and sp
 
 ![peptide_per_allele](resources/images/peptideAllelePlot.png?raw=true "Peptide intensity vs genotype")
 
-Under this hypothesis: (1) if the genotype is homozygous for the reference or alternative allele, one would expect only peptides presenting the reference or alternative amino acid, respectively; (2) if the genotype is heterozygous, one would expect a 50-50 intensity distribution.
+Under this hypothesis: (1) if the genotype is homozygous for the reference allele, _AA_, one would expect only peptides carrying the reference amino acid; (2) if the genotype is heterozygous, AB, one would expect a 50-50 intensity distribution between peptides carrying the reference and alternative amino acids; (3) if the genotype is homozygous for the alternative allele, _BB_, one would expect only peptides carrying the alternative amino acid.
 
 ## References
 
