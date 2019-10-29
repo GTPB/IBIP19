@@ -20,14 +20,9 @@ Mutations in the genome can alter the sequence so that non-coding sections becom
 ##### [:thought_balloon:](answers.md#thought_balloon-based-on-you-knowledge-of-peptide-and-protein-identification-can-you-anticipate-challenges-posed-by-these-proteogenomic-databases) _Based on you knowledge of peptide and protein identification, can you anticipate challenges posed by these proteogenomic databases?_
 
 
-## Processing
-
-This tutorial is a notebook that contains [R](r-project.org) code that can be run directly from the _Rmd_ file. It assumes that the R working directory is the proteogenomics folder of the repository, _e.g._ `/myfolder/IBIP19/pages/proteogenomics`. We recommend using RStudio to run this tutorial.
-
-
 ## Libraries
 
-You will need the following libraries, please make sure that they are installed.
+We will need the following libraries, please make sure that they are installed.
 
 ```{r libraries, warning=FALSE, results='hide', message=FALSE}
 
@@ -40,10 +35,6 @@ theme_set(theme_bw(base_size = 11))
 
 ```
 
-- We will use [tidyr](tidyr.tidyverse.org) to import data, we recommend this [cheat sheet](https://github.com/rstudio/cheatsheets/blob/master/data-import.pdf).
-- We will use [dplyr](dplyr.tidyverse.org) to transform data, we recommend this [cheat sheet](https://github.com/rstudio/cheatsheets/blob/master/data-transformation.pdf).
-- We will use [ggplot2](ggplot2.tidyverse.org) to plot data, we recommend this [cheat sheet](https://github.com/rstudio/cheatsheets/blob/master/data-visualization-2.1.pdf).
-- We will use [scico](https://github.com/thomasp85/scico) for color palette. Scico is based on [Scientific Colour-Maps](http://www.fabiocrameri.ch/colourmaps.php) that are perceptually uniform, perceptually ordered, colour-vision-deficiency friendly, readable as black-and-white print, and therefore perfectly suited for scientific illustrations. 
 
 ## Data set
 
@@ -51,17 +42,18 @@ In this tutorial, we will analyze the non-canonical genomic products identified 
 
 ##### [:thought_balloon:](answers.md#thought_balloon-what-do-the-different-columns-in-the-table-represent) _What do the different columns in the table represent?_
 
-For this tutorial, the _Novel Peptides_ table was extracted to an R-friendly text format, and is available in [resources/data/novel_peptides.txt](resources/data/novel_peptides.txt).
+For this tutorial, the _Novel Peptides_ table was extracted to an R-friendly text format, and is available in [resources/data/novel_peptides.gz](resources/data/novel_peptides.gz).
 
 ##### :pencil2: Load the data in R as in the code below.
 
 ```{r import_id}
 
 novelPeptidesDF <- read.table(
-    file = "resources/data/novel_peptides.txt",
+    file = "resources/data/novel_peptides.gz",
     header = T,
     sep = "\t",
     comment.char = "",
+    quote = "",
     stringsAsFactors = F
 )
 
@@ -131,17 +123,18 @@ knitr::kable(categoriesDF)
 
 ## Abundance in tumors and normal tissue
 
-In [Supplementary Table 8](../resources/Johansson_et_al_breast_cancer_quantitative_proteome_and_proteogenomic_landscape), the authors provide the abundance for novel peptides monitored in normal tissue and tumors for five patients. The table was extracted to an R-friendly text format for this tutorial, and is available in [resources/data/novel_peptides_paired.txt](resources/data/novel_peptides_paired.txt).
+In [Supplementary Table 8](../resources/Johansson_et_al_breast_cancer_quantitative_proteome_and_proteogenomic_landscape), the authors provide the abundance for novel peptides monitored in normal tissue and tumors for five patients. The table was extracted to an R-friendly text format for this tutorial, and is available in [resources/data/novel_peptides_paired.gz](resources/data/novel_peptides_paired.gz).
 
 ##### :pencil2: Load the data in R as done for the previous table. In addition, transform the data from wide to long format and create columns indicating the patient number, whether the sample is _Control_ or _Tumor_, and what kind of tumor, as done in the code below.
 
 ```{r import_quant}
 
 novelPeptidesDF <- read.table(
-    file = "resources/data/novel_peptides_paired.txt",
+    file = "resources/data/novel_peptides_paired.gz",
     header = T,
     sep = "\t",
     comment.char = "",
+    quote = "",
     stringsAsFactors = F
 ) %>% 
     gather(

@@ -27,5 +27,5 @@ were not made available, but more examples can be found in
 
 ## References
 
-2)  [Breast cancer quantitative proteome and proteogenomic
+1)  [Breast cancer quantitative proteome and proteogenomic
     landscape](https://www.ncbi.nlm.nih.gov/pubmed/30962452)

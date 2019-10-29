@@ -15,9 +15,31 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # 1. Variation Analysis
 
-In the [previous chapter](novel_peptides.md), novel peptides were identified by Johansson _et al._ [(1)](#references) using a proteogenomic search strategy. In addition, this search allowed identifying peptides presenting single amino acid variants (SAAV). Figure 7h displays the intensity of peptides produced by the reference and alternative alleles of corresponding SNPs for each genotype.
+In the [previous chapter](novel_peptides.md), novel peptides were identified by Johansson _et al._ [(1)](#references) using a proteogenomic search strategy. In addition, this search allowed identifying peptides presenting single amino acid variants (SAAV). 
+
+
+## Libraries
+
+We will need the following libraries, please make sure that they are installed.
+
+```{r libraries, warning=FALSE, results='hide', message=FALSE}
+
+library(tidyr)
+library(dplyr)
+library(ggplot2)
+library(scico)
+
+theme_set(theme_bw(base_size = 11))
+
+```
+
+
+## Genotype - peptide abundance relationship
+
+Figure 7h displays the intensity of peptides produced by the reference and alternative alleles of corresponding SNPs for each genotype.
 
 ![Figure_7h](resources/images/Fig7h.png?raw=true "Johansson et al. Fig 7h")
+
 > Figure 7h in Johansson _et al._ [(1)](#references).
 
 ##### [:thought_balloon:](answers.md#thought_balloon-if-we-assume-a-linear-relationship-between-number-of-alleles-and-peptide-abundance-what-should-be-the-peptide-distribution-for-each-genotype) _If we assume a linear relationship between number of alleles and peptide abundance, what should be the peptide distribution for each genotype?_
@@ -26,6 +48,127 @@ Note that the genotyping data corresponding to the peptide intensities were not 
 
 ##### :speech_balloon: Do the results presented follow a linear trend? What can affect the linearity of the relationship between number of alleles and intensity distribution? 
 
+
+## Abundance of variant peptides relative to the proteins
+
+In [Supplementary Table 1](../resources/Johansson_et_al_breast_cancer_quantitative_proteome_and_proteogenomic_landscape) and [Supplementary Table 6](../resources/Johansson_et_al_breast_cancer_quantitative_proteome_and_proteogenomic_landscape), the authors provide the results of their proteogenomic analysis for genes and for peptides carrying alternative alleles of SAAVs, respectively. In addition, [Supplementary Table 1](../resources/Johansson_et_al_breast_cancer_quantitative_proteome_and_proteogenomic_landscape) contains experimental design and sample characterization information. The tables were extracted to an R-friendly text format for this tutorial, and are available in [resources/data/tumor.gz](resources/data/tumor.gz), [resources/data/proteins.gz](resources/data/proteins.gz), and [resources/data/saav.gz](resources/data/saav.gz).
+
+##### :pencil2: Load the data in R as in the code below.
+
+```{r import}
+
+tumorDF <- read.table(
+    file = "resources/data/tumor.gz",
+    header = T,
+    sep = "\t",
+    comment.char = "",
+    quote = "",
+    stringsAsFactors = F
+)
+
+proteinsDF <- read.table(
+    file = "resources/data/proteins.gz",
+    header = T,
+    sep = "\t",
+    comment.char = "",
+    quote = "",
+    stringsAsFactors = F
+) %>%
+    select(
+        -contains("nspsm")
+    )
+
+saavDF <- read.table(
+    file = "resources/data/saav.gz",
+    header = T,
+    sep = "\t",
+    comment.char = "",
+    quote = "",
+    stringsAsFactors = F
+)
+
+```
+
+Note that for the sake of speed, the last columns of the protein table were skipped. 
+
+As you might have noticed, the quantitative values in the protein table have been arranged by tumors, but this is not the case for SAAV peptides.
+
+##### :pencil2: Organize the SAAV peptides table using kits as column, keep one quantification value per peptide.
+
+```{r organize_saav}
+
+# Get the unique peptides
+saavPeptidesProteinDF <- saavDF %>% 
+    select(
+        peptide_sequence,
+        protein
+    ) %>%
+    distinct()
+
+# Iterate all sets
+for (tmtSet in 1:5) {
+    
+    # Set up intensity columns
+    for (tmtColumn in c("tmt126", "tmt127N", "tmt127C", "tmt128N", "tmt128C", "tmt129N", "tmt129C", "tmt130N", "tmt130C", "tmt131")) {
+        
+        newColumn <- paste0(tmtColumn, "_set", tmtSet)
+        saavPeptidesProteinDF[[newColumn]] <- NA
+        
+    }
+    
+    # Gather intensities for each set and each peptide 
+    for (i in 1:nrow(saavPeptidesProteinDF)) {
+        
+        js <- saavDF$tmt_set == tmtSet & saavDF$peptide_sequence == saavPeptidesProteinDF$peptide_sequence[i]
+        
+        if (sum(js) > 0) {
+            
+            for (tmtColumn in c("tmt126", "tmt127N", "tmt127C", "tmt128N", "tmt128C", "tmt129N", "tmt129C", "tmt130N", "tmt130C", "tmt131")) {
+                
+                newColumn <- paste0(tmtColumn, "_set", tmtSet)
+                
+                values <- saavDF[js, tmtColumn]
+                
+                if (sum(!is.na(values)) > 0) {
+                    
+                    value <- median(
+                        x = values, 
+                        na.rm = T
+                    )
+                    
+                    saavPeptidesProteinDF[i, newColumn] <- value
+                    
+                }
+            }
+        }
+    }
+}
+
+```
+
+##### :pencil2: Use the experimental design to label the columns according to the tumors analyzed.
+
+```{r rename_columns}
+
+tumorDF <- tumorDF %>%
+    mutate(
+        tmtColumn = paste0("tmt", tmtTag, "_set", tmtSet)
+    )
+
+for (i in 1:nrow(tumorDF)) {
+    
+    oldColumn <- tumorDF$tmtColumn[i]
+    newColumn <- tumorDF$tumor_id[i]
+    
+    names(saavPeptidesProteinDF)[names(saavPeptidesProteinDF) == oldColumn] <- newColumn
+    names(proteinsDF)[names(proteinsDF) == oldColumn] <- newColumn
+    
+}
+
+
+```
+
+
 ## References
 
-(2) [Breast cancer quantitative proteome and proteogenomic landscape](https://www.ncbi.nlm.nih.gov/pubmed/30962452)
+(1) [Breast cancer quantitative proteome and proteogenomic landscape](https://www.ncbi.nlm.nih.gov/pubmed/30962452)
