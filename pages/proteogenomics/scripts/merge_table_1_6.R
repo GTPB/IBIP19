@@ -284,8 +284,9 @@ for (i in 1:nrow(saavPeptidesProteinDF)) {
 
 write.table(
     x = table16DF,
-    file = "pages/proteogenomics/resources/data/table16.gz",
+    file = gzfile("pages/proteogenomics/resources/data/table16.gz"),
     sep = "\t",
     col.names = T,
-    row.names = F
+    row.names = F,
+    quote = F
 )

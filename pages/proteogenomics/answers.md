@@ -87,6 +87,11 @@ Mutations can yield new coding regions through alteration of start, stop, and sp
 
 Under this hypothesis: (1) if the genotype is homozygous for the reference allele, _AA_, one would expect only peptides carrying the reference amino acid; (2) if the genotype is heterozygous, AB, one would expect a 50-50 distribution between peptides carrying the reference and alternative amino acids; (3) if the genotype is homozygous for the alternative allele, _BB_, one would expect only peptides carrying the alternative amino acid.
 
+##### [:thought_balloon:](answers.md#thought_balloon-if-we-assume-a-linear-relationship-between-number-of-alleles-and-peptide-abundance-what-should-be-the-peptide-distribution-for-each-genotype) _How do we need to transform the tables to compare SAAV peptide-level intensities to gene-level intensities?_
+
+The data in the SAAV peptides table are not normalized. Thus, we need to scale all intensities using the reference channel (131). Each line represents a PSM, peptides might therefore be present multiple times, we need to aggregate these different measurements per peptide in order to have a peptide-level table. Then, the different TMT batches need to be aligned and link to the different tumors. Finally, the gene-level intensities need to be extracted for each peptide. Note that one peptide might map to multiple genes.
+
+
 ## References
 
 (1) [Anatomy and evolution of database search engines-a central component of mass spectrometry based proteomic workflows](https://www.ncbi.nlm.nih.gov/pubmed/28902424)
