@@ -87,7 +87,7 @@ In the "Yeast-UPS1" project expand the node called "Quantitations" then double c
 #### 2.3.1 LC-MS maps alignments
 
 Go to the tab called ```LC-MS maps```, then you should see a plot similar to this one:
-![maps_alignment](resources/images/maps_alignment.svg?raw=true "LC-MS maps alignment")
+![maps_alignment](resources/images/maps_alignment.png?raw=true "LC-MS maps alignment")
 
 ##### [:thought_balloon:]() _Why does the plot contain only five curves? Do you think these results are consistent according to the experimental design? Which retention time tolerance would you allow for the "match between runs" procedure of the LFQ workflow?_
 
