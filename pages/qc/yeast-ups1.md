@@ -3,7 +3,7 @@ layout: page
 title: Answers-Proteogenomics
 ---
 
-David Bouysié
+David Bouyssié
 
 # Label-free quantification QC
 
