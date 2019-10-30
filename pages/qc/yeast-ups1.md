@@ -64,7 +64,7 @@ In the "Yeast-UPS1" project expand the node called "Identification Trees" then d
 |OEMMA121101_63b|F083069.dat  | 675	| 3850 | 41458 |
 |OEMMA121101_65b|F083070.dat  | 681 | 3904 | 41500 |
 
-The number of queries correspond to the number of MS/MS spectra which were submitted for the search.
+The number of queries corresponds to the number of MS/MS spectra which were submitted for the search.
 
 ##### [:thought_balloon:]() _Why the number of identified peptides and protein sets is different between the triplicates of the same group? Do you see significant differences between the two groups?_
 
@@ -113,7 +113,7 @@ _For the 2+ charge state of "AKNPLTHSTPK" are you able to recover the XICs by pe
 
 #### 2.3.3 More advanced QC & statistics
 
-Download the "Exported files" node of the project tree download the ```.xlsx``` file on your computer. We will now use some R scripts to generate and inspect quality control reports.
+In the "Exported files" node of the project tree, download the ```.xlsx``` file on your computer. We will now use some R scripts to generate and inspect quality control reports.
 
 TODO: add links to results from Coralie's scripts
 
