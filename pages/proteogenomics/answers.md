@@ -7,7 +7,7 @@ title: Answers-Proteogenomics
 
 ## 1. Novel Peptides
 
-##### [:thought_balloon:](novel_peptides.md#thought_balloon-based-on-you-knowledge-of-peptide-and-protein-identification-can-you-anticipate-challenges-posed-by-these-proteogenomic-databases) _Based on you knowledge of peptide and protein identification, can you anticipate challenges posed by these proteogenomic databases?_
+##### [:thought_balloon:](novel_peptides.md#thought_balloon-based-on-you-knowledge-of-peptide-and-protein-identification-can-you-anticipate-challenges-posed-by-these-proteogenomic-databases) _Based on your knowledge of peptide and protein identification, can you anticipate challenges posed by these proteogenomic databases?_
 
 The first challenge posed by proteogenomic databases is that they are very large, and therefore require much more computational power. The inflation in the collection of possible sequences, called search space, also increases the probability that two peptide sequences are similar, hence reducing the discrimination power of search engines. Thus reduced discrimination power results in a reduced identification rate at fixed error rate [(1)](#references). The estimation of error rates in proteomics usually relies on the target-decoy approach [(2)](#references), which is very reliable to track random matches, but not the errors due to partial matches [(3)](#references). Consequently, error rate estimation is very challenging in proteogenomic databases and requires spectrum-level inspection of the matches [(4)](#references). Finally, The increased number of similar sequences reduces the probability to find peptides unique to a protein, hence complexifying protein inference [(5)](#references).
 
