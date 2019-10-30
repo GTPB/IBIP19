@@ -22,10 +22,10 @@ If you want to know more details about the sample preparation and the acquisitio
 
 ### 1.2 MS/MS search
 
-Since the aim of this study was to compare software solutions the raw data were analysis by different pipelines. In this tutorial we will use the results obtained by the Mascot search engine. Here is a short description of the used parameters:
+Since the aim of this study was to compare software solutions the raw data were analysed by different pipelines. In this tutorial we will use the results obtained from the Mascot search engine. Here is a short description of the used parameters:
 _Peaklists were submitted to Mascot database searches (version 2.4.2). ESI-TRAP was chosen as the instrument, trypsin/P as the enzyme and 2 missed cleavages were allowed. Precursor and fragment mass error tolerances were set at 5 ppm and 0.8 Da, respectively. Peptide variable modifications allowed during the search were: acetyl (Protein N-ter), oxidation (M), whereas carbamidomethyl (C) was set as fixed modification._
 
-The full list of raw files and result files are available from this FTP site:
+The full list of raw files and result files are available from this PRIDE FTP site:
 ftp://ftp.pride.ebi.ac.uk/pride/data/archive/2015/12/PXD001819
 
 Two groups of UPS1-Yeast proteins were selected for this tutorial. Raw files and result files were renamed to work in blind conditions. Here is the list of files you will use:
@@ -41,7 +41,7 @@ Two groups of UPS1-Yeast proteins were selected for this tutorial. Raw files and
 
 ## 2. Visual inspection of LFQ results
 
-Proline is a new software for label-free workflow execution and raw data visualization. We will use the web interface of this tool to verify the quality of peak detection and LC-MS maps alignments.
+Proline is a new software (manuscript under revision) for label-free workflow execution and raw data visualization. We will use the web interface of this tool to verify the quality of peak detection and LC-MS maps alignments.
 
 ### 2.1 Connection to Proline Web
 
