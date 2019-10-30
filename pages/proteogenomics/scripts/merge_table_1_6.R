@@ -20,8 +20,8 @@ tumorDF <- read.table(
     stringsAsFactors = F
 )
 
-proteinsDF <- read.table(
-    file = "pages/proteogenomics/resources/data/proteins.gz",
+genesDF <- read.table(
+    file = "pages/proteogenomics/resources/data/genes.gz",
     header = T,
     sep = "\t",
     comment.char = "",
@@ -117,7 +117,7 @@ for (i in 1:nrow(tumorDF)) {
     newColumn <- tumorDF$tumor_id[i]
     
     names(saavPeptidesProteinDF)[names(saavPeptidesProteinDF) == oldColumn] <- newColumn
-    names(proteinsDF)[names(proteinsDF) == oldColumn] <- newColumn
+    names(genesDF)[names(genesDF) == oldColumn] <- newColumn
     
 }
 
@@ -241,17 +241,17 @@ for (i in 1:nrow(saavPeptidesProteinDF)) {
         
         for (tumor in tumorDF$tumor_id) {
             
-            peptideColumn <- paste0(tumor, "_saav_peptide")
+            peptideColumn <- paste0(tumor, "_saavPeptide")
             peptideValue <- saavPeptidesProteinDF[i, tumor]
             peptideDF[j, peptideColumn] <- peptideValue
             
             proteinColumn <- paste0(tumor, "_gene")
             
-            k <- proteinsDF$gene_symbol == peptideDF$gene[j]
+            k <- genesDF$gene_symbol == peptideDF$gene[j]
             
             if (sum(k) == 1) {
                 
-                proteinValue <- proteinsDF[k, tumor]
+                proteinValue <- genesDF[k, tumor]
                 
             } else {
                 
@@ -260,8 +260,6 @@ for (i in 1:nrow(saavPeptidesProteinDF)) {
             }
             
             peptideDF[j, proteinColumn] <- proteinValue
-            
-            peptideDF[j, tumor] <- peptideValue / proteinValue
             
         }
     }

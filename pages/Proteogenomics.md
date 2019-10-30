@@ -55,8 +55,10 @@ You will need the following libraries, please make sure that they are installed.
 - We will use [tidyr](tidyr.tidyverse.org) to import data, we recommend this [cheat sheet](https://github.com/rstudio/cheatsheets/blob/master/data-import.pdf).
 - We will use [dplyr](dplyr.tidyverse.org) to transform data, we recommend this [cheat sheet](https://github.com/rstudio/cheatsheets/blob/master/data-transformation.pdf).
 - We will use [ggplot2](ggplot2.tidyverse.org) to plot data, we recommend this [cheat sheet](https://github.com/rstudio/cheatsheets/blob/master/data-visualization-2.1.pdf).
-- We will use [scico](https://github.com/thomasp85/scico) for color palette. Scico is based on [Scientific Colour-Maps](http://www.fabiocrameri.ch/colourmaps.php) that are perceptually uniform, perceptually ordered, colour-vision-deficiency friendly, readable as black-and-white print, and therefore perfectly suited for scientific illustrations. 
+- We will use [gamlss](https://www.gamlss.com/) for normalization.
+- We will use [conflicted](https://github.com/r-lib/conflicted) to manage conflict resolution to function names between packages.
 
+*Warining*: [conflicted](https://github.com/r-lib/conflicted) is not available in cran yet, you will need to install it using [devtools](https://devtools.r-lib.org/). See [the installation instructions](https://github.com/r-lib/conflicted#installation) for more details.
 
 ## Tutorials
 
