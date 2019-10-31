@@ -158,9 +158,14 @@ for (i in 1:nrow(saavPeptidesProteinDF)) {
         stringsAsFactors = F
     )
     
+    processedGenes <- c()
+    processedPeptides <- c()
+    
     for (j in 1:length(geneLines)) {
         
-        geneLine <- geneLines[1]
+        peptide_sequence <- saavPeptidesProteinDF$peptide_sequence[i]
+        
+        geneLine <- geneLines[j]
         
         gene <- NA
         geneVariant <- NA
@@ -195,11 +200,11 @@ for (i in 1:nrow(saavPeptidesProteinDF)) {
             gene <- tempSplit[2]
             geneVariant <- strsplit(
                 x = tempSplit[4],
-                split = "."
+                split = "\\."
             )[[1]][2]
             proteinVariant <- strsplit(
                 x = tempSplit[5],
-                split = "."
+                split = "\\."
             )[[1]][2]
             
             tempSplit <- strsplit(
@@ -225,7 +230,7 @@ for (i in 1:nrow(saavPeptidesProteinDF)) {
             
             tempSplit2 <- strsplit(
                 x = tempSplit[7],
-                split = "."
+                split = "\\."
             )[[1]]
             
             gene <- tempSplit[3]
@@ -234,7 +239,9 @@ for (i in 1:nrow(saavPeptidesProteinDF)) {
             
         }
         
-        peptideDF$peptide_sequence[j] <- saavPeptidesProteinDF$peptide_sequence[i]
+        if (!gene %in% processedGenes | !peptide_sequence %in% processedPeptides) {
+        
+        peptideDF$peptide_sequence[j] <- peptide_sequence
         peptideDF$gene[j] <- gene
         peptideDF$gene_variant[j] <- geneVariant
         peptideDF$protein_variant[j] <- proteinVariant
@@ -262,9 +269,17 @@ for (i in 1:nrow(saavPeptidesProteinDF)) {
             peptideDF[j, proteinColumn] <- proteinValue
             
         }
+        
+        processedGenes[length(processedGenes) + 1] <- gene
+        processedPeptides[length(processedPeptides) + 1] <- peptide_sequence
+        
+        }
     }
     
     peptideDF <- peptideDF %>%
+        filter(
+            gene != ""
+        ) %>%
         distinct()
     
     if (is.null(table16DF)) {

@@ -117,7 +117,9 @@ model <- gamlss(
     )
 ```
 
-This accounts for the log-normal distribution of the intensities observed in the previous question, and explains why the curve has this logarithmic shape.
+This accounts for the log-normal distribution of the intensities observed in the previous question, and explains why the curve has this logarithmic shape. Using a log-scale on the x axis therefore aligns the points.
+
+![zScore_log](resources/images/zLogIntensity.png?raw=true "Z-score vs log")
 
 
 ## References

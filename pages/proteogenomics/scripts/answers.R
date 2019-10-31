@@ -152,3 +152,25 @@ plot <- ggplot(
 png("pages/proteogenomics/resources/images/peptideProteinDistribution.png", width = 800, height = 1200)
 plot
 dummy <- dev.off()
+
+
+# Z-score vs logged intensities 
+
+plot <- ggplot(
+    data = saavDF
+) +
+    geom_point(
+        mapping = aes(
+            x = !!sym(column),
+            y = !!sym(zColumn)
+        ),
+        alpha = 0.05
+    ) +
+    scale_x_log10(
+        name = paste0(column, " [log10]")
+    )
+
+png("pages/proteogenomics/resources/images/zLogIntensity.png", width = 800, height = 1200)
+plot
+dummy <- dev.off()
+
