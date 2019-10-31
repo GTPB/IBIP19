@@ -85,11 +85,23 @@ Mutations can yield new coding regions through alteration of start, stop, and sp
 
 ![peptide_per_allele](resources/images/peptideAllelePlot.png?raw=true "Peptide abundance vs genotype")
 
-Under this hypothesis: (1) if the genotype is homozygous for the reference allele, _AA_, one would expect only peptides carrying the reference amino acid; (2) if the genotype is heterozygous, AB, one would expect a 50-50 distribution between peptides carrying the reference and alternative amino acids; (3) if the genotype is homozygous for the alternative allele, _BB_, one would expect only peptides carrying the alternative amino acid.
+Under this hypothesis: (1) if the genotype is homozygous for the reference allele, _AA_, one would expect only peptides carrying the reference amino acid; (2) if the genotype is heterozygous, _AB_, one would expect a 50-50 distribution between peptides carrying the reference and alternative amino acids; (3) if the genotype is homozygous for the alternative allele, _BB_, one would expect only peptides carrying the alternative amino acid.
 
-##### [:thought_balloon:](answers.md#thought_balloon-if-we-assume-a-linear-relationship-between-number-of-alleles-and-peptide-abundance-what-should-be-the-peptide-distribution-for-each-genotype) _How do we need to transform the tables to compare SAAV peptide-level intensities to gene-level intensities?_
+##### [:thought_balloon:](answers.md#thought_balloon-how-do-we-need-to-transform-the-tables-to-compare-saav-peptide-level-intensities-to-gene-level-intensities) _How do we need to transform the tables to compare SAAV peptide-level intensities to gene-level intensities?_
 
 The data in the SAAV peptides table are not normalized. Thus, we need to scale all intensities using the reference channel (131). Each line represents a PSM, peptides might therefore be present multiple times, we need to aggregate these different measurements per peptide in order to have a peptide-level table. Then, the different TMT batches need to be aligned and link to the different tumors. Finally, the gene-level intensities need to be extracted for each peptide. Note that one peptide might map to multiple genes.
+
+##### [:thought_balloon:](answers.md#thought_balloon-why-does-the-curve-have-this-shape) _Why are all intensities at the bottom? How can we better visualize these distributions?_
+
+On a proteome-wide scale, measured peptide and protein abundances generally distribute log-normally. This means that they span several orders of magnitude, with most abundances are low, with a long tail towards high abundances, and a short tail towards lower abundances. Note that the detectability and quantification performance strongly influence this distribution, and it can be that the distribution of protein abundances in the sample differ from what we measure.
+
+In order to visualize such distributions, you can transform the intensities logarithmically, then their distribution should look bell-shaped and symmetrical.
+
+![abundance_distribution](resources/images/peptideProteinDistribution.png?raw=true "Peptide and Protein abundance distributions")
+
+##### [:thought_balloon:](answers.md#thought_balloon-why-does-the-curve-have-this-shape) _Why does the curve have this shape?_
+
+Before normalizing the data, we log-transformed them. This is because the values are in fact ratios of TMT channels against a reference. Therefore, they are distributed around one, with the lower values packed between zero and one, and the higher values ranging from one to infinity. Consequently, while the center of the distribution, _i.e._ the median, is around one, the mean is higher, and the distance from the low values to the median is smaller than the distance from the high values to the median. Computing z-scores on the raw values would therefore not center and scale the distribution as wanted, while logging the data before transformation restores symmetry.
 
 
 ## References

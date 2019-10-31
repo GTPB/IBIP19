@@ -16,17 +16,9 @@ translation of the entire genome
 
 ##### [:thought\_balloon:](answers.md#thought_balloon-based-on-you-knowledge-of-peptide-and-protein-identification-can-you-anticipate-challenges-posed-by-these-proteogenomic-databases) *Based on you knowledge of peptide and protein identification, can you anticipate challenges posed by these proteogenomic databases?*
 
-## Processing
-
-This tutorial is a notebook that contains [R](r-project.org) code that
-can be run directly from the *Rmd* file. It assumes that the R working
-directory is the proteogenomics folder of the repository, *e.g.*
-`/myfolder/IBIP19/pages/proteogenomics`. We recommend using RStudio to
-run this tutorial.
-
 ## Libraries
 
-You will need the following libraries, please make sure that they are
+We will need the following libraries, please make sure that they are
 installed.
 
 ``` r
@@ -37,22 +29,6 @@ library(scico)
 
 theme_set(theme_bw(base_size = 11))
 ```
-
-  - We will use [tidyr](tidyr.tidyverse.org) to import data, we
-    recommend this [cheat
-    sheet](https://github.com/rstudio/cheatsheets/blob/master/data-import.pdf).
-  - We will use [dplyr](dplyr.tidyverse.org) to transform data, we
-    recommend this [cheat
-    sheet](https://github.com/rstudio/cheatsheets/blob/master/data-transformation.pdf).
-  - We will use [ggplot2](ggplot2.tidyverse.org) to plot data, we
-    recommend this [cheat
-    sheet](https://github.com/rstudio/cheatsheets/blob/master/data-visualization-2.1.pdf).
-  - We will use [scico](https://github.com/thomasp85/scico) for color
-    palette. Scico is based on [Scientific
-    Colour-Maps](http://www.fabiocrameri.ch/colourmaps.php) that are
-    perceptually uniform, perceptually ordered, colour-vision-deficiency
-    friendly, readable as black-and-white print, and therefore perfectly
-    suited for scientific illustrations.
 
 ## Data set
 
@@ -73,16 +49,17 @@ repository.
 
 For this tutorial, the *Novel Peptides* table was extracted to an
 R-friendly text format, and is available in
-[resources/data/novel\_peptides.txt](resources/data/novel_peptides.txt).
+[resources/data/novel\_peptides.gz](resources/data/novel_peptides.gz).
 
 ##### :pencil2: Load the data in R as in the code below.
 
 ``` r
 novelPeptidesDF <- read.table(
-    file = "resources/data/novel_peptides.txt",
+    file = "resources/data/novel_peptides.gz",
     header = T,
     sep = "\t",
     comment.char = "",
+    quote = "",
     stringsAsFactors = F
 )
 ```
@@ -183,16 +160,17 @@ In [Supplementary Table
 the authors provide the abundance for novel peptides monitored in normal
 tissue and tumors for five patients. The table was extracted to an
 R-friendly text format for this tutorial, and is available in
-[resources/data/novel\_peptides\_paired.txt](resources/data/novel_peptides_paired.txt).
+[resources/data/novel\_peptides\_paired.gz](resources/data/novel_peptides_paired.gz).
 
 ##### :pencil2: Load the data in R as done for the previous table. In addition, transform the data from wide to long format and create columns indicating the patient number, whether the sample is *Control* or *Tumor*, and what kind of tumor, as done in the code below.
 
 ``` r
 novelPeptidesDF <- read.table(
-    file = "resources/data/novel_peptides_paired.txt",
+    file = "resources/data/novel_peptides_paired.gz",
     header = T,
     sep = "\t",
     comment.char = "",
+    quote = "",
     stringsAsFactors = F
 ) %>% 
     gather(
@@ -215,6 +193,9 @@ novelPeptidesDF <- read.table(
     ) %>%
     mutate(
         patientId = paste("Patient", patientNumber)
+    ) %>%
+    arrange(
+        abs(tumor - control)
     )
 ```
 
@@ -268,7 +249,7 @@ ggplot(
     )
 ```
 
-    ## Warning: Removed 95 rows containing missing values (geom_point).
+    ## Warning: Removed 116 rows containing missing values (geom_point).
 
 ![](novel_peptides_files/figure-gfm/facet_patient-1.png)<!-- -->
 

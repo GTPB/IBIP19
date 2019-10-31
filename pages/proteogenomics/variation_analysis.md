@@ -20,8 +20,13 @@ library(tidyr)
 library(dplyr)
 library(ggplot2)
 library(scico)
+library(gamlss)
+library(conflicted)
 
 theme_set(theme_bw(base_size = 11))
+
+conflict_prefer("filter", "dplyr")
+conflict_prefer("select", "dplyr")
 ```
 
 ## Genotype - peptide abundance relationship
@@ -99,7 +104,7 @@ Note that for the sake of speed, the last columns of the genes table
 were
 skipped.
 
-##### [:thought\_balloon:](answers.md#thought_balloon-if-we-assume-a-linear-relationship-between-number-of-alleles-and-peptide-abundance-what-should-be-the-peptide-distribution-for-each-genotype) *How do we need to transform the tables to compare SAAV peptide-level intensities to gene-level intensities?*
+##### [:thought\_balloon:](answers.md#thought_balloon-how-do-we-need-to-transform-the-tables-to-compare-saav-peptide-level-intensities-to-gene-level-intensities) *How do we need to transform the tables to compare SAAV peptide-level intensities to gene-level intensities?*
 
 For the sake of time, this data transformation was run for you already.
 The proposed solution is available in
@@ -118,7 +123,442 @@ saavDF <- read.table(
     quote = "",
     stringsAsFactors = F
 )
+
+tumorColumns <- c("OSL.53E_saavPeptide", "OSL.53E_gene", "OSL.567_saavPeptide", "OSL.567_gene", "OSL.3FF_saavPeptide", "OSL.3FF_gene", "OSL.55F_saavPeptide", "OSL.55F_gene", "OSL.46A_saavPeptide", "OSL.46A_gene", "OSL.4B0_saavPeptide", "OSL.4B0_gene", "OSL.4D6_saavPeptide", "OSL.4D6_gene", "OSL.485_saavPeptide", "OSL.485_gene", "OSL.41B_saavPeptide", "OSL.41B_gene", "OSL.4AF_saavPeptide", "OSL.4AF_gene", "OSL.46E_saavPeptide", "OSL.46E_gene", "OSL.494_saavPeptide", "OSL.494_gene", "OSL.457_saavPeptide", "OSL.457_gene", "OSL.48B_saavPeptide", "OSL.48B_gene", "OSL.4B4_saavPeptide", "OSL.4B4_gene", "OSL.449_saavPeptide", "OSL.449_gene", "OSL.44E_saavPeptide", "OSL.44E_gene", "OSL.3EB_saavPeptide", "OSL.3EB_gene", "OSL.43C_saavPeptide", "OSL.43C_gene", "OSL.493_saavPeptide", "OSL.493_gene", "OSL.4D9_saavPeptide", "OSL.4D9_gene", "OSL.56F_saavPeptide", "OSL.56F_gene", "OSL.405_saavPeptide", "OSL.405_gene", "OSL.49E_saavPeptide", "OSL.49E_gene", "OSL.441_saavPeptide", "OSL.441_gene", "OSL.430_saavPeptide", "OSL.430_gene", "OSL.4FA_saavPeptide", "OSL.4FA_gene", "OSL.43A_saavPeptide", "OSL.43A_gene", "OSL.406_saavPeptide", "OSL.406_gene", "OSL.47C_saavPeptide", "OSL.47C_gene", "OSL.524_saavPeptide", "OSL.524_gene", "OSL.443_saavPeptide", "OSL.443_gene", "OSL.458_saavPeptide", "OSL.458_gene", "OSL.53D_saavPeptide", "OSL.53D_gene", "OSL.540_saavPeptide", "OSL.540_gene", "OSL.42E_saavPeptide", "OSL.42E_gene", "OSL.40A_saavPeptide", "OSL.40A_gene", "OSL.40E_saavPeptide", "OSL.40E_gene", "OSL.3FA_saavPeptide", "OSL.3FA_gene", "OSL.521_saavPeptide", "OSL.521_gene", "OSL.46D_saavPeptide", "OSL.46D_gene", "OSL.54D_saavPeptide", "OSL.54D_gene", "OSL.4BA_saavPeptide", "OSL.4BA_gene", "OSL.579_saavPeptide", "OSL.579_gene", "OSL.57B_saavPeptide", "OSL.57B_gene")
 ```
+
+##### :pencil2: Plot the intensity distributions as violin and box plots for the different tumors
+
+``` r
+intensitiesDF <- saavDF %>%
+    gather(
+        !!tumorColumns,
+        key = "sample",
+        value = "intensity"
+    ) %>%
+    filter(
+        !is.na(intensity) & !is.infinite(intensity)
+    ) %>%
+    separate(
+        col = sample,
+        into = c("tumor", "species"),
+        sep = "_"
+    )
+
+intensitiesDF$species <- factor(
+    intensitiesDF$species, 
+    levels = c("gene", "saavPeptide")
+)
+levels(intensitiesDF$species) <- c("Gene", "SAAV Peptide")
+
+ggplot(
+    data = intensitiesDF
+) +
+    geom_violin(
+        mapping = aes(
+            x = tumor,
+            y = intensity,
+            col = tumor
+        ),
+        fill = NA
+    ) +
+    geom_boxplot(
+        mapping = aes(
+            x = tumor,
+            y = intensity,
+            col = tumor
+        ),
+        fill = NA,
+        outlier.shape = NA
+    ) +
+    facet_grid(
+        species ~ .
+    ) + 
+    scale_fill_manual(
+        values = scico(
+            n = length(unique(intensitiesDF$tumor)),
+            palette = "batlow",
+            begin = 0.25,
+            end = 0.75
+        )
+    ) +
+    scale_color_manual(
+        values = scico(
+            n = length(unique(intensitiesDF$tumor)),
+            palette = "batlow",
+            begin = 0.25,
+            end = 0.75
+        )
+    ) + 
+    scale_y_continuous(
+        name = "Intensity"
+    ) + 
+    theme(
+        legend.position = "none",
+        axis.title.x = element_blank(),
+        axis.text.x = element_text(
+            angle = 90,
+            hjust = 1,
+            vjust = 0.5
+            
+        ),
+        panel.grid.major.x = element_blank(),
+        panel.grid.minor.x = element_blank()
+    )
+```
+
+![](variation_analysis_files/figure-gfm/intensity_densities-1.png)<!-- -->
+
+##### [:thought\_balloon:](answers.md#thought_balloon-why-does-the-curve-have-this-shape) *Why are all intensities at the bottom? How can we better visualize these distributions?*
+
+As you can see, the gene-level intensities are centered around one, and
+not for the peptide-level. You might have noticed in the paper that the
+gene-level data as provided in the supplementary information are
+centered, but this was not done for the
+peptides.
+
+##### :speech\_balloon: In your opinion why were the protein data centered? How would you recommend normalizing these data? Why?
+
+Here, we hypothesize that SAAV peptides are sampled from these genes and
+should therefore present the same abundance distribution. Data
+acquisition and processing artefacts can influence the centering and
+scaling. To correct for this, we will normalize the abundances from all
+tumors using centile-based
+Z-scores.
+
+``` r
+saavDF$x <- 0 # Note that it is possible to include covariates in the model instead of using a constant here
+
+for (column in tumorColumns) {
+    
+    zColumn <- paste0("z_", column)
+    
+    trainingDF <- saavDF %>%
+        filter(
+            !is.na(!!sym(column)) & !is.infinite(!!sym(column)) & !!sym(column) > 0
+        ) %>%
+        select(
+            x, !!column
+        ) %>% 
+        mutate(
+            y = log10(!!sym(column))
+        )
+    
+    model <- gamlss(
+        formula = as.formula("y ~ x"),
+        family = NO,
+        data = trainingDF
+    )
+    
+    saavDF[[zColumn]] <- centiles.pred(
+        obj = model, 
+        xname = "x", 
+        xvalues = saavDF$x, 
+        yval = log10(saavDF[[column]]), 
+        type = "z-scores"
+    )
+    
+}
+```
+
+    ## GAMLSS-RS iteration 1: Global Deviance = 840.4938 
+    ## GAMLSS-RS iteration 2: Global Deviance = 840.4938 
+    ## GAMLSS-RS iteration 1: Global Deviance = -2945.805 
+    ## GAMLSS-RS iteration 2: Global Deviance = -2945.805 
+    ## GAMLSS-RS iteration 1: Global Deviance = 812.2958 
+    ## GAMLSS-RS iteration 2: Global Deviance = 812.2958 
+    ## GAMLSS-RS iteration 1: Global Deviance = -2283.254 
+    ## GAMLSS-RS iteration 2: Global Deviance = -2283.254 
+    ## GAMLSS-RS iteration 1: Global Deviance = 708.7037 
+    ## GAMLSS-RS iteration 2: Global Deviance = 708.7037 
+    ## GAMLSS-RS iteration 1: Global Deviance = -4506.253 
+    ## GAMLSS-RS iteration 2: Global Deviance = -4506.253 
+    ## GAMLSS-RS iteration 1: Global Deviance = 790.2805 
+    ## GAMLSS-RS iteration 2: Global Deviance = 790.2805 
+    ## GAMLSS-RS iteration 1: Global Deviance = -1713.002 
+    ## GAMLSS-RS iteration 2: Global Deviance = -1713.002 
+    ## GAMLSS-RS iteration 1: Global Deviance = 936.0433 
+    ## GAMLSS-RS iteration 2: Global Deviance = 936.0433 
+    ## GAMLSS-RS iteration 1: Global Deviance = -634.6402 
+    ## GAMLSS-RS iteration 2: Global Deviance = -634.6402 
+    ## GAMLSS-RS iteration 1: Global Deviance = 547.8296 
+    ## GAMLSS-RS iteration 2: Global Deviance = 547.8296 
+    ## GAMLSS-RS iteration 1: Global Deviance = -4913.075 
+    ## GAMLSS-RS iteration 2: Global Deviance = -4913.075 
+    ## GAMLSS-RS iteration 1: Global Deviance = 450.362 
+    ## GAMLSS-RS iteration 2: Global Deviance = 450.362 
+    ## GAMLSS-RS iteration 1: Global Deviance = -2788.431 
+    ## GAMLSS-RS iteration 2: Global Deviance = -2788.431 
+    ## GAMLSS-RS iteration 1: Global Deviance = 297.8676 
+    ## GAMLSS-RS iteration 2: Global Deviance = 297.8676 
+    ## GAMLSS-RS iteration 1: Global Deviance = -3492.028 
+    ## GAMLSS-RS iteration 2: Global Deviance = -3492.028 
+    ## GAMLSS-RS iteration 1: Global Deviance = 773.3634 
+    ## GAMLSS-RS iteration 2: Global Deviance = 773.3634 
+    ## GAMLSS-RS iteration 1: Global Deviance = -1731.351 
+    ## GAMLSS-RS iteration 2: Global Deviance = -1731.351 
+    ## GAMLSS-RS iteration 1: Global Deviance = 761.8647 
+    ## GAMLSS-RS iteration 2: Global Deviance = 761.8647 
+    ## GAMLSS-RS iteration 1: Global Deviance = -1944.156 
+    ## GAMLSS-RS iteration 2: Global Deviance = -1944.156 
+    ## GAMLSS-RS iteration 1: Global Deviance = 745.1938 
+    ## GAMLSS-RS iteration 2: Global Deviance = 745.1938 
+    ## GAMLSS-RS iteration 1: Global Deviance = -2501.996 
+    ## GAMLSS-RS iteration 2: Global Deviance = -2501.996 
+    ## GAMLSS-RS iteration 1: Global Deviance = 688.3178 
+    ## GAMLSS-RS iteration 2: Global Deviance = 688.3178 
+    ## GAMLSS-RS iteration 1: Global Deviance = -2753.819 
+    ## GAMLSS-RS iteration 2: Global Deviance = -2753.819 
+    ## GAMLSS-RS iteration 1: Global Deviance = 789.2905 
+    ## GAMLSS-RS iteration 2: Global Deviance = 789.2905 
+    ## GAMLSS-RS iteration 1: Global Deviance = -2614.964 
+    ## GAMLSS-RS iteration 2: Global Deviance = -2614.964 
+    ## GAMLSS-RS iteration 1: Global Deviance = 663.672 
+    ## GAMLSS-RS iteration 2: Global Deviance = 663.672 
+    ## GAMLSS-RS iteration 1: Global Deviance = -2438.429 
+    ## GAMLSS-RS iteration 2: Global Deviance = -2438.429 
+    ## GAMLSS-RS iteration 1: Global Deviance = 476.9165 
+    ## GAMLSS-RS iteration 2: Global Deviance = 476.9165 
+    ## GAMLSS-RS iteration 1: Global Deviance = -2870.104 
+    ## GAMLSS-RS iteration 2: Global Deviance = -2870.104 
+    ## GAMLSS-RS iteration 1: Global Deviance = 608.7589 
+    ## GAMLSS-RS iteration 2: Global Deviance = 608.7589 
+    ## GAMLSS-RS iteration 1: Global Deviance = -1753.453 
+    ## GAMLSS-RS iteration 2: Global Deviance = -1753.453 
+    ## GAMLSS-RS iteration 1: Global Deviance = 668.643 
+    ## GAMLSS-RS iteration 2: Global Deviance = 668.643 
+    ## GAMLSS-RS iteration 1: Global Deviance = -710.1498 
+    ## GAMLSS-RS iteration 2: Global Deviance = -710.1498 
+    ## GAMLSS-RS iteration 1: Global Deviance = 779.4555 
+    ## GAMLSS-RS iteration 2: Global Deviance = 779.4555 
+    ## GAMLSS-RS iteration 1: Global Deviance = -2333.914 
+    ## GAMLSS-RS iteration 2: Global Deviance = -2333.914 
+    ## GAMLSS-RS iteration 1: Global Deviance = 1207.25 
+    ## GAMLSS-RS iteration 2: Global Deviance = 1207.25 
+    ## GAMLSS-RS iteration 1: Global Deviance = -2963.476 
+    ## GAMLSS-RS iteration 2: Global Deviance = -2963.476 
+    ## GAMLSS-RS iteration 1: Global Deviance = 985.2918 
+    ## GAMLSS-RS iteration 2: Global Deviance = 985.2918 
+    ## GAMLSS-RS iteration 1: Global Deviance = -4277.468 
+    ## GAMLSS-RS iteration 2: Global Deviance = -4277.468 
+    ## GAMLSS-RS iteration 1: Global Deviance = 985.3234 
+    ## GAMLSS-RS iteration 2: Global Deviance = 985.3234 
+    ## GAMLSS-RS iteration 1: Global Deviance = -2247.06 
+    ## GAMLSS-RS iteration 2: Global Deviance = -2247.06 
+    ## GAMLSS-RS iteration 1: Global Deviance = 1082.365 
+    ## GAMLSS-RS iteration 2: Global Deviance = 1082.365 
+    ## GAMLSS-RS iteration 1: Global Deviance = -2069.334 
+    ## GAMLSS-RS iteration 2: Global Deviance = -2069.334 
+    ## GAMLSS-RS iteration 1: Global Deviance = 1078.149 
+    ## GAMLSS-RS iteration 2: Global Deviance = 1078.149 
+    ## GAMLSS-RS iteration 1: Global Deviance = -2006.406 
+    ## GAMLSS-RS iteration 2: Global Deviance = -2006.406 
+    ## GAMLSS-RS iteration 1: Global Deviance = 668.1537 
+    ## GAMLSS-RS iteration 2: Global Deviance = 668.1537 
+    ## GAMLSS-RS iteration 1: Global Deviance = -3710.985 
+    ## GAMLSS-RS iteration 2: Global Deviance = -3710.985 
+    ## GAMLSS-RS iteration 1: Global Deviance = 341.3271 
+    ## GAMLSS-RS iteration 2: Global Deviance = 341.3271 
+    ## GAMLSS-RS iteration 1: Global Deviance = -4220.562 
+    ## GAMLSS-RS iteration 2: Global Deviance = -4220.562 
+    ## GAMLSS-RS iteration 1: Global Deviance = 425.3992 
+    ## GAMLSS-RS iteration 2: Global Deviance = 425.3992 
+    ## GAMLSS-RS iteration 1: Global Deviance = -3559.435 
+    ## GAMLSS-RS iteration 2: Global Deviance = -3559.435 
+    ## GAMLSS-RS iteration 1: Global Deviance = 832.422 
+    ## GAMLSS-RS iteration 2: Global Deviance = 832.422 
+    ## GAMLSS-RS iteration 1: Global Deviance = -3431.085 
+    ## GAMLSS-RS iteration 2: Global Deviance = -3431.085 
+    ## GAMLSS-RS iteration 1: Global Deviance = 1255.336 
+    ## GAMLSS-RS iteration 2: Global Deviance = 1255.336 
+    ## GAMLSS-RS iteration 1: Global Deviance = -2341.443 
+    ## GAMLSS-RS iteration 2: Global Deviance = -2341.443 
+    ## GAMLSS-RS iteration 1: Global Deviance = 1098.109 
+    ## GAMLSS-RS iteration 2: Global Deviance = 1098.109 
+    ## GAMLSS-RS iteration 1: Global Deviance = -2253.094 
+    ## GAMLSS-RS iteration 2: Global Deviance = -2253.094 
+    ## GAMLSS-RS iteration 1: Global Deviance = 1007.28 
+    ## GAMLSS-RS iteration 2: Global Deviance = 1007.28 
+    ## GAMLSS-RS iteration 1: Global Deviance = -2976.973 
+    ## GAMLSS-RS iteration 2: Global Deviance = -2976.973 
+    ## GAMLSS-RS iteration 1: Global Deviance = 1092.962 
+    ## GAMLSS-RS iteration 2: Global Deviance = 1092.962 
+    ## GAMLSS-RS iteration 1: Global Deviance = -2684.323 
+    ## GAMLSS-RS iteration 2: Global Deviance = -2684.323 
+    ## GAMLSS-RS iteration 1: Global Deviance = 873.9888 
+    ## GAMLSS-RS iteration 2: Global Deviance = 873.9888 
+    ## GAMLSS-RS iteration 1: Global Deviance = -2970.003 
+    ## GAMLSS-RS iteration 2: Global Deviance = -2970.003 
+    ## GAMLSS-RS iteration 1: Global Deviance = 1110.102 
+    ## GAMLSS-RS iteration 2: Global Deviance = 1110.102 
+    ## GAMLSS-RS iteration 1: Global Deviance = -2077.95 
+    ## GAMLSS-RS iteration 2: Global Deviance = -2077.95 
+    ## GAMLSS-RS iteration 1: Global Deviance = 655.789 
+    ## GAMLSS-RS iteration 2: Global Deviance = 655.789 
+    ## GAMLSS-RS iteration 1: Global Deviance = -3202.731 
+    ## GAMLSS-RS iteration 2: Global Deviance = -3202.731 
+    ## GAMLSS-RS iteration 1: Global Deviance = 100.8563 
+    ## GAMLSS-RS iteration 2: Global Deviance = 100.8563 
+    ## GAMLSS-RS iteration 1: Global Deviance = -5135.314 
+    ## GAMLSS-RS iteration 2: Global Deviance = -5135.314 
+    ## GAMLSS-RS iteration 1: Global Deviance = 738.1112 
+    ## GAMLSS-RS iteration 2: Global Deviance = 738.1112 
+    ## GAMLSS-RS iteration 1: Global Deviance = -3379.92 
+    ## GAMLSS-RS iteration 2: Global Deviance = -3379.92 
+    ## GAMLSS-RS iteration 1: Global Deviance = 1440.962 
+    ## GAMLSS-RS iteration 2: Global Deviance = 1440.962 
+    ## GAMLSS-RS iteration 1: Global Deviance = -2076.825 
+    ## GAMLSS-RS iteration 2: Global Deviance = -2076.825 
+    ## GAMLSS-RS iteration 1: Global Deviance = 815.4158 
+    ## GAMLSS-RS iteration 2: Global Deviance = 815.4158 
+    ## GAMLSS-RS iteration 1: Global Deviance = -3351.195 
+    ## GAMLSS-RS iteration 2: Global Deviance = -3351.195 
+    ## GAMLSS-RS iteration 1: Global Deviance = 775.8443 
+    ## GAMLSS-RS iteration 2: Global Deviance = 775.8443 
+    ## GAMLSS-RS iteration 1: Global Deviance = -3830.9 
+    ## GAMLSS-RS iteration 2: Global Deviance = -3830.9 
+    ## GAMLSS-RS iteration 1: Global Deviance = 715.4553 
+    ## GAMLSS-RS iteration 2: Global Deviance = 715.4553 
+    ## GAMLSS-RS iteration 1: Global Deviance = -3674.995 
+    ## GAMLSS-RS iteration 2: Global Deviance = -3674.995 
+    ## GAMLSS-RS iteration 1: Global Deviance = 685.6302 
+    ## GAMLSS-RS iteration 2: Global Deviance = 685.6302 
+    ## GAMLSS-RS iteration 1: Global Deviance = -3943.427 
+    ## GAMLSS-RS iteration 2: Global Deviance = -3943.427 
+    ## GAMLSS-RS iteration 1: Global Deviance = 1021.019 
+    ## GAMLSS-RS iteration 2: Global Deviance = 1021.019 
+    ## GAMLSS-RS iteration 1: Global Deviance = -1879.398 
+    ## GAMLSS-RS iteration 2: Global Deviance = -1879.398 
+    ## GAMLSS-RS iteration 1: Global Deviance = 826.4545 
+    ## GAMLSS-RS iteration 2: Global Deviance = 826.4545 
+    ## GAMLSS-RS iteration 1: Global Deviance = -3217.784 
+    ## GAMLSS-RS iteration 2: Global Deviance = -3217.784 
+    ## GAMLSS-RS iteration 1: Global Deviance = 255.9764 
+    ## GAMLSS-RS iteration 2: Global Deviance = 255.9764 
+    ## GAMLSS-RS iteration 1: Global Deviance = -3993.959 
+    ## GAMLSS-RS iteration 2: Global Deviance = -3993.959 
+    ## GAMLSS-RS iteration 1: Global Deviance = 825.211 
+    ## GAMLSS-RS iteration 2: Global Deviance = 825.211 
+    ## GAMLSS-RS iteration 1: Global Deviance = -3307.261 
+    ## GAMLSS-RS iteration 2: Global Deviance = -3307.261
+
+``` r
+saavDF <- saavDF %>%
+    select(-x)
+```
+
+##### :pencil2: For a tumor and plot the normalized values against the original ones.
+
+``` r
+column <- sample(
+    x = tumorColumns,
+    size = 1
+)
+zColumn <- paste0("z_", column)
+
+ggplot(
+    data = saavDF
+) +
+    geom_point(
+        mapping = aes(
+            x = !!sym(column),
+            y = !!sym(zColumn)
+        )
+    )
+```
+
+    ## Warning: Removed 1607 rows containing missing values (geom_point).
+
+![](variation_analysis_files/figure-gfm/normalization_example-1.png)<!-- -->
+
+##### [:thought\_balloon:](answers.md#thought_balloon-why-does-the-curve-have-this-shape) *Why does the curve have this shape?*
+
+##### :pencil2: Plot the distributions like before after normalization.
+
+``` r
+zTumorColumns <- paste0("z_", tumorColumns)
+
+intensitiesDF <- saavDF %>%
+    select(
+        -!!tumorColumns
+    ) %>%
+    gather(
+        !!zTumorColumns,
+        key = "sample",
+        value = "intensity"
+    ) %>%
+    filter(
+        !is.na(intensity) & !is.infinite(intensity)
+    ) %>%
+    separate(
+        col = sample,
+        into = c(NA, "tumor", "species"),
+        sep = "_"
+    )
+
+intensitiesDF$species <- factor(
+    intensitiesDF$species, 
+    levels = c("gene", "saavPeptide")
+)
+levels(intensitiesDF$species) <- c("Gene", "SAAV Peptide")
+
+ggplot(
+    data = intensitiesDF
+) +
+    geom_violin(
+        mapping = aes(
+            x = tumor,
+            y = intensity,
+            col = tumor
+        ),
+        fill = NA
+    ) +
+    geom_boxplot(
+        mapping = aes(
+            x = tumor,
+            y = intensity,
+            col = tumor
+        ),
+        fill = NA,
+        outlier.shape = NA
+    ) +
+    facet_grid(
+        species ~ .
+    ) + 
+    scale_fill_manual(
+        values = scico(
+            n = length(unique(intensitiesDF$tumor)),
+            palette = "batlow",
+            begin = 0.25,
+            end = 0.75
+        )
+    ) +
+    scale_color_manual(
+        values = scico(
+            n = length(unique(intensitiesDF$tumor)),
+            palette = "batlow",
+            begin = 0.25,
+            end = 0.75
+        )
+    ) + 
+    scale_y_continuous(
+        name = "Intensity"
+    ) + 
+    theme(
+        legend.position = "none",
+        axis.title.x = element_blank(),
+        axis.text.x = element_text(
+            angle = 90,
+            hjust = 1,
+            vjust = 0.5
+            
+        ),
+        panel.grid.major.x = element_blank(),
+        panel.grid.minor.x = element_blank()
+    )
+```
+
+![](variation_analysis_files/figure-gfm/intensity_quartiles-1.png)<!-- -->
 
 ## References
 
