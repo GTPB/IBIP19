@@ -1,6 +1,11 @@
 ---
-layout: page
-title: CNA-Protein
+title: "CNA-Protein"
+author: Marc Vaudel
+date: 2019-10-28
+output: 
+    github_document:
+    toc: true
+    toc_depth: 1
 ---
 
 # CNA-Protein
