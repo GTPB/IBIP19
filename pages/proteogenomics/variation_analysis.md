@@ -37,8 +37,7 @@ and alternative alleles of corresponding SNPs for each genotype.
 ![Figure\_7h](resources/images/Fig7h.png?raw=true
 "Johansson et al. Fig 7h")
 
-> Figure 7h in Johansson *et al.*
-[(1)](#references).
+> Figure 7h in Johansson *et al.* [(1)](#references).
 
 ##### [:thought\_balloon:](answers.md#thought_balloon-if-we-assume-a-linear-relationship-between-number-of-alleles-and-peptide-abundance-what-should-be-the-peptide-distribution-for-each-genotype) *If we assume a linear relationship between number of alleles and peptide abundance, what should be the peptide distribution for each genotype?*
 
@@ -112,8 +111,7 @@ tumorDF$color <- tumorColors[tumorDF$PAM50_subtype]
 ```
 
 Note that for the sake of speed, the last columns of the genes table
-were
-skipped.
+were skipped.
 
 ##### [:thought\_balloon:](answers.md#thought_balloon-how-do-we-need-to-transform-the-tables-to-compare-saav-peptide-level-intensities-to-gene-level-intensities) *How do we need to transform the tables to compare SAAV peptide-level intensities to gene-level intensities?*
 
@@ -123,8 +121,7 @@ The proposed solution is available in
 reformated SAAV peptides table is available in
 [resources/data/table16.gz](resources/data/table16.gz). Note that in
 this table one row represents a unique *{peptide sequence, gene
-accession}*
-pair.
+accession}* pair.
 
 ##### [:thought\_balloon:](answers.md#thought_balloon-why-can-there-be-multiple-peptide-per-gene-and-gene-per-peptide-is-it-correct-to-represent-peptides-by-their-sequence) *Why can there be multiple peptide per gene, and gene per peptide? Is it correct to represent peptides by their sequence?*
 
@@ -268,8 +265,7 @@ ggplot(
 As you can see, the gene-level intensities are centered around one, and
 not for the peptide-level. You might have noticed in the paper that the
 gene-level data as provided in the supplementary information are
-centered, but this was not done for the
-peptides.
+centered, but this was not done for the peptides.
 
 ##### :speech\_balloon: In your opinion why were the protein data centered? How would you recommend normalizing these data? Why?
 
@@ -580,7 +576,7 @@ ggplot(
     )
 ```
 
-    ## Warning: Removed 1457 rows containing missing values (geom_point).
+    ## Warning: Removed 2557 rows containing missing values (geom_point).
 
 ![](variation_analysis_files/figure-gfm/normalization_example-1.png)<!-- -->
 
@@ -805,8 +801,7 @@ ggplot(
 In the following, we will inspect the correlation of the profile across
 tumors for the abundances reported for genes and SAAV peptides. Note
 that we will use random values to compare our results with what one
-would expect by
-chance.
+would expect by chance.
 
 ##### :pencil2: Plot a histogram of pairwise correlation between protein and peptide abundances across tumors, compare with random values.
 
