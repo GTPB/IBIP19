@@ -1,6 +1,6 @@
 David Bouyssié
 
-# Label-free quantification QC
+# Quality control of label-free quantification MS data
 
 Proteomic workflows based on nanoLC–MS/MS data-dependent-acquisition are now use routinely in core facilities and laboratories though popular software such as MaxQuant or Proteome Discoverer. However, the computational processing of label-free quantification data is challenging because of potential inconsistencies which can occur at several levels of the sample preparation and MS analysis. And more importantly mass spectrometers do not acquire MS/MS spectra in a reproducible manner in long series of samples, making mandatory to combine the identifications observed between the compared runs to obtain of full overview of the quantified peptides and proteins. Controlling the errors which may occur during the MS signal detection and the "match betwen runs" procedure is thus very important, since it can help to increase the reliability of quantitative studies based on this strategy.
 
