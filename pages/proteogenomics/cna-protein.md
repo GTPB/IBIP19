@@ -25,6 +25,7 @@ installed.
 library(tidyr)
 library(dplyr)
 library(ggplot2)
+library(scico)
 library(gtable)
 library(grid)
 library(conflicted)
@@ -60,10 +61,56 @@ cnaCorDF <- read.table(
 
 ##### [:thought\_balloon:](answers.md#thought_balloon-what-do-the-columns-represent-what-is-the-difference-between-pearson-and-spearman-correlations) What do the columns represent? What is the difference between Pearson and Spearman correlations?
 
+Gonçalves *et al.* [(3)](#references) define the attenuation coefficient
+as the difference between the correlation of the protein and RNA.
+
+##### :pencil2: Estimate the attenuation coefficient and plot its density.
+
+``` r
+# Attenuation coefficient
+
+cnaCorDF <- cnaCorDF %>%
+    mutate(
+        attenuation_coefficient = protein_Spearman_correlation - mRNA_Spearman_correlation
+    )
+
+
+# Build density plot
+
+ggplot(
+    data = cnaCorDF
+) +
+    geom_density(
+        mapping = aes(
+            x = attenuation_coefficient
+        ),
+        fill = "black",
+        alpha = 0.2
+    ) +
+    scale_x_continuous(
+        name = "Attenuation Coefficient"
+    ) +
+    scale_y_continuous(
+        name = "Density"
+    )
+```
+
+![](cna-protein_files/figure-gfm/attenuation_coefficient-1.png)<!-- -->
+
 ##### :pencil2: Plot the correlation results for proteins against mRNA as in Figure 6 of Johansson *et al.* [(1)](#references) and Figure 1 of Gonçalves *et al.* [(3)](#references).
 
 ``` r
+# Attenuation coefficient
+
+cnaCorDF <- cnaCorDF %>%
+    mutate(
+        attenuation_coefficient = protein_Spearman_correlation - mRNA_Spearman_correlation
+    )
+
+
 # Build the scatter plot
+
+gradientEnd <- (max(cnaCorDF$attenuation_coefficient) - min(cnaCorDF$attenuation_coefficient)) / (2 * (-min(cnaCorDF$attenuation_coefficient)))
 
 scatterPlot <- ggplot(
     data = cnaCorDF
@@ -71,9 +118,9 @@ scatterPlot <- ggplot(
     geom_point(
         mapping = aes(
             x = mRNA_Spearman_correlation,
-            y = protein_Spearman_correlation
+            y = protein_Spearman_correlation,
+            col = attenuation_coefficient
         ),
-        col = "black",
         alpha = 0.2
     ) +
     geom_density_2d(
@@ -88,6 +135,15 @@ scatterPlot <- ggplot(
     ) +
     scale_y_continuous(
         name = "Protein-CNA Correlation (Spearman)"
+    ) +
+    scale_color_scico(
+        name = "Attenuation Coefficient",
+        palette = "berlin",
+        begin = 0,
+        end = gradientEnd
+    ) +
+    theme(
+        legend.position = "top"
     )
 
 
@@ -148,17 +204,17 @@ proteinDensityGrob <- ggplotGrob(proteinDensityPlot)
 
 # Insert the densities as new row and column in the scatter grob
 
-mergedGrob <- rbind(scatterGrob[1:4, ], rnaDensityGrob[7, ], scatterGrob[5:nrow(scatterGrob), ], size = "last")
-mergedGrob$heights[5] <- unit(0.2, "null")
+mergedGrob <- rbind(scatterGrob[1:7, ], rnaDensityGrob[7, ], scatterGrob[8:nrow(scatterGrob), ], size = "last")
+mergedGrob$heights[8] <- unit(0.2, "null")
 
 proteinDensityGrob <- gtable_add_rows(
         x = proteinDensityGrob, 
-        heights = unit(1, "null"), 
+        heights = unit(rep(0, nrow(mergedGrob) - nrow(proteinDensityGrob)), "null"), 
         pos = 0
     )
 
 mergedGrob <- cbind(mergedGrob[, 1:5], proteinDensityGrob[, 5], mergedGrob[, 6:ncol(mergedGrob)], size = "first")
-mergedGrob$widths[6] <- unit(0.2, "null")
+mergedGrob$widths[6] <- unit(0.15, "null")
 
 
 # Plot
