@@ -98,7 +98,9 @@ Note that for the sake of speed, the last columns of the genes table were skippe
 
 ##### [:thought_balloon:](answers.md#thought_balloon-how-do-we-need-to-transform-the-tables-to-compare-saav-peptide-level-intensities-to-gene-level-intensities) _How do we need to transform the tables to compare SAAV peptide-level intensities to gene-level intensities?_
 
-For the sake of time, this data transformation was run for you already. The proposed solution is available in [scripts/merge_table_1_6.R](resources/data/saav.gz), and the reformated SAAV peptides table is available in [resources/data/table16.gz](resources/data/table16.gz).
+For the sake of time, this data transformation was run for you already. The proposed solution is available in [scripts/merge_table_1_6.R](resources/data/saav.gz), and the reformated SAAV peptides table is available in [resources/data/table16.gz](resources/data/table16.gz). Note that in this table one row represents a unique {peptide sequence, gene accession} pair.
+
+##### [:thought_balloon:](answers.md#thought_balloon-why-can-there-be-multiple-peptide-per-gene-and-gene-per-peptide-is-it-correct-to-represent-peptides-by-their-sequence) _Why can there be multiple peptide per gene, and gene per peptide? Is it correct to represent peptides by their sequence?_
 
 ##### :pencil2: Load the reformated SAAV peptides table.
 
@@ -200,7 +202,7 @@ ggplot(
 
 ```
 
-##### [:thought_balloon:](answers.md#thought_balloon-why-does-the-curve-have-this-shape) _Why are all intensities at the bottom? How can we better visualize these distributions?_
+##### [:thought_balloon:](answers.md#thought_balloon-why-are-all-intensities-at-the-bottom-how-can-we-better-visualize-these-distributions) _Why are all intensities at the bottom? How can we better visualize these distributions?_
 
 As you can see, the gene-level intensities are centered around one, and not for the peptide-level. You might have noticed in the paper that the gene-level data as provided in the supplementary information are centered, but this was not done for the peptides.
 
@@ -209,8 +211,6 @@ As you can see, the gene-level intensities are centered around one, and not for 
 Here, we hypothesize that SAAV peptides are sampled from these genes and should therefore present the same abundance distribution. Data acquisition and processing artefacts can influence the centering and scaling. To correct for this, we will normalize the abundances from all tumors using centile-based Z-scores.
 
 ```{r normalization}
-
-saavDF$x <- 0 # Note that it is possible to include covariates in the model instead of using a constant here
 
 for (column in tumorColumns) {
     
@@ -221,30 +221,38 @@ for (column in tumorColumns) {
             !is.na(!!sym(column)) & !is.infinite(!!sym(column)) & !!sym(column) > 0
         ) %>%
         select(
-            x, !!column
-        ) %>% 
-        mutate(
-            y = log10(!!sym(column))
+            gene, peptide_sequence, !!column
         )
     
+    trainingDF$x <- 0 # Note that it is possible to include covariates in the model instead of using a constant here
+    
     model <- gamlss(
-        formula = as.formula("y ~ x"),
-        family = NO,
-        data = trainingDF
+        formula = as.formula(paste0(column, " ~ x")),
+        family = LOGNO,
+        data = trainingDF,
+        
     )
     
-    saavDF[[zColumn]] <- centiles.pred(
+    trainingDF[[zColumn]] <- centiles.pred(
         obj = model, 
         xname = "x", 
-        xvalues = saavDF$x, 
-        yval = log10(saavDF[[column]]), 
+        xvalues = trainingDF$x, 
+        yval = trainingDF[[column]], 
         type = "z-scores"
     )
     
+    trainingDF <- trainingDF %>%
+        select(
+            gene, peptide_sequence, !!zColumn
+        )
+    
+    saavDF <- saavDF %>%
+        left_join(
+            trainingDF,
+            by = c("gene", "peptide_sequence")
+        )
+    
 }
-
-saavDF <- saavDF %>%
-    select(-x)
 
 ```
 
@@ -265,7 +273,8 @@ ggplot(
         mapping = aes(
             x = !!sym(column),
             y = !!sym(zColumn)
-        )
+        ),
+        alpha = 0.1
     )
 
 
@@ -350,13 +359,105 @@ ggplot(
         axis.title.x = element_blank(),
         axis.text.x = element_text(
             angle = 90,
-            hjust = 1,
+            hjust = 0,
             vjust = 0.5
             
         ),
         panel.grid.major.x = element_blank(),
         panel.grid.minor.x = element_blank()
     )
+
+```
+
+##### :pencil2: Plot the gene- and peptide- level intensities and the linear corresponding linear model.
+
+```{r peptide_protein_scatter}
+
+zTumorColumns <- paste0("z_", tumorColumns)
+
+intensitiesDF <- saavDF %>%
+    select(
+        -!!tumorColumns
+    ) %>%
+    gather(
+        !!zTumorColumns,
+        key = "sample",
+        value = "intensity"
+    ) %>%
+    filter(
+        !is.na(intensity) & !is.infinite(intensity)
+    ) %>%
+    separate(
+        col = sample,
+        into = c(NA, "tumor", "species"),
+        sep = "_"
+    ) %>%
+    spread(
+        key = species,
+        value = intensity
+    ) %>%
+    filter(
+        !is.na(saavPeptide) & !is.na(gene)
+    ) %>%
+    arrange(
+        abs(saavPeptide - gene)
+    )
+
+model <- lm(
+    data = intensitiesDF,
+    formula = as.formula("saavPeptide ~ gene")
+)
+
+summary(model)
+
+modeCoefficients <- coef(model)
+
+ggplot(
+    data = intensitiesDF
+) +
+    geom_abline(
+        intercept = 0,
+        slope = 1,
+        col = "black",
+        linetype = "dotted"
+    ) +
+    geom_point(
+        mapping = aes(
+            x = gene,
+            y = saavPeptide,
+            col = tumor
+        ),
+        alpha = 0.1
+    ) +
+    geom_density2d(
+        mapping = aes(
+            x = gene,
+            y = saavPeptide
+        ),
+        col = "blue"
+    ) +
+    geom_abline(
+        intercept = modeCoefficients[1],
+        slope = modeCoefficients[2],
+        col = "blue",
+        linetype = "dotted"
+    ) +
+    scale_x_continuous(
+        name = "Gene-level Abundances [Z-score]"
+    ) +
+    scale_y_continuous(
+        name = "SAAV peptide-level Abundances [Z-score]"
+    ) +
+    scale_color_manual(
+        values = scico(
+            n = length(unique(intensitiesDF$tumor)),
+            palette = "batlow"
+        )
+    ) +
+    theme(
+        legend.position = "none"
+    )
+
 
 ```
 

@@ -141,7 +141,7 @@ plot <- ggplot(
         axis.title.x = element_blank(),
         axis.text.x = element_text(
             angle = 90,
-            hjust = 1,
+            hjust = 0,
             vjust = 0.5
             
         ),
