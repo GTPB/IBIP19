@@ -822,7 +822,7 @@ ggplot(
 
 ##### :speech_balloon: How do you interpret differences in correlation between abundances reported for genes or SAAV peptides? 
 
-In the following, we investigate whether specific classes of variants influence the correlation between SAAV peptide- and gene-level abundances. For this, we query the [Ensembl Variant Effect Predictor (VEP)](ensembl.org/Homo_sapiens/Tools/VEP) using the variant identifiers reported in [Supplementary Table 6](../resources/Johansson_et_al_breast_cancer_quantitative_proteome_and_proteogenomic_landscape). For the sake of time, we will not query VEP as part of this tutorial, this was already done for you, and the VEP results are available in [resources/data/vep.txt](resources/data/vep.txt).
+In the following, we investigate whether specific classes of variants influence the correlation between SAAV peptide- and gene-level abundances. For this, we query the [Ensembl Variant Effect Predictor (VEP)](ensembl.org/Homo_sapiens/Tools/VEP) using the variant identifiers reported in [Supplementary Table 6](../resources/Johansson_et_al_breast_cancer_quantitative_proteome_and_proteogenomic_landscape). For the sake of time, we will not query VEP as part of this tutorial, this was already done for you, and the VEP results are available in [resources/data/vep.txt](resources/data/vep.txt). Note that only variants with an _rsID_ were used in this analysis.
 
 ##### :pencil2: Import the VEP results and merge with the correlation data frame.
 

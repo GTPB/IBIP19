@@ -5,9 +5,60 @@ title: CNA-Protein
 
 # CNA-Protein
 
-Bla [(1)](#references). 
+In the previous chapters, we investigated the presence of novel or variant peptides in Breast cancer tumors as done by Johansson _et al._ [(1)](#references) using a proteogenomic search strategy. Here, we look at the effect of copy number alteration (CNA). Copy number variation is associated with increased or decreased gene expression, but the association with protein abundances is less pronounced, one says that the effect of CNAs is post-translationally attenuated [(1,2)](#references).
+
+##### :speech_balloon: In you opinion, what mechanisms can affect the association between CNA, gene expression, and protein abundances?
+
+
+## Libraries
+
+We will need the following libraries, please make sure that they are installed.
+
+```{r libraries, warning=FALSE, results='hide', message=FALSE}
+
+library(tidyr)
+library(dplyr)
+library(ggplot2)
+library(gtable)
+library(grid)
+library(conflicted)
+
+theme_set(theme_bw(base_size = 11))
+
+```
+
+
+## CNA - RNA - Protein abundance relationship
+
+Johansson _et al._ [(1)](#references) conduct a correlation analysis similar to Gonçalves _et al._ [(3)](#references), where the correlation of protein abundances with CNA is compared to the correlation of RNA levels with CNA. These values are provided in [Supplementary Table 5](../resources/Johansson_et_al_breast_cancer_quantitative_proteome_and_proteogenomic_landscape). The correlation values were extracted in R-friendly format and are availabe in [resources/data/cna-rna-protein](resources/data/cna-rna-protein).
+
+##### :pencil2: Import the correlation results.
+
+```{r vep}
+
+# Load the file, select the columns of interest, format the columns and content
+
+cnaCorDF <- read.table(
+    file = "resources/data/cna-rna-protein",
+    header = T,
+    sep = "\t",
+    comment.char = "",
+    quote = "",
+    stringsAsFactors = F
+)
+
+```
+
+##### [:thought_balloon:](answers.md#thought_balloon-if-we-assume-a-linear-relationship-between-number-of-alleles-and-peptide-abundance-what-should-be-the-peptide-distribution-for-each-genotype) What do the columns represent? What is the difference between Pearson and Spearman correlations?
+
+##### :pencil2: Import the correlation results.
+
 
 
 ## References
 
-(1) [title](https://www.ncbi.nlm.nih.gov/pubmed/pmid)
+(1) [Breast cancer quantitative proteome and proteogenomic landscape](https://www.ncbi.nlm.nih.gov/pubmed/30962452)
+
+(2) [The genomic and transcriptomic architecture of 2,000 breast tumours reveals novel subgroups](https://www.ncbi.nlm.nih.gov/pubmed/22522925)
+
+(3) [Widespread Post-transcriptional Attenuation of Genomic Copy-Number Variation in Cancer](https://www.ncbi.nlm.nih.gov/pubmed/29032074)

@@ -122,6 +122,22 @@ This accounts for the log-normal distribution of the intensities observed in the
 ![zScore_log](resources/images/zLogIntensity.png?raw=true "Z-score vs log")
 
 
+## 3. CNA-protein
+
+##### [:thought_balloon:](answers.md#thought_balloon-if-we-assume-a-linear-relationship-between-number-of-alleles-and-peptide-abundance-what-should-be-the-peptide-distribution-for-each-genotype) What do the columns represent? What is the difference between Pearson and Spearman correlations?
+
+| Column Name | Description |
+| ----------- | ----------- |
+| gene, chromosome, start, end, band, position | The chromosomic coordinates of the CNA. |
+| mRNA_ANOVA_AdjPval, protein_ANOVA_AdjPval | The significance that the RNA or protein, respectively, are differentially abundant between the tumors using an ANOVA analysis. [-log10] |
+| mRNA_Pearson_correlation, protein_Pearson_correlation | The Pearson correlation coefficient (R) for the RNA or the protein abundance, respectively, with the CNA. |
+| mRNA_Pearson_pval, protein_Pearson_pval | The Pearson correlation significance for the RNA or the protein abundance, respectively, with the CNA. |
+| mRNA_Spearman_correlation, protein_Spearman_correlation | The Spearman correlation coefficient (R) for the RNA or the protein abundance, respectively, with the CNA. |
+| mRNA_Spearman_pval, protein_Spearman_pval | The Spearman correlation significance for the RNA or the protein abundance, respectively, with the CNA. |
+
+The Spearman correlation is a Pearson correlation of the ranks of the values. Working on the ranks is more robust, especially towards outliers. See the R help on _cor_ for more details `?cor`.
+
+
 ## References
 
 (1) [Anatomy and evolution of database search engines-a central component of mass spectrometry based proteomic workflows](https://www.ncbi.nlm.nih.gov/pubmed/28902424)

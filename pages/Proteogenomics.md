@@ -55,6 +55,7 @@ You will need the following libraries, please make sure that they are installed.
 - We will use [tidyr](tidyr.tidyverse.org) to import data, we recommend this [cheat sheet](https://github.com/rstudio/cheatsheets/blob/master/data-import.pdf).
 - We will use [dplyr](dplyr.tidyverse.org) to transform data, we recommend this [cheat sheet](https://github.com/rstudio/cheatsheets/blob/master/data-transformation.pdf).
 - We will use [ggplot2](ggplot2.tidyverse.org) to plot data, we recommend this [cheat sheet](https://github.com/rstudio/cheatsheets/blob/master/data-visualization-2.1.pdf).
+- We will use [gtable](github.com/r-lib/gtable) to organize plots.
 - We will use [gamlss](https://www.gamlss.com/) for normalization.
 - We will use [conflicted](https://github.com/r-lib/conflicted) to manage conflict resolution to function names between packages.
 
