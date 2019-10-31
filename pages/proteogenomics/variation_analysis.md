@@ -476,7 +476,7 @@ ggplot(
     )
 ```
 
-    ## Warning: Removed 1566 rows containing missing values (geom_point).
+    ## Warning: Removed 2850 rows containing missing values (geom_point).
 
 ![](variation_analysis_files/figure-gfm/normalization_example-1.png)<!-- -->
 
@@ -568,6 +568,118 @@ ggplot(
 ```
 
 ![](variation_analysis_files/figure-gfm/intensity_quartiles-1.png)<!-- -->
+
+##### :pencil2: Plot the gene- and peptide- level intensities and the linear corresponding linear model.
+
+``` r
+zTumorColumns <- paste0("z_", tumorColumns)
+
+intensitiesDF <- saavDF %>%
+    select(
+        -!!tumorColumns
+    ) %>%
+    gather(
+        !!zTumorColumns,
+        key = "sample",
+        value = "intensity"
+    ) %>%
+    filter(
+        !is.na(intensity) & !is.infinite(intensity)
+    ) %>%
+    separate(
+        col = sample,
+        into = c(NA, "tumor", "species"),
+        sep = "_"
+    ) %>%
+    spread(
+        key = species,
+        value = intensity
+    ) %>%
+    filter(
+        !is.na(saavPeptide) & !is.na(gene)
+    ) %>%
+    arrange(
+        abs(saavPeptide - gene)
+    )
+
+model <- lm(
+    data = intensitiesDF,
+    formula = as.formula("saavPeptide ~ gene")
+)
+
+summary(model)
+```
+
+    ## 
+    ## Call:
+    ## lm(formula = as.formula("saavPeptide ~ gene"), data = intensitiesDF)
+    ## 
+    ## Residuals:
+    ##     Min      1Q  Median      3Q     Max 
+    ## -8.2482 -0.3133  0.0889  0.4266  8.1073 
+    ## 
+    ## Coefficients:
+    ##              Estimate Std. Error t value Pr(>|t|)    
+    ## (Intercept) -0.011673   0.004031  -2.896  0.00378 ** 
+    ## gene         0.320825   0.004050  79.214  < 2e-16 ***
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## Residual standard error: 0.9706 on 58019 degrees of freedom
+    ## Multiple R-squared:  0.0976, Adjusted R-squared:  0.09758 
+    ## F-statistic:  6275 on 1 and 58019 DF,  p-value: < 2.2e-16
+
+``` r
+modeCoefficients <- coef(model)
+
+ggplot(
+    data = intensitiesDF
+) +
+    geom_abline(
+        intercept = 0,
+        slope = 1,
+        col = "black",
+        linetype = "dotted"
+    ) +
+    geom_point(
+        mapping = aes(
+            x = gene,
+            y = saavPeptide,
+            col = tumor
+        ),
+        alpha = 0.1
+    ) +
+    geom_density2d(
+        mapping = aes(
+            x = gene,
+            y = saavPeptide
+        ),
+        col = "blue"
+    ) +
+    geom_abline(
+        intercept = modeCoefficients[1],
+        slope = modeCoefficients[2],
+        col = "blue",
+        linetype = "dotted"
+    ) +
+    scale_x_continuous(
+        name = "Gene-level Abundances [Z-score]"
+    ) +
+    scale_y_continuous(
+        name = "SAAV peptide-level Abundances [Z-score]"
+    ) +
+    scale_color_manual(
+        values = scico(
+            n = length(unique(intensitiesDF$tumor)),
+            palette = "batlow"
+        )
+    ) +
+    theme(
+        legend.position = "none"
+    )
+```
+
+![](variation_analysis_files/figure-gfm/peptide_protein_scatter-1.png)<!-- -->
 
 ## References
 

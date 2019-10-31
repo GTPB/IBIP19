@@ -91,7 +91,7 @@ Under this hypothesis: (1) if the genotype is homozygous for the reference allel
 
 The data in the SAAV peptides table are not normalized. Thus, we need to scale all intensities using the reference channel (131). Each line represents a PSM, peptides might therefore be present multiple times, we need to aggregate these different measurements per peptide in order to have a peptide-level table. Then, the different TMT batches need to be aligned and link to the different tumors. Finally, the gene-level intensities need to be extracted for each peptide. Note that one peptide might map to multiple genes.
 
-##### [:thought_balloon:](answers.md#thought_balloon-how-do-we-need-to-transform-the-tables-to-compare-saav-peptide-level-intensities-to-gene-level-intensities) _Why can there be multiple peptide per gene, and gene per peptide? Is it correct to represent peptides by their sequence?_
+##### [:thought_balloon:](answers.md#thought_balloon-why-can-there-be-multiple-peptide-per-gene-and-gene-per-peptide-is-it-correct-to-represent-peptides-by-their-sequence) _Why can there be multiple peptide per gene, and gene per peptide? Is it correct to represent peptides by their sequence?_
 
 A gene can contain multiple peptides with different SAAV. Conversely, a peptide carrying an SAAV can be shared between different genes. Consequently genes and peptides can appear multiple times in the table and their quantification values as well.
 

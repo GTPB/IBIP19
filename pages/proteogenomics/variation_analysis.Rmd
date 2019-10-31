@@ -100,7 +100,7 @@ Note that for the sake of speed, the last columns of the genes table were skippe
 
 For the sake of time, this data transformation was run for you already. The proposed solution is available in [scripts/merge_table_1_6.R](resources/data/saav.gz), and the reformated SAAV peptides table is available in [resources/data/table16.gz](resources/data/table16.gz). Note that in this table one row represents a unique {peptide sequence, gene accession} pair.
 
-##### [:thought_balloon:](answers.md#thought_balloon-how-do-we-need-to-transform-the-tables-to-compare-saav-peptide-level-intensities-to-gene-level-intensities) _Why can there be multiple peptide per gene, and gene per peptide? Is it correct to represent peptides by their sequence?_
+##### [:thought_balloon:](answers.md#thought_balloon-why-can-there-be-multiple-peptide-per-gene-and-gene-per-peptide-is-it-correct-to-represent-peptides-by-their-sequence) _Why can there be multiple peptide per gene, and gene per peptide? Is it correct to represent peptides by their sequence?_
 
 ##### :pencil2: Load the reformated SAAV peptides table.
 
@@ -369,7 +369,97 @@ ggplot(
 
 ```
 
+##### :pencil2: Plot the gene- and peptide- level intensities and the linear corresponding linear model.
 
+```{r peptide_protein_scatter}
+
+zTumorColumns <- paste0("z_", tumorColumns)
+
+intensitiesDF <- saavDF %>%
+    select(
+        -!!tumorColumns
+    ) %>%
+    gather(
+        !!zTumorColumns,
+        key = "sample",
+        value = "intensity"
+    ) %>%
+    filter(
+        !is.na(intensity) & !is.infinite(intensity)
+    ) %>%
+    separate(
+        col = sample,
+        into = c(NA, "tumor", "species"),
+        sep = "_"
+    ) %>%
+    spread(
+        key = species,
+        value = intensity
+    ) %>%
+    filter(
+        !is.na(saavPeptide) & !is.na(gene)
+    ) %>%
+    arrange(
+        abs(saavPeptide - gene)
+    )
+
+model <- lm(
+    data = intensitiesDF,
+    formula = as.formula("saavPeptide ~ gene")
+)
+
+summary(model)
+
+modeCoefficients <- coef(model)
+
+ggplot(
+    data = intensitiesDF
+) +
+    geom_abline(
+        intercept = 0,
+        slope = 1,
+        col = "black",
+        linetype = "dotted"
+    ) +
+    geom_point(
+        mapping = aes(
+            x = gene,
+            y = saavPeptide,
+            col = tumor
+        ),
+        alpha = 0.1
+    ) +
+    geom_density2d(
+        mapping = aes(
+            x = gene,
+            y = saavPeptide
+        ),
+        col = "blue"
+    ) +
+    geom_abline(
+        intercept = modeCoefficients[1],
+        slope = modeCoefficients[2],
+        col = "blue",
+        linetype = "dotted"
+    ) +
+    scale_x_continuous(
+        name = "Gene-level Abundances [Z-score]"
+    ) +
+    scale_y_continuous(
+        name = "SAAV peptide-level Abundances [Z-score]"
+    ) +
+    scale_color_manual(
+        values = scico(
+            n = length(unique(intensitiesDF$tumor)),
+            palette = "batlow"
+        )
+    ) +
+    theme(
+        legend.position = "none"
+    )
+
+
+```
 
 ## References
 
