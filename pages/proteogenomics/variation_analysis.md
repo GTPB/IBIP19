@@ -110,7 +110,12 @@ For the sake of time, this data transformation was run for you already.
 The proposed solution is available in
 [scripts/merge\_table\_1\_6.R](resources/data/saav.gz), and the
 reformated SAAV peptides table is available in
-[resources/data/table16.gz](resources/data/table16.gz).
+[resources/data/table16.gz](resources/data/table16.gz). Note that in
+this table one row represents a unique {peptide sequence, gene
+accession}
+pair.
+
+##### [:thought\_balloon:](answers.md#thought_balloon-how-do-we-need-to-transform-the-tables-to-compare-saav-peptide-level-intensities-to-gene-level-intensities) *Why can there be multiple peptide per gene, and gene per peptide? Is it correct to represent peptides by their sequence?*
 
 ##### :pencil2: Load the reformated SAAV peptides table.
 
@@ -209,7 +214,7 @@ ggplot(
 
 ![](variation_analysis_files/figure-gfm/intensity_densities-1.png)<!-- -->
 
-##### [:thought\_balloon:](answers.md#thought_balloon-why-does-the-curve-have-this-shape) *Why are all intensities at the bottom? How can we better visualize these distributions?*
+##### [:thought\_balloon:](answers.md#thought_balloon-why-are-all-intensities-at-the-bottom-how-can-we-better-visualize-these-distributions) *Why are all intensities at the bottom? How can we better visualize these distributions?*
 
 As you can see, the gene-level intensities are centered around one, and
 not for the peptide-level. You might have noticed in the paper that the
@@ -223,12 +228,9 @@ Here, we hypothesize that SAAV peptides are sampled from these genes and
 should therefore present the same abundance distribution. Data
 acquisition and processing artefacts can influence the centering and
 scaling. To correct for this, we will normalize the abundances from all
-tumors using centile-based
-Z-scores.
+tumors using centile-based Z-scores.
 
 ``` r
-saavDF$x <- 0 # Note that it is possible to include covariates in the model instead of using a constant here
-
 for (column in tumorColumns) {
     
     zColumn <- paste0("z_", column)
@@ -238,214 +240,220 @@ for (column in tumorColumns) {
             !is.na(!!sym(column)) & !is.infinite(!!sym(column)) & !!sym(column) > 0
         ) %>%
         select(
-            x, !!column
-        ) %>% 
-        mutate(
-            y = log10(!!sym(column))
+            gene, peptide_sequence, !!column
         )
     
+    trainingDF$x <- 0 # Note that it is possible to include covariates in the model instead of using a constant here
+    
     model <- gamlss(
-        formula = as.formula("y ~ x"),
-        family = NO,
-        data = trainingDF
+        formula = as.formula(paste0(column, " ~ x")),
+        family = LOGNO,
+        data = trainingDF,
+        
     )
     
-    saavDF[[zColumn]] <- centiles.pred(
+    trainingDF[[zColumn]] <- centiles.pred(
         obj = model, 
         xname = "x", 
-        xvalues = saavDF$x, 
-        yval = log10(saavDF[[column]]), 
+        xvalues = trainingDF$x, 
+        yval = trainingDF[[column]], 
         type = "z-scores"
     )
+    
+    trainingDF <- trainingDF %>%
+        select(
+            gene, peptide_sequence, !!zColumn
+        )
+    
+    saavDF <- saavDF %>%
+        left_join(
+            trainingDF,
+            by = c("gene", "peptide_sequence")
+        )
     
 }
 ```
 
-    ## GAMLSS-RS iteration 1: Global Deviance = 840.4938 
-    ## GAMLSS-RS iteration 2: Global Deviance = 840.4938 
-    ## GAMLSS-RS iteration 1: Global Deviance = -2945.805 
-    ## GAMLSS-RS iteration 2: Global Deviance = -2945.805 
-    ## GAMLSS-RS iteration 1: Global Deviance = 812.2958 
-    ## GAMLSS-RS iteration 2: Global Deviance = 812.2958 
-    ## GAMLSS-RS iteration 1: Global Deviance = -2283.254 
-    ## GAMLSS-RS iteration 2: Global Deviance = -2283.254 
-    ## GAMLSS-RS iteration 1: Global Deviance = 708.7037 
-    ## GAMLSS-RS iteration 2: Global Deviance = 708.7037 
-    ## GAMLSS-RS iteration 1: Global Deviance = -4506.253 
-    ## GAMLSS-RS iteration 2: Global Deviance = -4506.253 
-    ## GAMLSS-RS iteration 1: Global Deviance = 790.2805 
-    ## GAMLSS-RS iteration 2: Global Deviance = 790.2805 
-    ## GAMLSS-RS iteration 1: Global Deviance = -1713.002 
-    ## GAMLSS-RS iteration 2: Global Deviance = -1713.002 
-    ## GAMLSS-RS iteration 1: Global Deviance = 936.0433 
-    ## GAMLSS-RS iteration 2: Global Deviance = 936.0433 
-    ## GAMLSS-RS iteration 1: Global Deviance = -634.6402 
-    ## GAMLSS-RS iteration 2: Global Deviance = -634.6402 
-    ## GAMLSS-RS iteration 1: Global Deviance = 547.8296 
-    ## GAMLSS-RS iteration 2: Global Deviance = 547.8296 
-    ## GAMLSS-RS iteration 1: Global Deviance = -4913.075 
-    ## GAMLSS-RS iteration 2: Global Deviance = -4913.075 
-    ## GAMLSS-RS iteration 1: Global Deviance = 450.362 
-    ## GAMLSS-RS iteration 2: Global Deviance = 450.362 
-    ## GAMLSS-RS iteration 1: Global Deviance = -2788.431 
-    ## GAMLSS-RS iteration 2: Global Deviance = -2788.431 
-    ## GAMLSS-RS iteration 1: Global Deviance = 297.8676 
-    ## GAMLSS-RS iteration 2: Global Deviance = 297.8676 
-    ## GAMLSS-RS iteration 1: Global Deviance = -3492.028 
-    ## GAMLSS-RS iteration 2: Global Deviance = -3492.028 
-    ## GAMLSS-RS iteration 1: Global Deviance = 773.3634 
-    ## GAMLSS-RS iteration 2: Global Deviance = 773.3634 
-    ## GAMLSS-RS iteration 1: Global Deviance = -1731.351 
-    ## GAMLSS-RS iteration 2: Global Deviance = -1731.351 
-    ## GAMLSS-RS iteration 1: Global Deviance = 761.8647 
-    ## GAMLSS-RS iteration 2: Global Deviance = 761.8647 
-    ## GAMLSS-RS iteration 1: Global Deviance = -1944.156 
-    ## GAMLSS-RS iteration 2: Global Deviance = -1944.156 
-    ## GAMLSS-RS iteration 1: Global Deviance = 745.1938 
-    ## GAMLSS-RS iteration 2: Global Deviance = 745.1938 
-    ## GAMLSS-RS iteration 1: Global Deviance = -2501.996 
-    ## GAMLSS-RS iteration 2: Global Deviance = -2501.996 
-    ## GAMLSS-RS iteration 1: Global Deviance = 688.3178 
-    ## GAMLSS-RS iteration 2: Global Deviance = 688.3178 
-    ## GAMLSS-RS iteration 1: Global Deviance = -2753.819 
-    ## GAMLSS-RS iteration 2: Global Deviance = -2753.819 
-    ## GAMLSS-RS iteration 1: Global Deviance = 789.2905 
-    ## GAMLSS-RS iteration 2: Global Deviance = 789.2905 
-    ## GAMLSS-RS iteration 1: Global Deviance = -2614.964 
-    ## GAMLSS-RS iteration 2: Global Deviance = -2614.964 
-    ## GAMLSS-RS iteration 1: Global Deviance = 663.672 
-    ## GAMLSS-RS iteration 2: Global Deviance = 663.672 
-    ## GAMLSS-RS iteration 1: Global Deviance = -2438.429 
-    ## GAMLSS-RS iteration 2: Global Deviance = -2438.429 
-    ## GAMLSS-RS iteration 1: Global Deviance = 476.9165 
-    ## GAMLSS-RS iteration 2: Global Deviance = 476.9165 
-    ## GAMLSS-RS iteration 1: Global Deviance = -2870.104 
-    ## GAMLSS-RS iteration 2: Global Deviance = -2870.104 
-    ## GAMLSS-RS iteration 1: Global Deviance = 608.7589 
-    ## GAMLSS-RS iteration 2: Global Deviance = 608.7589 
-    ## GAMLSS-RS iteration 1: Global Deviance = -1753.453 
-    ## GAMLSS-RS iteration 2: Global Deviance = -1753.453 
-    ## GAMLSS-RS iteration 1: Global Deviance = 668.643 
-    ## GAMLSS-RS iteration 2: Global Deviance = 668.643 
-    ## GAMLSS-RS iteration 1: Global Deviance = -710.1498 
-    ## GAMLSS-RS iteration 2: Global Deviance = -710.1498 
-    ## GAMLSS-RS iteration 1: Global Deviance = 779.4555 
-    ## GAMLSS-RS iteration 2: Global Deviance = 779.4555 
-    ## GAMLSS-RS iteration 1: Global Deviance = -2333.914 
-    ## GAMLSS-RS iteration 2: Global Deviance = -2333.914 
-    ## GAMLSS-RS iteration 1: Global Deviance = 1207.25 
-    ## GAMLSS-RS iteration 2: Global Deviance = 1207.25 
-    ## GAMLSS-RS iteration 1: Global Deviance = -2963.476 
-    ## GAMLSS-RS iteration 2: Global Deviance = -2963.476 
-    ## GAMLSS-RS iteration 1: Global Deviance = 985.2918 
-    ## GAMLSS-RS iteration 2: Global Deviance = 985.2918 
-    ## GAMLSS-RS iteration 1: Global Deviance = -4277.468 
-    ## GAMLSS-RS iteration 2: Global Deviance = -4277.468 
-    ## GAMLSS-RS iteration 1: Global Deviance = 985.3234 
-    ## GAMLSS-RS iteration 2: Global Deviance = 985.3234 
-    ## GAMLSS-RS iteration 1: Global Deviance = -2247.06 
-    ## GAMLSS-RS iteration 2: Global Deviance = -2247.06 
-    ## GAMLSS-RS iteration 1: Global Deviance = 1082.365 
-    ## GAMLSS-RS iteration 2: Global Deviance = 1082.365 
-    ## GAMLSS-RS iteration 1: Global Deviance = -2069.334 
-    ## GAMLSS-RS iteration 2: Global Deviance = -2069.334 
-    ## GAMLSS-RS iteration 1: Global Deviance = 1078.149 
-    ## GAMLSS-RS iteration 2: Global Deviance = 1078.149 
-    ## GAMLSS-RS iteration 1: Global Deviance = -2006.406 
-    ## GAMLSS-RS iteration 2: Global Deviance = -2006.406 
-    ## GAMLSS-RS iteration 1: Global Deviance = 668.1537 
-    ## GAMLSS-RS iteration 2: Global Deviance = 668.1537 
-    ## GAMLSS-RS iteration 1: Global Deviance = -3710.985 
-    ## GAMLSS-RS iteration 2: Global Deviance = -3710.985 
-    ## GAMLSS-RS iteration 1: Global Deviance = 341.3271 
-    ## GAMLSS-RS iteration 2: Global Deviance = 341.3271 
-    ## GAMLSS-RS iteration 1: Global Deviance = -4220.562 
-    ## GAMLSS-RS iteration 2: Global Deviance = -4220.562 
-    ## GAMLSS-RS iteration 1: Global Deviance = 425.3992 
-    ## GAMLSS-RS iteration 2: Global Deviance = 425.3992 
-    ## GAMLSS-RS iteration 1: Global Deviance = -3559.435 
-    ## GAMLSS-RS iteration 2: Global Deviance = -3559.435 
-    ## GAMLSS-RS iteration 1: Global Deviance = 832.422 
-    ## GAMLSS-RS iteration 2: Global Deviance = 832.422 
-    ## GAMLSS-RS iteration 1: Global Deviance = -3431.085 
-    ## GAMLSS-RS iteration 2: Global Deviance = -3431.085 
-    ## GAMLSS-RS iteration 1: Global Deviance = 1255.336 
-    ## GAMLSS-RS iteration 2: Global Deviance = 1255.336 
-    ## GAMLSS-RS iteration 1: Global Deviance = -2341.443 
-    ## GAMLSS-RS iteration 2: Global Deviance = -2341.443 
-    ## GAMLSS-RS iteration 1: Global Deviance = 1098.109 
-    ## GAMLSS-RS iteration 2: Global Deviance = 1098.109 
-    ## GAMLSS-RS iteration 1: Global Deviance = -2253.094 
-    ## GAMLSS-RS iteration 2: Global Deviance = -2253.094 
-    ## GAMLSS-RS iteration 1: Global Deviance = 1007.28 
-    ## GAMLSS-RS iteration 2: Global Deviance = 1007.28 
-    ## GAMLSS-RS iteration 1: Global Deviance = -2976.973 
-    ## GAMLSS-RS iteration 2: Global Deviance = -2976.973 
-    ## GAMLSS-RS iteration 1: Global Deviance = 1092.962 
-    ## GAMLSS-RS iteration 2: Global Deviance = 1092.962 
-    ## GAMLSS-RS iteration 1: Global Deviance = -2684.323 
-    ## GAMLSS-RS iteration 2: Global Deviance = -2684.323 
-    ## GAMLSS-RS iteration 1: Global Deviance = 873.9888 
-    ## GAMLSS-RS iteration 2: Global Deviance = 873.9888 
-    ## GAMLSS-RS iteration 1: Global Deviance = -2970.003 
-    ## GAMLSS-RS iteration 2: Global Deviance = -2970.003 
-    ## GAMLSS-RS iteration 1: Global Deviance = 1110.102 
-    ## GAMLSS-RS iteration 2: Global Deviance = 1110.102 
-    ## GAMLSS-RS iteration 1: Global Deviance = -2077.95 
-    ## GAMLSS-RS iteration 2: Global Deviance = -2077.95 
-    ## GAMLSS-RS iteration 1: Global Deviance = 655.789 
-    ## GAMLSS-RS iteration 2: Global Deviance = 655.789 
-    ## GAMLSS-RS iteration 1: Global Deviance = -3202.731 
-    ## GAMLSS-RS iteration 2: Global Deviance = -3202.731 
-    ## GAMLSS-RS iteration 1: Global Deviance = 100.8563 
-    ## GAMLSS-RS iteration 2: Global Deviance = 100.8563 
-    ## GAMLSS-RS iteration 1: Global Deviance = -5135.314 
-    ## GAMLSS-RS iteration 2: Global Deviance = -5135.314 
-    ## GAMLSS-RS iteration 1: Global Deviance = 738.1112 
-    ## GAMLSS-RS iteration 2: Global Deviance = 738.1112 
-    ## GAMLSS-RS iteration 1: Global Deviance = -3379.92 
-    ## GAMLSS-RS iteration 2: Global Deviance = -3379.92 
-    ## GAMLSS-RS iteration 1: Global Deviance = 1440.962 
-    ## GAMLSS-RS iteration 2: Global Deviance = 1440.962 
-    ## GAMLSS-RS iteration 1: Global Deviance = -2076.825 
-    ## GAMLSS-RS iteration 2: Global Deviance = -2076.825 
-    ## GAMLSS-RS iteration 1: Global Deviance = 815.4158 
-    ## GAMLSS-RS iteration 2: Global Deviance = 815.4158 
-    ## GAMLSS-RS iteration 1: Global Deviance = -3351.195 
-    ## GAMLSS-RS iteration 2: Global Deviance = -3351.195 
-    ## GAMLSS-RS iteration 1: Global Deviance = 775.8443 
-    ## GAMLSS-RS iteration 2: Global Deviance = 775.8443 
-    ## GAMLSS-RS iteration 1: Global Deviance = -3830.9 
-    ## GAMLSS-RS iteration 2: Global Deviance = -3830.9 
-    ## GAMLSS-RS iteration 1: Global Deviance = 715.4553 
-    ## GAMLSS-RS iteration 2: Global Deviance = 715.4553 
-    ## GAMLSS-RS iteration 1: Global Deviance = -3674.995 
-    ## GAMLSS-RS iteration 2: Global Deviance = -3674.995 
-    ## GAMLSS-RS iteration 1: Global Deviance = 685.6302 
-    ## GAMLSS-RS iteration 2: Global Deviance = 685.6302 
-    ## GAMLSS-RS iteration 1: Global Deviance = -3943.427 
-    ## GAMLSS-RS iteration 2: Global Deviance = -3943.427 
-    ## GAMLSS-RS iteration 1: Global Deviance = 1021.019 
-    ## GAMLSS-RS iteration 2: Global Deviance = 1021.019 
-    ## GAMLSS-RS iteration 1: Global Deviance = -1879.398 
-    ## GAMLSS-RS iteration 2: Global Deviance = -1879.398 
-    ## GAMLSS-RS iteration 1: Global Deviance = 826.4545 
-    ## GAMLSS-RS iteration 2: Global Deviance = 826.4545 
-    ## GAMLSS-RS iteration 1: Global Deviance = -3217.784 
-    ## GAMLSS-RS iteration 2: Global Deviance = -3217.784 
-    ## GAMLSS-RS iteration 1: Global Deviance = 255.9764 
-    ## GAMLSS-RS iteration 2: Global Deviance = 255.9764 
-    ## GAMLSS-RS iteration 1: Global Deviance = -3993.959 
-    ## GAMLSS-RS iteration 2: Global Deviance = -3993.959 
-    ## GAMLSS-RS iteration 1: Global Deviance = 825.211 
-    ## GAMLSS-RS iteration 2: Global Deviance = 825.211 
-    ## GAMLSS-RS iteration 1: Global Deviance = -3307.261 
-    ## GAMLSS-RS iteration 2: Global Deviance = -3307.261
-
-``` r
-saavDF <- saavDF %>%
-    select(-x)
-```
+    ## GAMLSS-RS iteration 1: Global Deviance = 2264.447 
+    ## GAMLSS-RS iteration 2: Global Deviance = 2264.447 
+    ## GAMLSS-RS iteration 1: Global Deviance = 2077.346 
+    ## GAMLSS-RS iteration 2: Global Deviance = 2077.346 
+    ## GAMLSS-RS iteration 1: Global Deviance = 1481.316 
+    ## GAMLSS-RS iteration 2: Global Deviance = 1481.316 
+    ## GAMLSS-RS iteration 1: Global Deviance = 3196.276 
+    ## GAMLSS-RS iteration 2: Global Deviance = 3196.276 
+    ## GAMLSS-RS iteration 1: Global Deviance = 2027.347 
+    ## GAMLSS-RS iteration 2: Global Deviance = 2027.347 
+    ## GAMLSS-RS iteration 1: Global Deviance = 393.7306 
+    ## GAMLSS-RS iteration 2: Global Deviance = 393.7306 
+    ## GAMLSS-RS iteration 1: Global Deviance = 2032.55 
+    ## GAMLSS-RS iteration 2: Global Deviance = 2032.55 
+    ## GAMLSS-RS iteration 1: Global Deviance = 2816.031 
+    ## GAMLSS-RS iteration 2: Global Deviance = 2816.031 
+    ## GAMLSS-RS iteration 1: Global Deviance = 2209.422 
+    ## GAMLSS-RS iteration 2: Global Deviance = 2209.422 
+    ## GAMLSS-RS iteration 1: Global Deviance = 3725.461 
+    ## GAMLSS-RS iteration 2: Global Deviance = 3725.461 
+    ## GAMLSS-RS iteration 1: Global Deviance = 2129.542 
+    ## GAMLSS-RS iteration 2: Global Deviance = 2129.542 
+    ## GAMLSS-RS iteration 1: Global Deviance = 80.1345 
+    ## GAMLSS-RS iteration 2: Global Deviance = 80.1345 
+    ## GAMLSS-RS iteration 1: Global Deviance = 1750.882 
+    ## GAMLSS-RS iteration 2: Global Deviance = 1750.882 
+    ## GAMLSS-RS iteration 1: Global Deviance = 2265.483 
+    ## GAMLSS-RS iteration 2: Global Deviance = 2265.483 
+    ## GAMLSS-RS iteration 1: Global Deviance = 1619.658 
+    ## GAMLSS-RS iteration 2: Global Deviance = 1619.658 
+    ## GAMLSS-RS iteration 1: Global Deviance = 1350.304 
+    ## GAMLSS-RS iteration 2: Global Deviance = 1350.304 
+    ## GAMLSS-RS iteration 1: Global Deviance = 1730.315 
+    ## GAMLSS-RS iteration 2: Global Deviance = 1730.315 
+    ## GAMLSS-RS iteration 1: Global Deviance = 3128.811 
+    ## GAMLSS-RS iteration 2: Global Deviance = 3128.811 
+    ## GAMLSS-RS iteration 1: Global Deviance = 1542.748 
+    ## GAMLSS-RS iteration 2: Global Deviance = 1542.748 
+    ## GAMLSS-RS iteration 1: Global Deviance = 2791.137 
+    ## GAMLSS-RS iteration 2: Global Deviance = 2791.137 
+    ## GAMLSS-RS iteration 1: Global Deviance = 1481.33 
+    ## GAMLSS-RS iteration 2: Global Deviance = 1481.33 
+    ## GAMLSS-RS iteration 1: Global Deviance = 2275.306 
+    ## GAMLSS-RS iteration 2: Global Deviance = 2275.306 
+    ## GAMLSS-RS iteration 1: Global Deviance = 1583.872 
+    ## GAMLSS-RS iteration 2: Global Deviance = 1583.872 
+    ## GAMLSS-RS iteration 1: Global Deviance = 2457.926 
+    ## GAMLSS-RS iteration 2: Global Deviance = 2457.926 
+    ## GAMLSS-RS iteration 1: Global Deviance = 1851.024 
+    ## GAMLSS-RS iteration 2: Global Deviance = 1851.024 
+    ## GAMLSS-RS iteration 1: Global Deviance = 2347.758 
+    ## GAMLSS-RS iteration 2: Global Deviance = 2347.758 
+    ## GAMLSS-RS iteration 1: Global Deviance = 1424.598 
+    ## GAMLSS-RS iteration 2: Global Deviance = 1424.598 
+    ## GAMLSS-RS iteration 1: Global Deviance = 2364.471 
+    ## GAMLSS-RS iteration 2: Global Deviance = 2364.471 
+    ## GAMLSS-RS iteration 1: Global Deviance = 1481.254 
+    ## GAMLSS-RS iteration 2: Global Deviance = 1481.254 
+    ## GAMLSS-RS iteration 1: Global Deviance = 2060.945 
+    ## GAMLSS-RS iteration 2: Global Deviance = 2060.945 
+    ## GAMLSS-RS iteration 1: Global Deviance = 1615.283 
+    ## GAMLSS-RS iteration 2: Global Deviance = 1615.283 
+    ## GAMLSS-RS iteration 1: Global Deviance = 3160.729 
+    ## GAMLSS-RS iteration 2: Global Deviance = 3160.729 
+    ## GAMLSS-RS iteration 1: Global Deviance = 1588.185 
+    ## GAMLSS-RS iteration 2: Global Deviance = 1588.185 
+    ## GAMLSS-RS iteration 1: Global Deviance = 3742.049 
+    ## GAMLSS-RS iteration 2: Global Deviance = 3742.049 
+    ## GAMLSS-RS iteration 1: Global Deviance = 1598.858 
+    ## GAMLSS-RS iteration 2: Global Deviance = 1598.858 
+    ## GAMLSS-RS iteration 1: Global Deviance = 2625.44 
+    ## GAMLSS-RS iteration 2: Global Deviance = 2625.44 
+    ## GAMLSS-RS iteration 1: Global Deviance = 3487.879 
+    ## GAMLSS-RS iteration 2: Global Deviance = 3487.879 
+    ## GAMLSS-RS iteration 1: Global Deviance = 1972.476 
+    ## GAMLSS-RS iteration 2: Global Deviance = 1972.476 
+    ## GAMLSS-RS iteration 1: Global Deviance = 3403.546 
+    ## GAMLSS-RS iteration 2: Global Deviance = 3403.546 
+    ## GAMLSS-RS iteration 1: Global Deviance = 814.9447 
+    ## GAMLSS-RS iteration 2: Global Deviance = 814.9447 
+    ## GAMLSS-RS iteration 1: Global Deviance = 3080.229 
+    ## GAMLSS-RS iteration 2: Global Deviance = 3080.229 
+    ## GAMLSS-RS iteration 1: Global Deviance = 3272.684 
+    ## GAMLSS-RS iteration 2: Global Deviance = 3272.684 
+    ## GAMLSS-RS iteration 1: Global Deviance = 4061.563 
+    ## GAMLSS-RS iteration 2: Global Deviance = 4061.563 
+    ## GAMLSS-RS iteration 1: Global Deviance = 2833.753 
+    ## GAMLSS-RS iteration 2: Global Deviance = 2833.753 
+    ## GAMLSS-RS iteration 1: Global Deviance = 3387.229 
+    ## GAMLSS-RS iteration 2: Global Deviance = 3387.229 
+    ## GAMLSS-RS iteration 1: Global Deviance = 2769.055 
+    ## GAMLSS-RS iteration 2: Global Deviance = 2769.055 
+    ## GAMLSS-RS iteration 1: Global Deviance = 3597.698 
+    ## GAMLSS-RS iteration 2: Global Deviance = 3597.698 
+    ## GAMLSS-RS iteration 1: Global Deviance = 1359.68 
+    ## GAMLSS-RS iteration 2: Global Deviance = 1359.68 
+    ## GAMLSS-RS iteration 1: Global Deviance = 2488.062 
+    ## GAMLSS-RS iteration 2: Global Deviance = 2488.062 
+    ## GAMLSS-RS iteration 1: Global Deviance = 1200.834 
+    ## GAMLSS-RS iteration 2: Global Deviance = 1200.834 
+    ## GAMLSS-RS iteration 1: Global Deviance = 2728.444 
+    ## GAMLSS-RS iteration 2: Global Deviance = 2728.444 
+    ## GAMLSS-RS iteration 1: Global Deviance = 1628.479 
+    ## GAMLSS-RS iteration 2: Global Deviance = 1628.479 
+    ## GAMLSS-RS iteration 1: Global Deviance = 3479.428 
+    ## GAMLSS-RS iteration 2: Global Deviance = 3479.428 
+    ## GAMLSS-RS iteration 1: Global Deviance = 1996.938 
+    ## GAMLSS-RS iteration 2: Global Deviance = 1996.938 
+    ## GAMLSS-RS iteration 1: Global Deviance = 3328.183 
+    ## GAMLSS-RS iteration 2: Global Deviance = 3328.183 
+    ## GAMLSS-RS iteration 1: Global Deviance = 2734.184 
+    ## GAMLSS-RS iteration 2: Global Deviance = 2734.184 
+    ## GAMLSS-RS iteration 1: Global Deviance = 3184.91 
+    ## GAMLSS-RS iteration 2: Global Deviance = 3184.91 
+    ## GAMLSS-RS iteration 1: Global Deviance = 2675.977 
+    ## GAMLSS-RS iteration 2: Global Deviance = 2675.977 
+    ## GAMLSS-RS iteration 1: Global Deviance = 3851.462 
+    ## GAMLSS-RS iteration 2: Global Deviance = 3851.462 
+    ## GAMLSS-RS iteration 1: Global Deviance = 1858.786 
+    ## GAMLSS-RS iteration 2: Global Deviance = 1858.786 
+    ## GAMLSS-RS iteration 1: Global Deviance = 3885.189 
+    ## GAMLSS-RS iteration 2: Global Deviance = 3885.189 
+    ## GAMLSS-RS iteration 1: Global Deviance = 2200.488 
+    ## GAMLSS-RS iteration 2: Global Deviance = 2200.488 
+    ## GAMLSS-RS iteration 1: Global Deviance = 3695.444 
+    ## GAMLSS-RS iteration 2: Global Deviance = 3695.444 
+    ## GAMLSS-RS iteration 1: Global Deviance = 1742.239 
+    ## GAMLSS-RS iteration 2: Global Deviance = 1742.239 
+    ## GAMLSS-RS iteration 1: Global Deviance = 4599.755 
+    ## GAMLSS-RS iteration 2: Global Deviance = 4599.755 
+    ## GAMLSS-RS iteration 1: Global Deviance = 2586.694 
+    ## GAMLSS-RS iteration 2: Global Deviance = 2586.694 
+    ## GAMLSS-RS iteration 1: Global Deviance = 3274.743 
+    ## GAMLSS-RS iteration 2: Global Deviance = 3274.743 
+    ## GAMLSS-RS iteration 1: Global Deviance = 2236.788 
+    ## GAMLSS-RS iteration 2: Global Deviance = 2236.788 
+    ## GAMLSS-RS iteration 1: Global Deviance = 2725.114 
+    ## GAMLSS-RS iteration 2: Global Deviance = 2725.114 
+    ## GAMLSS-RS iteration 1: Global Deviance = 62.4986 
+    ## GAMLSS-RS iteration 2: Global Deviance = 62.4986 
+    ## GAMLSS-RS iteration 1: Global Deviance = 3774.564 
+    ## GAMLSS-RS iteration 2: Global Deviance = 3774.564 
+    ## GAMLSS-RS iteration 1: Global Deviance = 1842.262 
+    ## GAMLSS-RS iteration 2: Global Deviance = 1842.262 
+    ## GAMLSS-RS iteration 1: Global Deviance = 4175.185 
+    ## GAMLSS-RS iteration 2: Global Deviance = 4175.185 
+    ## GAMLSS-RS iteration 1: Global Deviance = 2598.445 
+    ## GAMLSS-RS iteration 2: Global Deviance = 2598.445 
+    ## GAMLSS-RS iteration 1: Global Deviance = 3156.551 
+    ## GAMLSS-RS iteration 2: Global Deviance = 3156.551 
+    ## GAMLSS-RS iteration 1: Global Deviance = 1804.424 
+    ## GAMLSS-RS iteration 2: Global Deviance = 1804.424 
+    ## GAMLSS-RS iteration 1: Global Deviance = 3490.199 
+    ## GAMLSS-RS iteration 2: Global Deviance = 3490.199 
+    ## GAMLSS-RS iteration 1: Global Deviance = 1169.507 
+    ## GAMLSS-RS iteration 2: Global Deviance = 1169.507 
+    ## GAMLSS-RS iteration 1: Global Deviance = 3835.325 
+    ## GAMLSS-RS iteration 2: Global Deviance = 3835.325 
+    ## GAMLSS-RS iteration 1: Global Deviance = 1231.51 
+    ## GAMLSS-RS iteration 2: Global Deviance = 1231.51 
+    ## GAMLSS-RS iteration 1: Global Deviance = 3676.381 
+    ## GAMLSS-RS iteration 2: Global Deviance = 3676.381 
+    ## GAMLSS-RS iteration 1: Global Deviance = 1197.251 
+    ## GAMLSS-RS iteration 2: Global Deviance = 1197.251 
+    ## GAMLSS-RS iteration 1: Global Deviance = 4566.195 
+    ## GAMLSS-RS iteration 2: Global Deviance = 4566.195 
+    ## GAMLSS-RS iteration 1: Global Deviance = 2786.826 
+    ## GAMLSS-RS iteration 2: Global Deviance = 2786.826 
+    ## GAMLSS-RS iteration 1: Global Deviance = 2821.402 
+    ## GAMLSS-RS iteration 2: Global Deviance = 2821.402 
+    ## GAMLSS-RS iteration 1: Global Deviance = 1851.387 
+    ## GAMLSS-RS iteration 2: Global Deviance = 1851.387 
+    ## GAMLSS-RS iteration 1: Global Deviance = 2767.705 
+    ## GAMLSS-RS iteration 2: Global Deviance = 2767.705 
+    ## GAMLSS-RS iteration 1: Global Deviance = 1033.786 
+    ## GAMLSS-RS iteration 2: Global Deviance = 1033.786 
+    ## GAMLSS-RS iteration 1: Global Deviance = 3181.741 
+    ## GAMLSS-RS iteration 2: Global Deviance = 3181.741 
+    ## GAMLSS-RS iteration 1: Global Deviance = 1930.635 
+    ## GAMLSS-RS iteration 2: Global Deviance = 1930.635
 
 ##### :pencil2: For a tumor and plot the normalized values against the original ones.
 
@@ -463,11 +471,12 @@ ggplot(
         mapping = aes(
             x = !!sym(column),
             y = !!sym(zColumn)
-        )
+        ),
+        alpha = 0.1
     )
 ```
 
-    ## Warning: Removed 1607 rows containing missing values (geom_point).
+    ## Warning: Removed 1566 rows containing missing values (geom_point).
 
 ![](variation_analysis_files/figure-gfm/normalization_example-1.png)<!-- -->
 
@@ -549,7 +558,7 @@ ggplot(
         axis.title.x = element_blank(),
         axis.text.x = element_text(
             angle = 90,
-            hjust = 1,
+            hjust = 0,
             vjust = 0.5
             
         ),
