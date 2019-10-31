@@ -92,6 +92,18 @@ saavDF <- read.table(
     stringsAsFactors = F
 )
 
+
+# Set colors for each tumor type
+
+tumorSubtypes <- unique(tumorDF$PAM50_subtype)
+tumorColors <- scico(
+    n = length(tumorSubtypes),
+    palette = "hawaii"
+)
+names(tumorColors) <- tumorSubtypes
+tumorDF$color <- tumorColors[tumorDF$PAM50_subtype]
+
+
 ```
 
 Note that for the sake of speed, the last columns of the genes table were skipped.
@@ -138,6 +150,13 @@ for (tumor in tumorDF$tumor_id) {
     saavDF[[geneColumn]][is.na(saavDF[[peptideColumn]])] <- NA
     
 }
+
+
+# Remove lines with no quantification value
+
+nValid <- rowSums(!is.na(saavDF[, tumorColumns]))
+saavDF <- saavDF[nValid > 0,]
+
 
 ```
 
@@ -242,6 +261,13 @@ Here, we hypothesize that SAAV peptides are sampled from these genes and should 
 
 ```{r normalization}
 
+# Placeholder for the z-transformed columns
+
+zTumorColumns <- paste0("z_", tumorColumns)
+zTumorPeptideColumns <- paste0("z_", tumorPeptideColumns)
+zTumorGeneColumns <- paste0("z_", tumorGeneColumns)
+
+
 # Iterate through the tumor columns
 
 for (column in tumorColumns) {
@@ -289,6 +315,9 @@ for (column in tumorColumns) {
     # Extract the transformed values
     
     trainingDF <- trainingDF %>%
+        filter(
+            !is.infinite(!!sym(zColumn))
+        ) %>%
         select(
             gene, peptide_sequence, !!zColumn
         )
@@ -303,6 +332,26 @@ for (column in tumorColumns) {
         )
     
 }
+
+
+# For each tumor, keep only pairs of gene and peptide pairs
+
+for (tumor in tumorDF$tumor_id) {
+    
+    peptideColumn <- paste0("z_", tumor, "_saavPeptide")
+    geneColumn <- paste0("z_", tumor, "_gene")
+    
+    saavDF[[peptideColumn]][is.na(saavDF[[geneColumn]])] <- NA
+    saavDF[[geneColumn]][is.na(saavDF[[peptideColumn]])] <- NA
+    
+}
+
+
+# Remove lines with no normalized quantification value
+
+nValid <- rowSums(!is.na(saavDF[, zTumorColumns]))
+saavDF <- saavDF[nValid > 0,]
+
 
 ```
 
@@ -340,11 +389,6 @@ ggplot(
 ##### :pencil2: Plot the distributions like before after normalization.
 
 ```{r z_intensity_distributions}
-
-# Placeholder for the z-transformed columns
-
-zTumorColumns <- paste0("z_", tumorColumns)
-
 
 # Transform the saav data frame from wide to long format using tidyr
 
@@ -437,8 +481,7 @@ ggplot(
 
 ##### :pencil2: Plot the gene- and peptide- level abundances.
 
-```{r peptide_protein_scatter}
-
+```{r peptide_gene_scatter}
 
 # Transform the saav data frame from wide to long format, and separate genes and proteins using tidyr
 
@@ -521,7 +564,7 @@ ggplot(
         limits = c(-axisLimit, axisLimit)
     ) +
     scale_y_continuous(
-        name = "SAAV peptide-level Abundances [Z-score]",
+        name = "SAAV-peptide-level Abundances [Z-score]",
         limits = c(-axisLimit, axisLimit)
     ) +
     scale_color_manual(
@@ -539,6 +582,666 @@ ggplot(
 ```
 
 ##### :speech_balloon: What do you think about the SAAV peptide to gene agreement?
+
+In the following, we will inspect the correlation of the profile across tumors for the abundances reported for genes and SAAV peptides. Note that we will use random values to compare our results with what one would expect by chance.
+
+##### :pencil2: Plot a histogram of pairwise correlation between protein and peptide abundances across tumors, compare with random values.
+
+```{r peptide_gene_correlation}
+
+
+# Select rows where there are at least 8 peptide-protein pairs
+
+saavDF$nPeptideValid <- rowSums(!is.na(saavDF[, zTumorPeptideColumns]))
+saavDF$nGeneValid <- rowSums(!is.na(saavDF[, zTumorGeneColumns]))
+corDF <- saavDF[saavDF$nPeptideValid >= 8 & saavDF$nGeneValid >= 8,]
+
+
+# Compute correlation by row
+
+corDF$cor <- NA
+corDF$rCor <- NA
+
+for (i in 1:nrow(corDF)) {
+    
+    x <- t(corDF[i, zTumorGeneColumns])
+    y <- t(corDF[i, zTumorPeptideColumns])
+    
+    corDF$cor[i] <- cor(
+        x = x,
+        y = y,
+        use = "pairwise.complete.obs",
+        method = "spearman"
+    )
+    
+    n <- sum(!is.na(x) & !is.na(y))
+    x <- rnorm(n)
+    y <- rnorm(n)
+    
+    corDF$rCor[i] <- cor(
+        x = x,
+        y = y,
+        use = "pairwise.complete.obs",
+        method = "spearman"
+    )
+    
+}
+
+
+# Transform the example data frame from wide to long format
+
+plotDF <- corDF %>%
+    select(
+        gene, peptide_sequence, cor, rCor
+    ) %>%
+    gather(
+        cor, rCor,
+        key = "data",
+        value = "correlation"
+    ) %>%
+    mutate(
+        data = ifelse(data == "cor", "Data", "Random")
+    )
+
+
+# Build plot
+
+ggplot(
+    data = plotDF
+) +
+    geom_histogram(
+        mapping = aes(
+            x = correlation,
+            fill = data
+        ),
+        alpha = 0.8,
+        bins = 20,
+        position = "dodge"
+    ) +
+    scale_x_continuous(
+        name = "Correlation [Spearman]"
+    ) +
+    scale_y_continuous(
+        name = "# SAAV Peptide - Protein"
+    ) +
+    scale_fill_manual(
+        values = c("darkblue", "black")
+    ) +
+    theme(
+        legend.position = "top",
+        legend.title = element_blank()
+    )
+
+
+```
+
+##### :speech_balloon: How do you interpret this distribution? What peptides are likely to provide information on the tumors that is othogonal to the proteome?
+
+##### :pencil2: Sample examples of peptide-protein pairs at the bottom, middle, and top of the distribution, and plot their profiles among tumors.
+
+```{r peptide_gene_correlation_examples}
+
+
+# Sample
+
+exampleLow <- corDF %>%
+    filter(
+        cor < -0.5
+    ) %>%
+    arrange(
+        desc(nPeptideValid)
+    ) %>%
+    slice(
+        1
+    ) %>%
+    mutate(
+        correlation_category = "Low"
+    )
+exampleMiddle <- corDF %>%
+    filter(
+        cor > -0.2 & cor < 0.2
+    ) %>%
+    arrange(
+        desc(nPeptideValid)
+    ) %>%
+    slice(
+        1
+    ) %>%
+    mutate(
+        correlation_category = "Middle"
+    )
+exampleHigh <- corDF %>%
+    filter(
+        cor > 0.8
+    ) %>%
+    arrange(
+        desc(nPeptideValid)
+    ) %>%
+    slice(
+        1
+    ) %>%
+    mutate(
+        correlation_category = "High"
+    )
+
+exampleDF <- rbind(
+    exampleLow, 
+    exampleMiddle,
+    exampleHigh
+) %>%
+    mutate(
+        correlation_category = factor(
+            x = correlation_category, 
+            levels = c("High", "Middle", "Low")
+        )
+    )
+
+
+# Transform the example data frame from wide to long format
+
+plotDF <- exampleDF %>%
+    select(
+        -!!tumorColumns
+    ) %>%
+    gather(
+        !!zTumorColumns,
+        key = "sample",
+        value = "intensity"
+    ) %>%
+    filter(
+        !is.na(intensity) & !is.infinite(intensity)
+    ) %>%
+    separate(
+        col = sample,
+        into = c(NA, "tumor", "species"),
+        sep = "_"
+    ) %>%
+    mutate(
+        species = factor(
+            x = ifelse(species == "gene", "Gene", "SAAV Peptide"),
+            levels = c("Gene", "SAAV Peptide")
+        )
+    )
+
+
+# Order the tumors by category
+
+tumorDF <- tumorDF %>%
+    arrange(
+        PAM50_subtype, tumor_id
+    )
+
+plotDF$tumor <- factor(
+    x = plotDF$tumor, 
+    levels = tumorDF$tumor_id
+)
+
+
+# Build plot
+
+ggplot(
+    data = plotDF
+) +
+    geom_point(
+        mapping = aes(
+            x = tumor,
+            y = intensity,
+            col = species
+        ),
+        alpha = 0.8
+    ) + 
+    facet_grid(
+        correlation_category ~ .
+    ) +
+    scale_y_continuous(
+        name = "Intensity [Z-score]"
+    ) +
+    scale_color_manual(
+        values = scico(
+            n = 2,
+            palette = "cork",
+            begin = 0.2,
+            end = 0.8,
+            direction = -1
+        )
+    ) +
+    theme(
+        legend.position = "top",
+        legend.title = element_blank(),
+        axis.title.x = element_blank(),
+        axis.text.x = element_text(
+            angle = 90,
+            hjust = 0,
+            vjust = 0.5,
+            color = tumorDF$color
+        )
+    )
+
+
+```
+
+##### :speech_balloon: How do you interpret differences in correlation between abundances reported for genes or SAAV peptides? 
+
+In the following, we investigate whether specific classes of variants influence the correlation between SAAV peptide- and gene-level abundances. For this, we query the [Ensembl Variant Effect Predictor (VEP)](ensembl.org/Homo_sapiens/Tools/VEP) using the variant identifiers reported in [Supplementary Table 6](../resources/Johansson_et_al_breast_cancer_quantitative_proteome_and_proteogenomic_landscape). For the sake of time, we will not query VEP as part of this tutorial, this was already done for you, and the VEP results are available in [resources/data/vep.txt](resources/data/vep.txt).
+
+##### :pencil2: Import the VEP results and merge with the correlation data frame.
+
+```{r vep}
+
+# Load the file, select the columns of interest, format the columns and content
+
+vepDF <- read.table(
+    file = "resources/data/vep.txt",
+    header = T,
+    sep = "\t",
+    comment.char = "",
+    quote = "",
+    stringsAsFactors = F
+) %>%
+    filter(
+        Consequence %in% c("missense_variant", "coding_sequence_variant") & BIOTYPE == "protein_coding"
+    ) %>%
+    select(
+        SYMBOL, Uploaded_variation, MutationAssessor_pred, clinvar_clnsig, clinvar_trait, gnomAD_exomes_NFE_AF, LoFtool
+    ) %>%
+    rename(
+        gene_variant = Uploaded_variation,
+        gene = SYMBOL,
+        functionality_prediction = MutationAssessor_pred,
+        clinical_significance = clinvar_clnsig,
+        allele_frequency = gnomAD_exomes_NFE_AF,
+        loss_of_function = LoFtool
+    ) %>%
+    mutate(
+        allele_frequency = as.numeric(allele_frequency),
+        allele_frequency = ifelse(allele_frequency > 0.5, 1 - allele_frequency, allele_frequency),
+        allele_frequency = log10(allele_frequency),
+        functionality_prediction = ifelse(functionality_prediction == "N", "Neutral", 
+                                          ifelse(functionality_prediction == "L", "Low", 
+                                                 ifelse(functionality_prediction == "M", "Medium", 
+                                                        ifelse(functionality_prediction == "H", "High", NA
+                                                        )))),
+        functionality_prediction = factor(
+            x = functionality_prediction,
+            levels = c("Neutral", "Low", "Medium", "High")
+        ),
+        clinical_significance = ifelse(grepl(x = clinical_significance, pattern = "5"), "Pathogenic", 
+                                       ifelse(grepl(x = clinical_significance, pattern = "4"), "Likely pathogenic", 
+                                              ifelse(grepl(x = clinical_significance, pattern = "3"), "Likely benign", 
+                                                     ifelse(grepl(x = clinical_significance, pattern = "2"), "Benign", NA
+                                                     )))),
+        clinical_significance = factor(
+            x = clinical_significance,
+            levels = c("Benign", "Likely benign", "Likely pathogenic", "Pathogenic")
+        ),
+        loss_of_function = as.numeric(loss_of_function)
+    ) %>%
+    distinct()
+
+
+# Merge with the correlation data frame
+
+corVepDF <- corDF %>%
+    select(
+        peptide_sequence, gene, gene_variant, cor, rCor
+    ) %>%
+    left_join(
+        vepDF,
+        by = c("gene", "gene_variant")
+    )
+
+
+```
+
+
+##### :pencil2: Plot the distribution of the correlation against the minor allele frequency
+
+```{r frequency}
+
+
+plotDF <- corVepDF %>%
+    select(
+        peptide_sequence, gene, gene_variant, cor, rCor, allele_frequency
+    ) %>%
+    filter(
+        !is.na(allele_frequency)
+    ) %>%
+    distinct() %>%
+    gather(
+        cor, rCor,
+        key = "data",
+        value = "correlation"
+    ) %>%
+    mutate(
+        data = ifelse(data == "cor", "Data", "Random"),
+        data = factor(
+            x = data, 
+            levels = c("Data", "Random")
+        )
+    ) %>%
+    arrange(
+        desc(data)
+    )
+
+ggplot(
+    data = plotDF
+) +
+    geom_point(
+        mapping = aes(
+            x = allele_frequency,
+            y = correlation,
+            col = data
+        ),
+        alpha = 0.2
+    ) +
+    geom_smooth(
+        mapping = aes(
+            x = allele_frequency,
+            y = correlation,
+            col = data,
+            fill = data
+        ),
+        method = "loess"
+    ) +
+    scale_x_continuous(
+        name = "Minor Allele Frequency [log10]",
+        breaks = -5:-1,
+        labels = paste0("10e", -5:-1)
+    ) +
+    scale_y_continuous(
+        name = "Correlation"
+    ) +
+    scale_color_manual(
+        values = scico(
+            n = 2,
+            palette = "cork",
+            begin = 0.2,
+            end = 0.8,
+            direction = -1
+        )
+    ) +
+    scale_fill_manual(
+        values = scico(
+            n = 2,
+            palette = "cork",
+            begin = 0.2,
+            end = 0.8,
+            direction = -1
+        )
+    ) +
+    theme(
+        legend.position = "top",
+        legend.title = element_blank()
+    )
+
+
+
+```
+
+##### :speech_balloon: Intuitively, what frequency do you expect variants promoting tumor survival to have?
+
+
+##### :pencil2: Plot the distribution of the correlation against the functionality prediction
+
+```{r functionality_prediction}
+
+
+plotDF <- corVepDF %>%
+    select(
+        peptide_sequence, gene, gene_variant, cor, rCor, functionality_prediction
+    ) %>%
+    filter(
+        !is.na(functionality_prediction)
+    ) %>%
+    distinct() %>%
+    gather(
+        cor, rCor,
+        key = "data",
+        value = "correlation"
+    ) %>%
+    mutate(
+        data = ifelse(data == "cor", "Data", "Random"),
+        data = factor(
+            x = data, 
+            levels = c("Data", "Random")
+        )
+    ) %>%
+    arrange(
+        desc(data)
+    )
+
+ggplot(
+    data = plotDF
+) +
+    geom_violin(
+        mapping = aes(
+            x = functionality_prediction,
+            y = correlation,
+            col = data,
+            fill = data
+        ),
+        alpha = 0.5,
+        width = 0.8
+    ) +
+    geom_boxplot(
+        mapping = aes(
+            x = functionality_prediction,
+            y = correlation,
+            col = data
+        ),
+        fill = "white",
+        alpha = 0.8,
+        width = 0.8
+    ) +
+    scale_x_discrete(
+        name = "Functionality Prediction"
+    ) +
+    scale_y_continuous(
+        name = "Correlation"
+    ) +
+    scale_color_manual(
+        values = scico(
+            n = 2,
+            palette = "cork",
+            begin = 0.2,
+            end = 0.8,
+            direction = -1
+        )
+    ) +
+    scale_fill_manual(
+        values = scico(
+            n = 2,
+            palette = "cork",
+            begin = 0.2,
+            end = 0.8,
+            direction = -1
+        )
+    ) +
+    theme(
+        legend.position = "top",
+        legend.title = element_blank()
+    )
+
+
+```
+
+##### :speech_balloon: How can we interpret that protein and SAAV correlation is associated with functional prediction?
+
+
+##### :pencil2: Plot the distribution of the correlation against the loss of function prediction
+
+```{r loss_of_function}
+
+
+plotDF <- corVepDF %>%
+    select(
+        peptide_sequence, gene, gene_variant, cor, rCor, loss_of_function
+    ) %>%
+    filter(
+        !is.na(loss_of_function)
+    ) %>%
+    distinct() %>%
+    gather(
+        cor, rCor,
+        key = "data",
+        value = "correlation"
+    ) %>%
+    mutate(
+        data = ifelse(data == "cor", "Data", "Random"),
+        data = factor(
+            x = data, 
+            levels = c("Data", "Random")
+        )
+    ) %>%
+    arrange(
+        desc(data)
+    )
+
+ggplot(
+    data = plotDF
+) +
+    geom_point(
+        mapping = aes(
+            x = loss_of_function,
+            y = correlation,
+            col = data
+        ),
+        alpha = 0.2
+    ) +
+    geom_smooth(
+        mapping = aes(
+            x = loss_of_function,
+            y = correlation,
+            col = data,
+            fill = data
+        ),
+        method = "loess"
+    ) +
+    scale_x_continuous(
+        name = "Loss of Function Score"
+    ) +
+    scale_y_continuous(
+        name = "Correlation"
+    ) +
+    scale_color_manual(
+        values = scico(
+            n = 2,
+            palette = "cork",
+            begin = 0.2,
+            end = 0.8,
+            direction = -1
+        )
+    ) +
+    scale_fill_manual(
+        values = scico(
+            n = 2,
+            palette = "cork",
+            begin = 0.2,
+            end = 0.8,
+            direction = -1
+        )
+    ) +
+    theme(
+        legend.position = "top",
+        legend.title = element_blank()
+    )
+
+
+```
+
+##### :speech_balloon: Intuitively, how do you expect the correlation to evolve relatively to the loss of function score?
+
+
+##### :pencil2: Plot the distribution of the correlation against the loss of clinical significance
+
+```{r clinical_significance}
+
+
+plotDF <- corVepDF %>%
+    select(
+        peptide_sequence, gene, gene_variant, cor, rCor, clinical_significance
+    ) %>%
+    filter(
+        !is.na(clinical_significance)
+    ) %>%
+    distinct() %>%
+    gather(
+        cor, rCor,
+        key = "data",
+        value = "correlation"
+    ) %>%
+    mutate(
+        data = ifelse(data == "cor", "Data", "Random"),
+        data = factor(
+            x = data, 
+            levels = c("Data", "Random")
+        )
+    ) %>%
+    arrange(
+        desc(data)
+    )
+
+ggplot(
+    data = plotDF
+) +
+    geom_violin(
+        mapping = aes(
+            x = clinical_significance,
+            y = correlation,
+            col = data,
+            fill = data
+        ),
+        alpha = 0.5,
+        width = 0.8
+    ) +
+    geom_boxplot(
+        mapping = aes(
+            x = clinical_significance,
+            y = correlation,
+            col = data
+        ),
+        fill = "white",
+        alpha = 0.8,
+        width = 0.8
+    ) +
+    scale_x_discrete(
+        name = "Clinical Significance"
+    ) +
+    scale_y_continuous(
+        name = "Correlation"
+    ) +
+    scale_color_manual(
+        values = scico(
+            n = 2,
+            palette = "cork",
+            begin = 0.2,
+            end = 0.8,
+            direction = -1
+        )
+    ) +
+    scale_fill_manual(
+        values = scico(
+            n = 2,
+            palette = "cork",
+            begin = 0.2,
+            end = 0.8,
+            direction = -1
+        )
+    ) +
+    theme(
+        legend.position = "top",
+        legend.title = element_blank()
+    )
+
+
+```
+
+##### :speech_balloon: How do you interpret the association of correlation between gene and SAAV peptides abundances in tumors and pathogenicity? How can we take advantage of the variant association in other diseases?
+
+
+## Conclusion
+
+##### :speech_balloon: Can you speculate on the function or effect of these variant peptides in cancer biology? How can these be used in a clinical setup?
 
 
 ## References
