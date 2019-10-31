@@ -58,9 +58,115 @@ cnaCorDF <- read.table(
 )
 ```
 
-##### [:thought\_balloon:](answers.md#thought_balloon-if-we-assume-a-linear-relationship-between-number-of-alleles-and-peptide-abundance-what-should-be-the-peptide-distribution-for-each-genotype) What do the columns represent? What is the difference between Pearson and Spearman correlations?
+##### [:thought\_balloon:](answers.md#thought_balloon-what-do-the-columns-represent-what-is-the-difference-between-pearson-and-spearman-correlations) What do the columns represent? What is the difference between Pearson and Spearman correlations?
 
-##### :pencil2: Import the correlation results.
+##### :pencil2: Plot the correlation results for proteins against mRNA as in Figure 6 of Johansson *et al.* [(1)](#references) and Figure 1 of Gonçalves *et al.* [(3)](#references).
+
+``` r
+# Build the scatter plot
+
+scatterPlot <- ggplot(
+    data = cnaCorDF
+) +
+    geom_point(
+        mapping = aes(
+            x = mRNA_Spearman_correlation,
+            y = protein_Spearman_correlation
+        ),
+        col = "black",
+        alpha = 0.2
+    ) +
+    geom_density_2d(
+        mapping = aes(
+            x = mRNA_Spearman_correlation,
+            y = protein_Spearman_correlation
+        ),
+        col = "white",
+    ) +
+    scale_x_continuous(
+        name = "RNA-CNA Correlation (Spearman)"
+    ) +
+    scale_y_continuous(
+        name = "Protein-CNA Correlation (Spearman)"
+    )
+
+
+# Build the density plots
+
+rnaDensityPlot <- ggplot(
+    data = cnaCorDF
+) + theme_minimal() + 
+    geom_density(
+        mapping = aes(
+            x = mRNA_Spearman_correlation
+        ),
+        fill = "black",
+        alpha = 0.1
+    ) +
+    scale_x_continuous(
+        expand = c(0, 0)
+    ) +
+    scale_y_continuous(
+        expand = c(0, 0)
+    ) +
+    theme(
+        axis.title = element_blank(),
+        axis.text = element_blank(),
+        panel.grid = element_blank()
+    )
+
+proteinDensityPlot <- ggplot(
+    data = cnaCorDF
+) + theme_minimal() + 
+    geom_density(
+        mapping = aes(
+            x = protein_Spearman_correlation
+        ),
+        fill = "black",
+        alpha = 0.1
+    ) +
+    scale_x_continuous(
+        expand = c(0, 0)
+    ) +
+    scale_y_continuous(
+        expand = c(0, 0)
+    ) +
+    theme(
+        axis.title = element_blank(),
+        axis.text = element_blank(),
+        panel.grid = element_blank()
+    ) + 
+    coord_flip()
+
+
+# Make grobs from plots
+
+scatterGrob <- ggplotGrob(scatterPlot)
+rnaDensityGrob <- ggplotGrob(rnaDensityPlot)
+proteinDensityGrob <- ggplotGrob(proteinDensityPlot)
+
+
+# Insert the densities as new row and column in the scatter grob
+
+mergedGrob <- rbind(scatterGrob[1:4, ], rnaDensityGrob[7, ], scatterGrob[5:nrow(scatterGrob), ], size = "last")
+mergedGrob$heights[5] <- unit(0.2, "null")
+
+proteinDensityGrob <- gtable_add_rows(
+        x = proteinDensityGrob, 
+        heights = unit(1, "null"), 
+        pos = 0
+    )
+
+mergedGrob <- cbind(mergedGrob[, 1:5], proteinDensityGrob[, 5], mergedGrob[, 6:ncol(mergedGrob)], size = "first")
+mergedGrob$widths[6] <- unit(0.2, "null")
+
+
+# Plot
+
+grid.draw(mergedGrob)
+```
+
+![](cna-protein_files/figure-gfm/correlation_plot-1.png)<!-- -->
 
 ## References
 
