@@ -15,16 +15,16 @@ In [Ramus C. _et al._ J. Prot. 2016 ](https://www.sciencedirect.com/science/arti
 ### 1.1 Experimental design
 
 We will use two samples of 2 μg of a yeast (_Saccharomyces cerevisiae_) protein lysate spiked with two different concentrations of Sigma UPS1 (standard mixture of 48 equimolar human proteins). Each of these two samples was analyzed in triplicate on an LTQ Orbitrap Velos (160 minutes run duration).
-If you want to know more details about the sample preparation and the acquisition method please read the manuscript [Experimental procedures](https://www.sciencedirect.com/science/article/pii/S187439191530186X#s0010){:target="_blank"}.
+If you want to know more details about the sample preparation and the acquisition method please read the manuscript [Experimental procedures](https://www.sciencedirect.com/science/article/pii/S187439191530186X#s0010).
 
 ##### :thought_balloon: _Why did the authors combine two different Proteomes? What is the purpose of the Yeast background? What is the purpose of the set of 48 human proteins?_
 
 ### 1.2 MS/MS search
 
-Since the aim of this study was to compare software solutions the raw data were analysed by different pipelines. In this tutorial we will use the results obtained from the [Mascot search engine](http://www.matrixscience.com/cgi/search_form.pl?FORMVER=2&SEARCH=MIS){:target="_blank"}. Here is a short description of the used parameters:
+Since the aim of this study was to compare software solutions the raw data were analysed by different pipelines. In this tutorial we will use the results obtained from the [Mascot search engine](http://www.matrixscience.com/cgi/search_form.pl?FORMVER=2&SEARCH=MIS). Here is a short description of the used parameters:
 _Peaklists were submitted to Mascot database searches (version 2.4.2). ESI-TRAP was chosen as the instrument, trypsin/P as the enzyme and 2 missed cleavages were allowed. Precursor and fragment mass error tolerances were set at 5 ppm and 0.8 Da, respectively. Peptide variable modifications allowed during the search were: acetyl (Protein N-ter), oxidation (M), whereas carbamidomethyl (C) was set as fixed modification._
 
-For more information regarding the Mascot parameters please check the corresponding [documentation page](http://www.matrixscience.com/help/search_field_help.html){:target="_blank"}.
+For more information regarding the Mascot parameters please check the corresponding [documentation page](http://www.matrixscience.com/help/search_field_help.html).
 
 The full list of raw files and result files are available from this PRIDE FTP site:
 ftp://ftp.pride.ebi.ac.uk/pride/data/archive/2015/12/PXD001819
@@ -44,7 +44,7 @@ Two groups of UPS1-Yeast proteins were selected for this tutorial. Raw files and
 
 Proline is a new software (manuscript under revision) for label-free workflow execution and raw data visualization. We will use the web interface of this tool to verify the quality of peak detection and LC-MS maps alignments.
 
-For an introduction to the Proline algorithms implemnted for LC-MS peak detection and alignment please read the [Proline documentation](http://www.profiproteomics.fr/software/doc/2.0/#id.44sinio){:target="_blank"}.
+For an introduction to the Proline algorithms implemnted for LC-MS peak detection and alignment please read the [Proline documentation](http://www.profiproteomics.fr/software/doc/2.0/#id.44sinio).
 
 ### 2.1 Connection to Proline Web
 
