@@ -252,6 +252,15 @@ summary(gmm, parameters = TRUE)
 
 ##### [:thought_balloon:](answers.md#thought_balloon-what-do-the-columns-represent-what-is-the-difference-between-pearson-and-spearman-correlations) How many gaussian distributions were suggested by the model? What do the _Mixing probabilities_, _Means_, and _Variances_ represent?
 
+##### :pencil2: Run Gaussian mixture modelling on the attenuation coefficient.
+
+```{r gmm}
+
+gmm <- densityMclust(cnaCorDF$attenuation_coefficient)
+
+summary(gmm, parameters = TRUE)
+
+```
 
 ## References
 
