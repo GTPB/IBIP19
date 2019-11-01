@@ -149,7 +149,7 @@ Set the T-Test ```p-value``` filter to ```0.01```, then sort the table in the up
 
 ---
 
-#### 2.3.2 Raw data verification
+#### 2.3.2 Verification of corresponding raw data
 
 On the volcano plot the protein named ```RL8B_YEAST``` seems to be an outlier. Click on this point to open the detailled quantitative results.
 
