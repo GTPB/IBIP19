@@ -44,7 +44,9 @@ Two groups of UPS1-Yeast proteins were selected for this tutorial. Raw files and
 
 Proline is a new software (manuscript under revision) for label-free workflow execution and raw data visualization. We will use the web interface of this tool to verify the quality of peak detection and LC-MS maps alignments.
 
-For an introduction to the Proline algorithms implemnted for LC-MS peak detection and alignment please read the [Proline documentation](http://www.profiproteomics.fr/software/doc/2.0/#id.44sinio).
+For an introduction to the Proline algorithms implemnted for LC-MS peak detection and alignment please read the [Proline algorithms documentation](http://www.profiproteomics.fr/software/doc/2.0/#id.44sinio).
+
+Additionally, you can also open the [Web interface documentation](http://www.profiproteomics.fr/software/doc/2.0/#id.43ky6rz) before going through the rest of this tutorial.
 
 ### 2.1 Connection to Proline Web
 
