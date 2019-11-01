@@ -249,23 +249,23 @@ summary(gmm, parameters = TRUE)
     ## Mclust V (univariate, unequal variance) model with 2 components: 
     ## 
     ##  log-likelihood    n df      BIC       ICL
-    ##        935.3849 9533  5 1824.957 -5978.545
+    ##        935.4042 9533  5 1824.996 -5895.968
     ## 
     ## Mixing probabilities:
     ##         1         2 
-    ## 0.4712043 0.5287957 
+    ## 0.4639931 0.5360069 
     ## 
     ## Means:
     ##           1           2 
-    ## -0.18830474 -0.06242155 
+    ## -0.18980655 -0.06281508 
     ## 
     ## Variances:
-    ##          1          2 
-    ## 0.07022877 0.02416618
+    ##         1         2 
+    ## 0.0704898 0.0244437
 
-##### [:thought\_balloon:](answers.md#thought_balloon-what-do-the-columns-represent-what-is-the-difference-between-pearson-and-spearman-correlations) How many gaussian distributions were suggested by the model? What do the *Mixing probabilities*, *Means*, and *Variances* represent?
+##### [:thought\_balloon:](answers.md#thought_balloon-how-many-gaussian-distributions-were-suggested-by-the-model-what-do-the-mixing-probabilities-means-and-variances-represent) How many gaussian distributions were suggested by the model? What do the *Mixing probabilities*, *Means*, and *Variances* represent?
 
-##### [:thought\_balloon:](answers.md#thought_balloon-what-do-the-columns-represent-what-is-the-difference-between-pearson-and-spearman-correlations) Based on this, how many CNAs are considered attenuated?
+##### [:thought\_balloon:](answers.md#thought_balloon-based-on-this-how-many-cnas-are-considered-attenuated) Based on this, how many CNAs are considered attenuated?
 
 ##### :pencil2: Overlay the density and the model.
 
@@ -364,7 +364,7 @@ ggplot() +
 
 ![](cna-protein_files/figure-gfm/gmm_overlay-1.png)<!-- -->
 
-##### [:thought\_balloon:](answers.md#thought_balloon-what-do-the-columns-represent-what-is-the-difference-between-pearson-and-spearman-correlations) Which component represents the attenuated distribution? How can we classify CNAs based on these distributions?
+##### [:thought\_balloon:](answers.md#thought_balloon-which-component-represents-the-attenuated-distribution-how-can-we-classify-cnas-based-on-these-distributions) Which component represents the attenuated distribution? How can we classify CNAs based on these distributions?
 
 ##### :speech\_balloon: What do you think of the quality of the modelling?
 
@@ -373,7 +373,7 @@ second component to scale the attenuation coefficient, and use the
 biologists’ favorite threshold of 0.05 to highlight the confidently
 attenuated CNAs.
 
-##### :pencil2: Scale the attenuation coefficient.
+##### :pencil2: Scale the attenuation coefficient, threshold at 0.05, and plot on top of the distributions.
 
 ``` r
 # Scale the attenuation coefficient
@@ -493,6 +493,8 @@ ggplot() +
 ```
 
 ![](cna-protein_files/figure-gfm/score_scaling-1.png)<!-- -->
+
+##### [:thought\_balloon:](answers.md#thought_balloon-what-do-the-columns-represent-what-is-the-difference-between-pearson-and-spearman-correlations) Using this threshold: What is the share of CNAs considered attenuated that would come from the component 2 distribution? What is the share of CNAs considered not attenuated that would come from the component 1? How will this influence the analyses?
 
 ##### :pencil2: Annotate the scaled attenuation coefficient on the scatter plot.
 
@@ -779,7 +781,7 @@ ggplot(
     )
 ```
 
-![](cna-protein_files/figure-gfm/import_complexes_pathways-1.png)<!-- -->
+![](cna-protein_files/figure-gfm/import_networks-1.png)<!-- -->
 
 ##### :speech\_balloon: How does the degree distribution inform us on the structure of these networks?
 
@@ -815,7 +817,7 @@ accessionsMapping <- accessionsMapping %>%
     distinct()
 ```
 
-##### [:thought\_balloon:](answers.md#thought_balloon-what-do-the-columns-represent-what-is-the-difference-between-pearson-and-spearman-correlations) What is the number of proteins per gene reported in the CNA table? How is this going to influence the analysis?
+##### [:thought\_balloon:](answers.md#thought_balloon-what-is-the-number-of-proteins-per-gene-reported-in-the-cna-table-how-is-this-going-to-influence-the-analysis) What is the number of proteins per gene reported in the CNA table? How is this going to influence the analysis?
 
 Note that in the following, we exclude genes mapping to more than 100
 proteins, and we use the sum of edges per protein for each gene.
@@ -924,6 +926,9 @@ degreeDF <- data.frame(
 )
 
 cnaDegreeDF <- accessionsMapping %>%
+    filter(
+        !gene %in% excludedGenes
+    ) %>% 
     left_join(
         degreeDF,
         by = "accession"
@@ -998,6 +1003,9 @@ degreeDF <- data.frame(
 )
 
 cnaDegreeDF <- accessionsMapping %>%
+    filter(
+        !gene %in% excludedGenes
+    ) %>% 
     left_join(
         degreeDF,
         by = "accession"
