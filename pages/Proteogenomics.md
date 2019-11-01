@@ -26,7 +26,7 @@ When in doubt, consider running a small pilot experiment to benchmark the perfor
 
 > The production of human insulin from the transcript INS-201 according to Ensembl release 97. (a) The transcript is coded by three exons on chromosome eleven, colored in yellow, orange, and dark red. The translated sequence is underlined. Sequence variation in the translated sequence can result in sequence variations in the amino acid sequence, and hence different proteoforms. (b) The sequence obtained after translation represents the raw proteoform of insulin, called preproinsulin, which requires posttranslational maturation to obtain the mature form of insulin. Amino acids are colored according to the coding exons and the residue overlapping splice site is underlined. (c) The signal peptide is cleaved, yielding proinsulin, and cysteines cross-linked by disulphide bonds, making a new proteoform of insulin. (d) Proteases cleave a large fragment of the sequence, the C-peptide. The C-peptide is often used as a proxy to measure insulin production. (e) Proteases cleave pairs of amino-acids, yielding the mature form of insulin. (f) The mature form of insulin consists of two cross-linked peptides. It can be further modified, yielding even more proteoforms. From [(5)](#references), adapted from [en.wikipedia.org/wiki/Insulin](https://en.wikipedia.org/wiki/Insulin#/media/File:Insulin_path.svg).
 
-- _Variant, Mutation, Alteration_: A genetic variant or mutation refers to a variation in the genetic sequence. When the variation is not inherited, it is called alteration. Variants involving the substitution of a single nucleotide are called single-nucleotide polymorphism (SNP) or single-nucleotide variant (SNV). SNP refers to variants where each version is carried by more than 1% of the population. When a variation of one amino acid is detected in the proteome, it is refered to as single amino acid variant (SAV or SAAV). Variants involving the deletion or insertion of genetic code are called indels. Variants involving the repeat of sections of the genome are examples of structural variation, and called Copy-number variation (CNV). When the variation is not inherited, it is called copy-number alteration (CNA).
+- _Variant, Mutation, Alteration_: A genetic variant or mutation refers to a variation in the genetic sequence. When the variation is not inherited, it is called alteration. Variants involving the substitution of a single nucleotide are called single-nucleotide polymorphism (SNP) or single-nucleotide variant (SNV). SNP refers to variants where each version is carried by more than 1% of the population. When a variation of one amino acid is detected in the proteome, it is referred to as single amino acid variant (SAV or SAAV). Variants involving the deletion or insertion of genetic code are called indels. Variants involving the repeat of sections of the genome are examples of structural variation, and called Copy-number variation (CNV). When the variation is not inherited, it is called copy-number alteration (CNA).
 
 - _Peptides, Proteins, isoforms, and proteoforms_: peptides and proteins are short and long chains of amino acids, respectively. Proteins are generally associated to a gene which codes their amino acid chain. Differences in splicing yield different isoforms for most proteins. During their lifetime, proteins undergo structural modification: cleavage, folding, cross-linking, post-translational modification (PTM), etc. These modifications yield very different forms for each protein, called proteoforms [(6)](#references).
 
@@ -57,9 +57,10 @@ You will need the following libraries, please make sure that they are installed.
 - We will use [ggplot2](ggplot2.tidyverse.org) to plot data, we recommend this [cheat sheet](https://github.com/rstudio/cheatsheets/blob/master/data-visualization-2.1.pdf).
 - We will use [gtable](github.com/r-lib/gtable) to organize plots.
 - We will use [gamlss](https://www.gamlss.com/) for normalization.
+- We will use [mclust](https://mclust-org.github.io) for Gaussian mixture modeling.
 - We will use [conflicted](https://github.com/r-lib/conflicted) to manage conflict resolution to function names between packages.
 
-*Warining*: [conflicted](https://github.com/r-lib/conflicted) is not available in cran yet, you will need to install it using [devtools](https://devtools.r-lib.org/). See [the installation instructions](https://github.com/r-lib/conflicted#installation) for more details.
+*Warning*: [conflicted](https://github.com/r-lib/conflicted) is not available in cran yet, you will need to install it using [devtools](https://devtools.r-lib.org/). See [the installation instructions](https://github.com/r-lib/conflicted#installation) for more details.
 
 ## Tutorials
 
@@ -69,7 +70,7 @@ You will need the following libraries, please make sure that they are installed.
 
 - [3. CNA-Protein](proteogenomics/can_protein.md): linking structural variants and protein levels to study CNA dampening/silencing.
 
-- [4. RNA-Protein](proteogenomics/rna_protein.md): compatring RNA and protein levels to identify key biological mechanisms.
+- [4. RNA-Protein](proteogenomics/rna_protein.md): comparing RNA and protein levels to identify key biological mechanisms.
 
 
 ## References

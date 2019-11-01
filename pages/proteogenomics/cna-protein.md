@@ -22,13 +22,14 @@ We will need the following libraries, please make sure that they are
 installed.
 
 ``` r
+library(conflicted)
 library(tidyr)
 library(dplyr)
 library(ggplot2)
 library(scico)
 library(gtable)
 library(grid)
-library(conflicted)
+library(mclust)
 
 theme_set(theme_bw(base_size = 11))
 ```
@@ -61,67 +62,31 @@ cnaCorDF <- read.table(
 
 ##### [:thought\_balloon:](answers.md#thought_balloon-what-do-the-columns-represent-what-is-the-difference-between-pearson-and-spearman-correlations) What do the columns represent? What is the difference between Pearson and Spearman correlations?
 
-Gonçalves *et al.* [(3)](#references) define the attenuation coefficient
-as the difference between the correlation of the protein and RNA.
-
-##### :pencil2: Estimate the attenuation coefficient and plot its density.
-
-``` r
-# Attenuation coefficient
-
-cnaCorDF <- cnaCorDF %>%
-    mutate(
-        attenuation_coefficient = protein_Spearman_correlation - mRNA_Spearman_correlation
-    )
-
-
-# Build density plot
-
-ggplot(
-    data = cnaCorDF
-) +
-    geom_density(
-        mapping = aes(
-            x = attenuation_coefficient
-        ),
-        fill = "black",
-        alpha = 0.2
-    ) +
-    scale_x_continuous(
-        name = "Attenuation Coefficient"
-    ) +
-    scale_y_continuous(
-        name = "Density"
-    )
-```
-
-![](cna-protein_files/figure-gfm/attenuation_coefficient-1.png)<!-- -->
-
 ##### :pencil2: Plot the correlation results for proteins against mRNA as in Figure 6 of Johansson *et al.* [(1)](#references) and Figure 1 of Gonçalves *et al.* [(3)](#references).
 
 ``` r
-# Attenuation coefficient
-
-cnaCorDF <- cnaCorDF %>%
-    mutate(
-        attenuation_coefficient = protein_Spearman_correlation - mRNA_Spearman_correlation
-    )
-
-
 # Build the scatter plot
 
-gradientEnd <- (max(cnaCorDF$attenuation_coefficient) - min(cnaCorDF$attenuation_coefficient)) / (2 * (-min(cnaCorDF$attenuation_coefficient)))
+axisMin <- min(c(cnaCorDF$mRNA_Spearman_correlation, cnaCorDF$protein_Spearman_correlation))
+axisMax <- max(c(cnaCorDF$mRNA_Spearman_correlation, cnaCorDF$protein_Spearman_correlation))
 
 scatterPlot <- ggplot(
     data = cnaCorDF
 ) +
+    geom_abline(
+        slope = 1,
+        intercept = 0,
+        linetype = "dotted",
+        col = "black",
+        alpha = 0.5
+    ) +
     geom_point(
         mapping = aes(
             x = mRNA_Spearman_correlation,
-            y = protein_Spearman_correlation,
-            col = attenuation_coefficient
+            y = protein_Spearman_correlation
         ),
-        alpha = 0.2
+        col = "black",
+        alpha = 0.1
     ) +
     geom_density_2d(
         mapping = aes(
@@ -131,19 +96,15 @@ scatterPlot <- ggplot(
         col = "white",
     ) +
     scale_x_continuous(
-        name = "RNA-CNA Correlation (Spearman)"
+        name = "RNA-CNA",
+        limits = c(axisMin, axisMax)
     ) +
     scale_y_continuous(
-        name = "Protein-CNA Correlation (Spearman)"
-    ) +
-    scale_color_scico(
-        name = "Attenuation Coefficient",
-        palette = "berlin",
-        begin = 0,
-        end = gradientEnd
+        name = "Protein-CNA",
+        limits = c(axisMin, axisMax)
     ) +
     theme(
-        legend.position = "top"
+        legend.position = "none"
     )
 
 
@@ -204,14 +165,14 @@ proteinDensityGrob <- ggplotGrob(proteinDensityPlot)
 
 # Insert the densities as new row and column in the scatter grob
 
-mergedGrob <- rbind(scatterGrob[1:7, ], rnaDensityGrob[7, ], scatterGrob[8:nrow(scatterGrob), ], size = "last")
-mergedGrob$heights[8] <- unit(0.2, "null")
+mergedGrob <- rbind(scatterGrob[1:6, ], rnaDensityGrob[7, ], scatterGrob[7:nrow(scatterGrob), ], size = "last")
+mergedGrob$heights[7] <- unit(0.15, "null")
 
 proteinDensityGrob <- gtable_add_rows(
-        x = proteinDensityGrob, 
-        heights = unit(rep(0, nrow(mergedGrob) - nrow(proteinDensityGrob)), "null"), 
-        pos = 0
-    )
+    x = proteinDensityGrob, 
+    heights = unit(rep(0, nrow(mergedGrob) - nrow(proteinDensityGrob)), "null"), 
+    pos = 0
+)
 
 mergedGrob <- cbind(mergedGrob[, 1:5], proteinDensityGrob[, 5], mergedGrob[, 6:ncol(mergedGrob)], size = "first")
 mergedGrob$widths[6] <- unit(0.15, "null")
@@ -223,6 +184,81 @@ grid.draw(mergedGrob)
 ```
 
 ![](cna-protein_files/figure-gfm/correlation_plot-1.png)<!-- -->
+
+##### :speech\_balloon: How can we categorize CNAs in tumors based on this plot?
+
+Gonçalves *et al.* [(3)](#references) define the attenuation coefficient
+as the difference between the correlation of the transcript and protein
+levels with the CNA, where a positive and negative coefficient indicate
+a lower and higher correlation at the protein level, respectively.
+
+##### :pencil2: Estimate the attenuation coefficient and plot its density.
+
+``` r
+# Attenuation coefficient
+
+cnaCorDF <- cnaCorDF %>%
+    mutate(
+        attenuation_coefficient = protein_Spearman_correlation - mRNA_Spearman_correlation
+    )
+
+
+# Build density plot
+
+ggplot(
+    data = cnaCorDF
+) +
+    geom_density(
+        mapping = aes(
+            x = attenuation_coefficient
+        ),
+        fill = "black",
+        alpha = 0.2
+    ) +
+    scale_x_continuous(
+        name = "Attenuation Coefficient"
+    ) +
+    scale_y_continuous(
+        name = "Density"
+    )
+```
+
+![](cna-protein_files/figure-gfm/attenuation_coefficient-1.png)<!-- -->
+
+The authors suggest that this distribution is the combination of two
+populations of CNAs: post-translationally attenuated and not. They model
+the distributions of the two populations using Gaussian mixture
+modelling, where the overall density is decomposed into the sum of
+densities from Gaussian distributions.
+
+##### :pencil2: Run Gaussian mixture modelling on the attenuation coefficient.
+
+``` r
+gmm <- densityMclust(cnaCorDF$attenuation_coefficient)
+
+summary(gmm, parameters = TRUE)
+```
+
+    ## ------------------------------------------------------- 
+    ## Density estimation via Gaussian finite mixture modeling 
+    ## ------------------------------------------------------- 
+    ## 
+    ## Mclust V (univariate, unequal variance) model with 2 components: 
+    ## 
+    ##  log-likelihood    n df      BIC      ICL
+    ##         935.402 9533  5 1824.991 -5794.68
+    ## 
+    ## Mixing probabilities:
+    ##         1         2 
+    ## 0.4553952 0.5446048 
+    ## 
+    ## Means:
+    ##           1           2 
+    ## -0.19153507 -0.06337456 
+    ## 
+    ## Variances:
+    ##          1          2 
+    ## 0.07083184 0.02476932
 
 ## References
 

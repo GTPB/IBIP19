@@ -24,12 +24,12 @@ We will need the following libraries, please make sure that they are installed.
 
 ```{r libraries, warning=FALSE, results='hide', message=FALSE}
 
+library(conflicted)
 library(tidyr)
 library(dplyr)
 library(ggplot2)
 library(scico)
 library(gamlss)
-library(conflicted)
 
 theme_set(theme_bw(base_size = 11))
 

@@ -174,3 +174,10 @@ png("pages/proteogenomics/resources/images/zLogIntensity.png", width = 800, heig
 plot
 dummy <- dev.off()
 
+
+# GMM number of components
+
+png("pages/proteogenomics/resources/images/gmm_n.png", width = 800, height = 1200)
+plot(gmm, what = "BIC", legendArgs = list(x = "topright"))
+dummy <- dev.off()
+
