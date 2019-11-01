@@ -69,7 +69,7 @@ You will need the following libraries, please make sure that they are installed.
 
 - [2. Variation Analysis](proteogenomics/variation_analysis.md): studying sequence and splicing variation in proteomics data.
 
-- [3. CNA-Protein](proteogenomics/can_protein.md): linking structural variants and protein levels to study CNA dampening/silencing.
+- [3. CNA-Protein](proteogenomics/cna-protein.md): linking structural variants and protein levels to study CNA dampening/silencing.
 
 - [4. RNA-Protein](proteogenomics/rna_protein.md): comparing RNA and protein levels to identify key biological mechanisms.
 
