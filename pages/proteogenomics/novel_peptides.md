@@ -11,8 +11,7 @@ or the alteration of a stop codon. In order to identify these
 non-canonical genomic products, protein databases that capture genetic
 variation and non-canonical genomic products are generated either by
 enriching canonical protein sequences or by running six reading frame
-translation of the entire genome
-[(1)](#references).
+translation of the entire genome [(1)](#references).
 
 ##### [:thought\_balloon:](answers.md#thought_balloon-based-on-you-knowledge-of-peptide-and-protein-identification-can-you-anticipate-challenges-posed-by-these-proteogenomic-databases) *Based on you knowledge of peptide and protein identification, can you anticipate challenges posed by these proteogenomic databases?*
 
@@ -42,8 +41,7 @@ conducting any proteogenomic experiment. The proteogenomic
 identification results by Johansson *et al.* [(2)](#references) are
 reported in Supplementary Data 6, available
 [here](../resources/Johansson_et_al_breast_cancer_quantitative_proteome_and_proteogenomic_landscape)
-in the course
-repository.
+in the course repository.
 
 ##### [:thought\_balloon:](answers.md#thought_balloon-what-do-the-different-columns-in-the-table-represent) *What do the different columns in the table represent?*
 
@@ -107,7 +105,7 @@ knitr::kable(classesDF)
 | UTR3                     |           1 |
 | UTR5-upstream            |           1 |
 
-##### [:thought\_balloon:](answers.md#thought_balloon-can-you-speculate-on-how-these-different-classes-of-loci-can-yield-detectable-peptides) *Can you speculate on how these different classes of loci can yield detectable peptides?*
+##### [:thought\_balloon:](answers.md#thought_balloon-can-you-speculate-on-how-these-different-classes-of-loci-can-yield-novel-peptides) *Can you speculate on how these different classes of loci can yield novel peptides?*
 
 ##### :pencil2: For the non-intergenic peptides, find the different categories of associated genes.
 

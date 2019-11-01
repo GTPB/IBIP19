@@ -84,7 +84,7 @@ knitr::kable(classesDF)
 
 ```
 
-##### [:thought_balloon:](answers.md#thought_balloon-can-you-speculate-on-how-these-different-classes-of-loci-can-yield-detectable-peptides) _Can you speculate on how these different classes of loci can yield detectable peptides?_
+##### [:thought_balloon:](answers.md#thought_balloon-can-you-speculate-on-how-these-different-classes-of-loci-can-yield-novel-peptides) _Can you speculate on how these different classes of loci can yield novel peptides?_
 
 ##### :pencil2: For the non-intergenic peptides, find the different categories of associated genes.
 

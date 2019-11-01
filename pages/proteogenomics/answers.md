@@ -61,7 +61,7 @@ This document contains two tables, a list of novel peptides and a list of peptid
 | TMT intensity | Intensity of the fragment ions from the different TMT channels. |
 
 
-##### [:thought_balloon:](novel_peptides.md#thought_balloon-can-you-speculate-on-how-these-different-classes-of-loci-can-yield-detectable-peptides) _Can you speculate on how these different classes of loci can yield detectable peptides?_
+##### [:thought_balloon:](novel_peptides.md#thought_balloon-can-you-speculate-on-how-these-different-classes-of-loci-can-yield-novel-peptides) _Can you speculate on how these different classes of loci can yield novel peptides?_
 
 Mutations can yield new coding regions through alteration of start, stop, and splicing information. Exons can hence be extended by upstream and downstream regions, extending canonical sequences and disrupting splicing. Alternatively, completely new peptides or proteins can be created from intergenic regions.
 
@@ -97,11 +97,11 @@ A gene can contain multiple peptides with different SAAV. Conversely, a peptide 
 
 If a protein carries a post-translational modification (PTM), its abundance and function will differ from the non-modified counterpart. Therefore, modifications ough to be considered when comparing peptides. In the data set of this tutorial, modifications were not accounted for.
 
-##### [:thought_balloon:](answers.md#thought_balloon-why-are-all-intensities-at-the-bottom-how-can-we-better-visualize-these-distributions) _Why are all intensities at the bottom? How can we better visualize these distributions?_
+##### [:thought_balloon:](answers.md#thought_balloon-why-are-all-intensities-at-the-bottom-how-can-we-transform-the-data-to-better-visualize-these-distributions) _Why are all intensities at the bottom? How can we transform the data to better visualize these distributions?_
 
 On a proteome-wide scale, measured peptide and protein abundances generally distribute log-normally. This means that they span several orders of magnitude, with most abundances are low, with a long tail towards high abundances, and a short tail towards lower abundances. Note that the detectability and quantification performance strongly influence this distribution, and it can be that the distribution of protein abundances in the sample differ from what we measure.
 
-In order to visualize such distributions, you can transform the intensities logarithmically, then their distribution should look bell-shaped and symmetrical.
+In order to visualize such distributions, you can transform the intensities logarithmically, or use a log-scale on the x-axis, then their distribution should look bell-shaped and symmetrical.
 
 ![abundance_distribution](resources/images/peptideProteinDistribution.png?raw=true "Peptide and Protein abundance distributions")
 
@@ -156,7 +156,35 @@ The mixing probability of the distribution with lowest mean (_i.e._ most attenua
 
 The distribution to the left, i.e. lowest mean, is the one representing the attenuated population. 
 
-It is possible to use the ratio of a distribution to the sum to estimate the probability at a given attenuation score to belong from either category. Alternatively, it is possible to use the cumulative distribution function to evaluate the appartenance to a population. 
+It is possible to use the ratio of a distribution to the sum to estimate the probability at a given attenuation score to belong from either category. Alternatively, it is possible to use the cumulative distribution function to evaluate the appartenance to a population.
+
+##### [:thought_balloon:](answers.md#thought_balloon-what-do-the-columns-represent-what-is-the-difference-between-pearson-and-spearman-correlations) What is the number of proteins per gene reported in the CNA table? How is this going to influence the analysis?
+
+According to the UniProt mapping, the number of proteins per gene ranges from 1 to approx. 8000. The genes mapping to most proteins are listed in the table below.
+
+| Gene | # accessions mapped |
+| ---- | ------------------- |
+| HLA-B | 7983 |
+| HLA-A | 6874 |
+| HLA-C | 6516 |
+| HLA-DRB1 | 3095 |
+| HLA-DQB1 | 2145 |
+| HLA-DPB1 | 1761 |
+| HLA-DQA1 | 207 |
+| ATXN3 | 204 |
+| HLA-DPA1 | 127 |
+| BRCA1 | 125 |
+| TP53 | 120 |
+| APOL1 | 107 |
+
+The result for each gene can be obtained using the following script in R.
+
+```
+geneOccurenceDF <- as.data.frame(table(accessionsMapping$gene))
+occurrenceFrequencyDF <- as.data.frame(table(geneOccurenceDF[[2]]))
+```
+
+When mapping the CNA results to functional databases, these genes are going to map everywhere in the proteome, reducing our ability to find meaningful information.
 
 ## References
 

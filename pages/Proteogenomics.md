@@ -58,6 +58,7 @@ You will need the following libraries, please make sure that they are installed.
 - We will use [gtable](github.com/r-lib/gtable) to organize plots.
 - We will use [gamlss](https://www.gamlss.com/) for normalization.
 - We will use [mclust](https://mclust-org.github.io) for Gaussian mixture modeling.
+- We will use [igraph](https://igraph.org) for graph manipulation.
 - We will use [conflicted](https://github.com/r-lib/conflicted) to manage conflict resolution to function names between packages.
 
 *Warning*: [conflicted](https://github.com/r-lib/conflicted) is not available in cran yet, you will need to install it using [devtools](https://devtools.r-lib.org/). See [the installation instructions](https://github.com/r-lib/conflicted#installation) for more details.

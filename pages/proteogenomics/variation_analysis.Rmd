@@ -251,7 +251,7 @@ ggplot(
 
 ```
 
-##### [:thought_balloon:](answers.md#thought_balloon-why-are-all-intensities-at-the-bottom-how-can-we-better-visualize-these-distributions) _Why are all intensities at the bottom? How can we better visualize these distributions?_
+##### [:thought_balloon:](answers.md#thought_balloon-why-are-all-intensities-at-the-bottom-how-can-we-transform-the-data-to-better-visualize-these-distributions) _Why are all intensities at the bottom? How can we transform the data to better visualize these distributions?_
 
 As you can see, the gene-level intensities are centered around one, and not for the peptide-level. You might have noticed in the paper that the gene-level data as provided in the supplementary information are centered, but this was not done for the peptides.
 

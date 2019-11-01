@@ -30,6 +30,7 @@ library(scico)
 library(gtable)
 library(grid)
 library(mclust)
+library(igraph)
 
 conflict_prefer("filter", "dplyr")
 
@@ -248,19 +249,19 @@ summary(gmm, parameters = TRUE)
     ## Mclust V (univariate, unequal variance) model with 2 components: 
     ## 
     ##  log-likelihood    n df      BIC       ICL
-    ##         935.404 9533  5 1824.995 -5860.316
+    ##        935.3849 9533  5 1824.957 -5978.545
     ## 
     ## Mixing probabilities:
     ##         1         2 
-    ## 0.4609893 0.5390107 
+    ## 0.4712043 0.5287957 
     ## 
     ## Means:
     ##           1           2 
-    ## -0.19046910 -0.06295614 
+    ## -0.18830474 -0.06242155 
     ## 
     ## Variances:
     ##          1          2 
-    ## 0.07058981 0.02456033
+    ## 0.07022877 0.02416618
 
 ##### [:thought\_balloon:](answers.md#thought_balloon-what-do-the-columns-represent-what-is-the-difference-between-pearson-and-spearman-correlations) How many gaussian distributions were suggested by the model? What do the *Mixing probabilities*, *Means*, and *Variances* represent?
 
@@ -456,7 +457,8 @@ ggplot() +
             y = 0,
             yend = yThreshold
         ),
-            linetype = "dashed"
+        linetype = "dotted",
+        col = "darkred"
     ) +
     scale_x_continuous(
         name = "Attenuation Coefficient"
@@ -482,7 +484,7 @@ ggplot() +
             "solid",
             "solid",
             "dashed",
-            "dotted"
+            "solid"
         )
     ) +
     theme(
@@ -491,6 +493,576 @@ ggplot() +
 ```
 
 ![](cna-protein_files/figure-gfm/score_scaling-1.png)<!-- -->
+
+##### :pencil2: Annotate the scaled attenuation coefficient on the scatter plot.
+
+``` r
+# Build the scatter plot with points colored by (logged) attenuation coefficient
+
+axisMin <- min(c(cnaCorDF$mRNA_Spearman_correlation, cnaCorDF$protein_Spearman_correlation))
+axisMax <- max(c(cnaCorDF$mRNA_Spearman_correlation, cnaCorDF$protein_Spearman_correlation))
+
+cnaCorDF <- cnaCorDF %>%
+    arrange(
+        desc(attenuation_p)
+    )
+
+scatterPlot <- ggplot(
+    data = cnaCorDF
+) +
+    geom_abline(
+        slope = 1,
+        intercept = 0,
+        linetype = "dotted",
+        col = "black",
+        alpha = 0.5
+    ) +
+    geom_abline(
+        slope = 1,
+        intercept = xThreshold,
+        color = "darkred",
+        linetype = "dotted"
+    ) +
+    geom_point(
+        mapping = aes(
+            x = mRNA_Spearman_correlation,
+            y = protein_Spearman_correlation,
+            col = -log10(attenuation_p)
+        ),
+        alpha = 0.5
+    ) +
+    geom_density_2d(
+        mapping = aes(
+            x = mRNA_Spearman_correlation,
+            y = protein_Spearman_correlation
+        ),
+        col = "white",
+    ) +
+    scale_color_scico(
+        name = "Scaled Attenuation Coefficient [-log10]",
+        palette = "lajolla",
+        direction = -1,
+        begin = 0.1,
+        breaks = seq(0, 10, 2)
+    ) +
+    scale_x_continuous(
+        name = "RNA-CNA",
+        limits = c(axisMin, axisMax)
+    ) +
+    scale_y_continuous(
+        name = "Protein-CNA",
+        limits = c(axisMin, axisMax)
+    ) +
+    theme(
+        legend.position = "top"
+    )
+
+
+# Build the density plots separating the points passing the attenuation threshold
+
+rnaDensityPlot <- ggplot(
+    data = cnaCorDF
+) + theme_minimal() + 
+    geom_density(
+        mapping = aes(
+            x = mRNA_Spearman_correlation,
+            fill = attenuation_category
+        ),
+        alpha = 0.1
+    ) +
+    scale_fill_manual(
+        values = c("darkred", "black")
+    ) +
+    scale_x_continuous(
+        expand = c(0, 0)
+    ) +
+    scale_y_continuous(
+        expand = c(0, 0)
+    ) +
+    theme(
+        legend.position = "none",
+        axis.title = element_blank(),
+        axis.text = element_blank(),
+        panel.grid = element_blank()
+    )
+
+proteinDensityPlot <- ggplot(
+    data = cnaCorDF
+) + theme_minimal() + 
+    geom_density(
+        mapping = aes(
+            x = protein_Spearman_correlation,
+            fill = attenuation_category
+        ),
+        alpha = 0.1
+    ) +
+    scale_fill_manual(
+        values = c("darkred", "black")
+    ) +
+    scale_x_continuous(
+        expand = c(0, 0)
+    ) +
+    scale_y_continuous(
+        expand = c(0, 0)
+    ) +
+    theme(
+        legend.position = "none",
+        axis.title = element_blank(),
+        axis.text = element_blank(),
+        panel.grid = element_blank()
+    ) + 
+    coord_flip()
+
+
+# Make grobs from plots
+
+scatterGrob <- ggplotGrob(scatterPlot)
+rnaDensityGrob <- ggplotGrob(rnaDensityPlot)
+proteinDensityGrob <- ggplotGrob(proteinDensityPlot)
+
+
+# Insert the densities as new row and column in the scatter grob
+
+mergedGrob <- rbind(scatterGrob[1:8, ], rnaDensityGrob[7, ], scatterGrob[9:nrow(scatterGrob), ], size = "last")
+mergedGrob$heights[9] <- unit(0.15, "null")
+
+proteinDensityGrob <- gtable_add_rows(
+    x = proteinDensityGrob, 
+    heights = unit(rep(0, nrow(mergedGrob) - nrow(proteinDensityGrob)), "null"), 
+    pos = 0
+)
+
+mergedGrob <- cbind(mergedGrob[, 1:5], proteinDensityGrob[, 5], mergedGrob[, 6:ncol(mergedGrob)], size = "first")
+mergedGrob$widths[6] <- unit(0.15, "null")
+
+
+# Plot
+
+grid.draw(mergedGrob)
+```
+
+![](cna-protein_files/figure-gfm/correlation_plot_colored-1.png)<!-- -->
+
+## Attenuation association with participation in complexes and biochemical reactions
+
+One of the proposed mechanisms of CNA attenuation is that cells regulate
+the protein abundance through regulation of translation and protein
+degradation. In particular the abundance of proteins involved in
+complexes or biochemical reactions might be regulated to respect the
+stoichiometry required by the complex or reaction, and the proteins
+remaining in excess are degraded [(3)](#references).
+
+To inspect this, we are now going to compare the CNA attenuation
+evaluated previously with the involvement of proteins in complexes,
+biochemical reactions, and protein-protein interactions (PPI). For this,
+we will use complexes from the [Complex
+Portal](https://www.ebi.ac.uk/complexportal/home), biochemical reactions
+from the [Reactome Pathway Database](https://reactome.org/), and PPIs
+from the [String database](https://string-db.org/). Pairs of interacting
+proteins from each databases were extracted in R-friendly format and are
+availabe in
+[resources/data/complexes\_18.08.17\_edges.gz](resources/data/complexes_18.08.17_edges.gz),
+[resources/data/proteinInternalEdges.tsv.gz](resources/data/proteinInternalEdges.tsv.gz),
+and
+[resources/data/string\_v10.5\_high\_edges.gz](resources/data/string_v10.5_high_edges.gz).
+
+##### :pencil2: Load all protein pairs, build corresponding biological networks, and plot the degree distribution of each network.
+
+``` r
+# Complexes
+
+edgesComplexes <- read.table(
+    file = "resources/data/complexes_18.08.17_edges.gz", 
+    header = T, 
+    sep = " ", 
+    stringsAsFactors = F, 
+    quote = "", 
+    comment.char = ""
+)
+
+
+# Protein reactions from Reactome
+
+edgesReactome <- read.table(
+    file = "resources/data/proteinInternalEdges.tsv.gz", 
+    header = T, 
+    sep = "\t", 
+    stringsAsFactors = F, 
+    quote = "", 
+    comment.char = ""
+)
+
+
+# Protein interactions from String
+
+edgesString <- read.table(
+    file = "resources/data/string_v10.5_high_edges.gz", 
+    header = T, 
+    sep = " ", 
+    stringsAsFactors = F, 
+    quote = "", 
+    comment.char = ""
+)
+
+
+# Build graphs
+
+graphComplexes <- graph_from_data_frame(edgesComplexes)
+graphReactome <- graph_from_data_frame(edgesReactome)
+graphString <- graph_from_data_frame(edgesString)
+
+
+# Simplify graphs
+
+graphComplexes <- simplify(graphComplexes, remove.multiple = T, remove.loops = T, edge.attr.comb = "first")
+graphReactome <- simplify(graphReactome, remove.multiple = T, remove.loops = T, edge.attr.comb = "first")
+graphString <- simplify(graphString, remove.multiple = T, remove.loops = T, edge.attr.comb = "first")
+
+
+# Extract degree distributions
+
+degreeComplexes <- degree.distribution(graphComplexes) * length(V(graphComplexes))
+degreeReactome <- degree.distribution(graphReactome) * length(V(graphReactome))
+degreeString <- degree.distribution(graphString) * length(V(graphString))
+
+complexLabel <- paste0("Complexes\nV: ", length(V(graphComplexes)), "\nE: ", length(E(graphComplexes)))
+reactomeLabel <- paste0("Reactome\nV: ", length(V(graphReactome)), "\nE: ", length(E(graphReactome)))
+stringLabel <- paste0("String\nV: ", length(V(graphString)), "\nE: ", length(E(graphString)))
+
+degreeDF <- data.frame(
+    degree = c(
+        1:length(degreeComplexes), 
+        1:length(degreeReactome), 
+        1:length(degreeString)
+    ),
+    frequency = c(
+        degreeComplexes, 
+        degreeReactome, 
+        degreeString
+    ),
+    graph = factor(
+        c(
+            rep(complexLabel, length(degreeComplexes)),
+            rep(reactomeLabel, length(degreeReactome)),
+            rep(stringLabel, length(degreeString))
+        ),
+        levels = c(complexLabel, reactomeLabel, stringLabel)
+    )
+) %>%
+    filter(
+        frequency > 0
+    )
+
+
+# Plot
+
+ggplot(
+    data = degreeDF
+) +
+    geom_point(
+        mapping = aes(
+            x = log10(degree),
+            y = log10(frequency)
+        ),
+        alpha = 0.2
+    ) +
+    facet_grid(
+        graph ~ .
+    ) + scale_x_continuous(
+        name = "Degree",
+        breaks = 1:3,
+        labels = 10^(1:3)
+    ) + scale_y_continuous(
+        name = "# Vertices",
+        breaks = 0:3,
+        labels = 10^(0:3)
+    )
+```
+
+![](cna-protein_files/figure-gfm/import_complexes_pathways-1.png)<!-- -->
+
+##### :speech\_balloon: How does the degree distribution inform us on the structure of these networks?
+
+These resources map interactions between proteins, yet the authors did
+not provide the accessions of the proteins associated to the CNAs. We
+therefore need to map the genes to proteins. For this, we will use the
+[UniProt](https://www.uniprot.org/) identifiers mapping. A mapping file
+for humans was downloaded in R-friendly format and is availabe in
+[resources/data/HUMAN\_9606\_idmapping.dat.gz](resources/data/HUMAN_9606_idmapping.dat.gz).
+
+``` r
+# Uniprot accession mapping
+
+accessionsMapping <- read.table(
+    file = "resources/data/HUMAN_9606_idmapping.dat.gz", 
+    header = F, 
+    sep = "\t", 
+    quote = "", 
+    comment.char = "", 
+    stringsAsFactors = F
+)
+names(accessionsMapping) <- c("accession", "source", "gene")
+accessionsMapping <- accessionsMapping %>%
+    filter(
+        source == "Gene_Name"
+    ) %>%
+    select (
+        gene, accession
+    ) %>%
+    filter(
+        gene %in% cnaCorDF$gene
+    ) %>%
+    distinct()
+```
+
+##### [:thought\_balloon:](answers.md#thought_balloon-what-do-the-columns-represent-what-is-the-difference-between-pearson-and-spearman-correlations) What is the number of proteins per gene reported in the CNA table? How is this going to influence the analysis?
+
+Note that in the following, we exclude genes mapping to more than 100
+proteins, and we use the sum of edges per protein for each gene.
+
+``` r
+geneOccurenceDF <- as.data.frame(
+    x = table(accessionsMapping$gene), 
+    stringsAsFactors = F
+)
+names(geneOccurenceDF) <- c("gene", "nProteins")
+
+excludedGenes <- geneOccurenceDF$gene[geneOccurenceDF$nProteins >= 100]
+```
+
+##### :pencil2: Plot the scaled CNA attenuation coefficient against the number of protein partners in the complex network
+
+``` r
+# Build degree data frame
+
+degreeDF <- data.frame(
+    accession = V(graphComplexes)$name,
+    degree = degree(graphComplexes),
+    stringsAsFactors = F
+)
+
+cnaDegreeDF <- accessionsMapping %>%
+    filter(
+        !gene %in% excludedGenes
+    ) %>% 
+    left_join(
+        degreeDF,
+        by = "accession"
+    ) %>%
+    mutate(
+        degree = ifelse(is.na(degree), 0, degree)
+    ) %>%
+    select(
+        -accession
+    ) %>%
+    distinct() %>%
+    group_by(
+        gene
+    ) %>%
+    summarise(
+        degree = sum(degree)
+    ) %>% 
+    ungroup() %>%
+    inner_join(
+        cnaCorDF,
+        by = "gene"
+    )
+
+
+# Build plot
+
+cnaDegreeDF$degreeFactor <- factor(
+    x = ifelse(cnaDegreeDF$degree > 24, ">24", as.character(cnaDegreeDF$degree)),
+    levels = as.character(c(2*(0:12), ">24"))
+)
+
+ggplot(
+    data = cnaDegreeDF
+) +
+    geom_hline(
+        yintercept = -log10(0.05),
+        color = "darkred",
+        linetype = "dotted"
+    ) +
+    geom_violin(
+        mapping = aes(
+            x = degreeFactor,
+            y = -log10(attenuation_p)
+        ), 
+        alpha = 0.1
+    ) +
+    geom_boxplot(
+        mapping = aes(
+            x = degreeFactor,
+            y = -log10(attenuation_p)
+        ),
+        width = 0.2
+    ) +
+    scale_x_discrete(
+        "Number of Interactors"
+    ) +
+    scale_y_continuous(
+        "Scaled Attenuation Coefficient [-log10]",
+        breaks = seq(0, 10, 5),
+        labels = paste0("10e-", seq(0, 10, 5))
+    )
+```
+
+![](cna-protein_files/figure-gfm/attenuation_per_vertex_complex-1.png)<!-- -->
+
+##### :speech\_balloon: According to this analysis, does the participation in complexes seem to be associated with CNA attenuation?
+
+##### :pencil2: Plot the scaled CNA attenuation coefficient against the number of protein partners in the biochemical reactions network
+
+``` r
+# Build degree data frame
+
+degreeDF <- data.frame(
+    accession = V(graphReactome)$name,
+    degree = degree(graphReactome),
+    stringsAsFactors = F
+)
+
+cnaDegreeDF <- accessionsMapping %>%
+    left_join(
+        degreeDF,
+        by = "accession"
+    ) %>%
+    mutate(
+        degree = ifelse(is.na(degree), 0, degree)
+    ) %>%
+    select(
+        -accession
+    ) %>%
+    distinct() %>%
+    group_by(
+        gene
+    ) %>%
+    summarise(
+        degree = sum(degree)
+    ) %>% 
+    ungroup() %>%
+    inner_join(
+        cnaCorDF,
+        by = "gene"
+    )
+
+
+# Build plot
+
+ggplot(
+    data = cnaDegreeDF
+) +
+    geom_hline(
+        yintercept = -log10(0.05),
+        color = "darkred",
+        linetype = "dotted"
+    ) +
+    geom_point(
+        mapping = aes(
+            x = degree,
+            y = -log10(attenuation_p)
+        ), 
+        alpha = 0.1
+    ) +
+    geom_smooth(
+        mapping = aes(
+            x = degree,
+            y = -log10(attenuation_p)
+        ),
+        method = "loess"
+    ) +
+    scale_x_continuous(
+        "Number of Interactors"
+    ) +
+    scale_y_continuous(
+        "Scaled Attenuation Coefficient [-log10]",
+        breaks = seq(0, 10, 5),
+        labels = paste0("10e-", seq(0, 10, 5))
+    )
+```
+
+![](cna-protein_files/figure-gfm/attenuation_per_vertex_reactome-1.png)<!-- -->
+
+##### :speech\_balloon: According to this analysis, does the participation in biochemical reactions seem to be associated with CNA attenuation?
+
+##### :pencil2: Plot the scaled CNA attenuation coefficient against the number of protein partners in the PPI network
+
+``` r
+# Build degree data frame
+
+degreeDF <- data.frame(
+    accession = V(graphString)$name,
+    degree = degree(graphString),
+    stringsAsFactors = F
+)
+
+cnaDegreeDF <- accessionsMapping %>%
+    left_join(
+        degreeDF,
+        by = "accession"
+    ) %>%
+    mutate(
+        degree = ifelse(is.na(degree), 0, degree)
+    ) %>%
+    select(
+        -accession
+    ) %>%
+    distinct() %>%
+    group_by(
+        gene
+    ) %>%
+    summarise(
+        degree = sum(degree)
+    ) %>% 
+    ungroup() %>%
+    inner_join(
+        cnaCorDF,
+        by = "gene"
+    )
+
+
+# Build plot
+
+ggplot(
+    data = cnaDegreeDF
+) +
+    geom_hline(
+        yintercept = -log10(0.05),
+        color = "darkred",
+        linetype = "dotted"
+    ) +
+    geom_point(
+        mapping = aes(
+            x = degree,
+            y = -log10(attenuation_p)
+        ), 
+        alpha = 0.1
+    ) +
+    geom_smooth(
+        mapping = aes(
+            x = degree,
+            y = -log10(attenuation_p)
+        ),
+        method = "loess"
+    ) +
+    scale_x_continuous(
+        "Number of Interactors"
+    ) +
+    scale_y_continuous(
+        "Scaled Attenuation Coefficient [-log10]",
+        breaks = seq(0, 10, 5),
+        labels = paste0("10e-", seq(0, 10, 5))
+    )
+```
+
+![](cna-protein_files/figure-gfm/attenuation_per_vertex_string-1.png)<!-- -->
+
+##### :speech\_balloon: According to this analysis, does the participation in PPIs seem to be associated with CNA attenuation?
+
+## Conclusion
+
+##### :speech\_balloon: Can you speculate on the function or effect of CNA attenuation in cancer biology? How can these be used in a clinical setup?
 
 ## References
 

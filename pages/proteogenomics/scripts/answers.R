@@ -181,3 +181,4 @@ png("pages/proteogenomics/resources/images/gmm_n.png", width = 800, height = 120
 plot(gmm, what = "BIC", legendArgs = list(x = "topright"))
 dummy <- dev.off()
 
+
