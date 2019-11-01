@@ -470,7 +470,7 @@ ggplot() +
 
 ```
 
-##### [:thought_balloon:](answers.md#thought_balloon-what-do-the-columns-represent-what-is-the-difference-between-pearson-and-spearman-correlations) Using this threshold: What is the share of CNAs considered attenuated that would come from the component 2 distribution? What is the share of CNAs considered not attenuated that would come from the component 1? How will this influence the analyses?
+##### [:thought_balloon:](answers.md#thought_balloon-using-this-threshold-what-is-the-share-of-cnas-considered-attenuated-that-would-come-from-the-component-2-distribution-what-is-the-share-of-cnas-considered-not-attenuated-that-would-come-from-the-component-1-how-will-this-influence-the-analyses) Using this threshold: What is the share of CNAs considered attenuated that would come from the component 2 distribution? What is the share of CNAs considered not attenuated that would come from the component 1? How will this influence the analyses?
 
 ##### :pencil2: Annotate the scaled attenuation coefficient on the scatter plot.
 

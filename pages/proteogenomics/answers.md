@@ -158,7 +158,7 @@ The distribution to the left, i.e. lowest mean, is the one representing the atte
 
 It is possible to use the ratio of a distribution to the sum to estimate the probability at a given attenuation score to belong from either category. Alternatively, it is possible to use the cumulative distribution function to evaluate the appartenance to a population.
 
-##### [:thought_balloon:](cna-protein.md#thought_balloon-what-do-the-columns-represent-what-is-the-difference-between-pearson-and-spearman-correlations) Using this threshold: What is the share of CNAs considered attenuated that would come from the component 2 distribution? What is the share of CNAs considered not attenuated that would come from the component 1? How will this influence the analyses?
+##### [:thought_balloon:](cna-protein.md#thought_balloon-using-this-threshold-what-is-the-share-of-cnas-considered-attenuated-that-would-come-from-the-component-2-distribution-what-is-the-share-of-cnas-considered-not-attenuated-that-would-come-from-the-component-1-how-will-this-influence-the-analyses) Using this threshold: What is the share of CNAs considered attenuated that would come from the component 2 distribution? What is the share of CNAs considered not attenuated that would come from the component 1? How will this influence the analyses?
 
 | Category | Component 1 | Component 2 |
 | -------- | ----------- | ----------- |
