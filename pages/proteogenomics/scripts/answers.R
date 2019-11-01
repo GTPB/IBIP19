@@ -175,10 +175,48 @@ plot
 dummy <- dev.off()
 
 
+# attenuated vs not attenuated
+
+xThreshold <- qnorm(
+    p = 0.05,
+    mean = gmm$parameters$mean[2],
+    sd = sqrt(gmm$parameters$variance$sigmasq[2])
+)
+
+n1ConsideredAttenuated <- nrow(cnaCorDF) * gmm$parameters$pro[1] * pnorm(
+    q = xThreshold,
+    mean = gmm$parameters$mean[1], 
+    sd = sqrt(gmm$parameters$variance$sigmasq[1]),
+    lower.tail = T
+)
+n1ConsideredNotAttenuated <- nrow(cnaCorDF) * gmm$parameters$pro[1] * pnorm(
+    q = xThreshold,
+    mean = gmm$parameters$mean[1], 
+    sd = sqrt(gmm$parameters$variance$sigmasq[1]),
+    lower.tail = F
+)
+n2ConsideredAttenuated <- nrow(cnaCorDF) * gmm$parameters$pro[2] * pnorm(
+    q = xThreshold,
+    mean = gmm$parameters$mean[2], 
+    sd = sqrt(gmm$parameters$variance$sigmasq[2]),
+    lower.tail = T
+)
+n2ConsideredNotAttenuated <- nrow(cnaCorDF) * gmm$parameters$pro[2] * pnorm(
+    q = xThreshold,
+    mean = gmm$parameters$mean[2], 
+    sd = sqrt(gmm$parameters$variance$sigmasq[2]),
+    lower.tail = F
+)
+
+nAttenuatedConsideredAttenuated + nAttenuatedConsideredNotAttenuated + nNotAttenuatedConsideredAttenuated + nNotAttenuatedConsideredNotAttenuated
+
+
 # GMM number of components
 
 png("pages/proteogenomics/resources/images/gmm_n.png", width = 800, height = 1200)
 plot(gmm, what = "BIC", legendArgs = list(x = "topright"))
 dummy <- dev.off()
+
+
 
 

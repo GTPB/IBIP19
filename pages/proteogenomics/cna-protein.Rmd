@@ -241,9 +241,9 @@ summary(gmm, parameters = TRUE)
 
 ```
 
-##### [:thought_balloon:](answers.md#thought_balloon-what-do-the-columns-represent-what-is-the-difference-between-pearson-and-spearman-correlations) How many gaussian distributions were suggested by the model? What do the _Mixing probabilities_, _Means_, and _Variances_ represent?
+##### [:thought_balloon:](answers.md#thought_balloon-how-many-gaussian-distributions-were-suggested-by-the-model-what-do-the-mixing-probabilities-means-and-variances-represent) How many gaussian distributions were suggested by the model? What do the _Mixing probabilities_, _Means_, and _Variances_ represent?
 
-##### [:thought_balloon:](answers.md#thought_balloon-what-do-the-columns-represent-what-is-the-difference-between-pearson-and-spearman-correlations) Based on this, how many CNAs are considered attenuated?
+##### [:thought_balloon:](answers.md#thought_balloon-based-on-this-how-many-cnas-are-considered-attenuated) Based on this, how many CNAs are considered attenuated?
 
 ##### :pencil2: Overlay the density and the model.
 
@@ -342,13 +342,13 @@ ggplot() +
 
 ```
 
-##### [:thought_balloon:](answers.md#thought_balloon-what-do-the-columns-represent-what-is-the-difference-between-pearson-and-spearman-correlations) Which component represents the attenuated distribution? How can we classify CNAs based on these distributions?
+##### [:thought_balloon:](answers.md#thought_balloon-which-component-represents-the-attenuated-distribution-how-can-we-classify-cnas-based-on-these-distributions) Which component represents the attenuated distribution? How can we classify CNAs based on these distributions?
 
 ##### :speech_balloon: What do you think of the quality of the modelling?
 
 In the following, we use the cumulative distribution function of the second component to scale the attenuation coefficient, and use the biologists' favorite threshold of 0.05 to highlight the confidently attenuated CNAs.
 
-##### :pencil2: Scale the attenuation coefficient.
+##### :pencil2: Scale the attenuation coefficient, threshold at 0.05, and plot on top of the distributions.
 
 ```{r score_scaling}
 
@@ -469,6 +469,8 @@ ggplot() +
 
 
 ```
+
+##### [:thought_balloon:](answers.md#thought_balloon-what-do-the-columns-represent-what-is-the-difference-between-pearson-and-spearman-correlations) Using this threshold: What is the share of CNAs considered attenuated that would come from the component 2 distribution? What is the share of CNAs considered not attenuated that would come from the component 1? How will this influence the analyses?
 
 ##### :pencil2: Annotate the scaled attenuation coefficient on the scatter plot.
 
@@ -774,7 +776,7 @@ accessionsMapping <- accessionsMapping %>%
 
 ```
 
-##### [:thought_balloon:](answers.md#thought_balloon-what-do-the-columns-represent-what-is-the-difference-between-pearson-and-spearman-correlations) What is the number of proteins per gene reported in the CNA table? How is this going to influence the analysis?
+##### [:thought_balloon:](answers.md#thought_balloon-what-is-the-number-of-proteins-per-gene-reported-in-the-cna-table-how-is-this-going-to-influence-the-analysis) What is the number of proteins per gene reported in the CNA table? How is this going to influence the analysis?
 
 Note that in the following, we exclude genes mapping to more than 100 proteins, and we use the sum of edges per protein for each gene.
 
@@ -886,6 +888,9 @@ degreeDF <- data.frame(
 )
 
 cnaDegreeDF <- accessionsMapping %>%
+    filter(
+        !gene %in% excludedGenes
+    ) %>% 
     left_join(
         degreeDF,
         by = "accession"
@@ -961,6 +966,9 @@ degreeDF <- data.frame(
 )
 
 cnaDegreeDF <- accessionsMapping %>%
+    filter(
+        !gene %in% excludedGenes
+    ) %>% 
     left_join(
         degreeDF,
         by = "accession"
