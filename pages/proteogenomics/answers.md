@@ -124,7 +124,7 @@ This accounts for the log-normal distribution of the intensities observed in the
 
 ## 3. CNA-protein
 
-##### [:thought_balloon:](answers.md#thought_balloon-what-do-the-columns-represent-what-is-the-difference-between-pearson-and-spearman-correlations) What do the columns represent? What is the difference between Pearson and Spearman correlations?
+##### [:thought_balloon:](cna-protein.md#thought_balloon-what-do-the-columns-represent-what-is-the-difference-between-pearson-and-spearman-correlations) What do the columns represent? What is the difference between Pearson and Spearman correlations?
 
 | Column Name | Description |
 | ----------- | ----------- |
@@ -136,6 +136,17 @@ This accounts for the log-normal distribution of the intensities observed in the
 | mRNA_Spearman_pval, protein_Spearman_pval | The Spearman correlation significance for the RNA or the protein abundance, respectively, with the CNA. |
 
 The Spearman correlation is a Pearson correlation of the ranks of the values. Working on the ranks is more robust, especially towards outliers. See the R help on _cor_ for more details: `?cor`.
+
+##### [:thought_balloon:](cna-protein.md#thought_balloon-what-do-the-columns-represent-what-is-the-difference-between-pearson-and-spearman-correlations) What do the _Mixing probabilities_, _Means_, and _Variances_ represent?
+
+The Model suggested using two gaussian distributions. This is based on the [Bayesian Information Criterion (BIC)](https://en.wikipedia.org/wiki/Bayesian_information_criterion), which evaluates the quality of the fitting relatively to the model complexity: an overly complex model will fit very well training data but is likely to overfit, while an overly simple model is unlikely to overfit but is likely to underperform. Optimizing the BIC allows finding a trade-off between the two. Below, the BIC is plotted against the number of components.
+
+![gmm_n_bic](resources/images/gmm_n.png?raw=true "BIC vs. n")
+
+For each Gaussian distribution, mclust returns the following paramters:
+- Mixing probabilities: the contribution of the distribution to the overall density.
+- Mean: the mean of the distribution.
+- Variance: the variance of the distribution.
 
 
 ## References
