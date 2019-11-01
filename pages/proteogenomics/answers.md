@@ -144,10 +144,19 @@ The Model suggested using two gaussian distributions. This is based on the [Baye
 ![gmm_n_bic](resources/images/gmm_n.png?raw=true "BIC vs. n")
 
 For each Gaussian distribution, mclust returns the following paramters:
-- Mixing probabilities: the contribution of the distribution to the overall density.
+- Mixing probabilities: the contribution of the distribution to the overall density. Their sum should be 1.
 - Mean: the mean of the distribution.
 - Variance: the variance of the distribution.
 
+##### [:thought_balloon:](answers.md#thought_balloon-what-do-the-columns-represent-what-is-the-difference-between-pearson-and-spearman-correlations) Based on this, how many CNAs are considered attenuated?
+
+The mixing probability of the distribution with lowest mean (_i.e._ most attenuated) is approx 45.6%, considering 9533 CNAs this makes 4343 CNAs attenuated.
+
+##### [:thought_balloon:](answers.md#thought_balloon-what-do-the-columns-represent-what-is-the-difference-between-pearson-and-spearman-correlations) Which component represents the attenuated distribution? How can we classify CNAs based on these distributions?
+
+The distribution to the left, i.e. lowest mean, is the one representing the attenuated population. 
+
+It is possible to use the ratio of a distribution to the sum to estimate the probability at a given attenuation score to belong from either category. Alternatively, it is possible to use the cumulative distribution function to evaluate the appartenance to a population. 
 
 ## References
 

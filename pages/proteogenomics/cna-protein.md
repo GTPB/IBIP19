@@ -31,6 +31,8 @@ library(gtable)
 library(grid)
 library(mclust)
 
+conflict_prefer("filter", "dplyr")
+
 theme_set(theme_bw(base_size = 11))
 ```
 
@@ -245,20 +247,250 @@ summary(gmm, parameters = TRUE)
     ## 
     ## Mclust V (univariate, unequal variance) model with 2 components: 
     ## 
-    ##  log-likelihood    n df      BIC      ICL
-    ##         935.402 9533  5 1824.991 -5794.68
+    ##  log-likelihood    n df      BIC       ICL
+    ##         935.404 9533  5 1824.995 -5860.316
     ## 
     ## Mixing probabilities:
     ##         1         2 
-    ## 0.4553952 0.5446048 
+    ## 0.4609893 0.5390107 
     ## 
     ## Means:
     ##           1           2 
-    ## -0.19153507 -0.06337456 
+    ## -0.19046910 -0.06295614 
     ## 
     ## Variances:
     ##          1          2 
-    ## 0.07083184 0.02476932
+    ## 0.07058981 0.02456033
+
+##### [:thought\_balloon:](answers.md#thought_balloon-what-do-the-columns-represent-what-is-the-difference-between-pearson-and-spearman-correlations) How many gaussian distributions were suggested by the model? What do the *Mixing probabilities*, *Means*, and *Variances* represent?
+
+##### [:thought\_balloon:](answers.md#thought_balloon-what-do-the-columns-represent-what-is-the-difference-between-pearson-and-spearman-correlations) Based on this, how many CNAs are considered attenuated?
+
+##### :pencil2: Overlay the density and the model.
+
+``` r
+# Density from first component
+
+gmm_density_1 <- gmm$parameters$pro[1] * dnorm(
+    x = cnaCorDF$attenuation_coefficient, 
+    mean = gmm$parameters$mean[1], 
+    sd = sqrt(gmm$parameters$variance$sigmasq[1])
+)
+
+# Density from second component
+
+gmm_density_2 <- gmm$parameters$pro[2] * dnorm(
+    x = cnaCorDF$attenuation_coefficient, 
+    mean = gmm$parameters$mean[2], 
+    sd = sqrt(gmm$parameters$variance$sigmasq[2])
+)
+
+# Sum
+
+gmm_density_sum <- gmm_density_1 + gmm_density_2
+
+
+# Gather densities in a data frame
+
+plotDF <- data.frame(
+    x = c(
+        rep(
+            x = cnaCorDF$attenuation_coefficient,
+            3
+        )
+    ),
+    y = c(
+        gmm_density_1,
+        gmm_density_2,
+        gmm_density_sum
+    ),
+    category = factor(
+        x = c(rep("GMM Component 1", nrow(cnaCorDF)), rep("GMM Component 2", nrow(cnaCorDF)), rep("Sum", nrow(cnaCorDF))),
+        levels = c("GMM Component 1", "GMM Component 2", "Sum")
+    )
+)
+
+# Build overlayed density plot
+
+ggplot() +
+    geom_density(
+        data = cnaCorDF,
+        mapping = aes(
+            x = attenuation_coefficient
+        ),
+        fill = "black",
+        col = NA,
+        alpha = 0.2
+    ) +
+    geom_line(
+        data = plotDF,
+        mapping = aes(
+            x = x,
+            y = y,
+            col = category,
+            linetype = category
+        )
+    ) +
+    scale_x_continuous(
+        name = "Attenuation Coefficient"
+    ) +
+    scale_y_continuous(
+        name = "Density"
+    ) +
+    scale_color_manual(
+        values = c(
+            scico(
+                n = 2,
+                palette = "cork",
+                begin = 0.2,
+                end = 0.8,
+                direction = -1
+            ),
+            "black"
+        )
+    ) +
+    scale_linetype_manual(
+        values = c(
+            "solid",
+            "solid",
+            "dashed"
+        )
+    ) +
+    theme(
+        legend.title = element_blank()
+    )
+```
+
+![](cna-protein_files/figure-gfm/gmm_overlay-1.png)<!-- -->
+
+##### [:thought\_balloon:](answers.md#thought_balloon-what-do-the-columns-represent-what-is-the-difference-between-pearson-and-spearman-correlations) Which component represents the attenuated distribution? How can we classify CNAs based on these distributions?
+
+##### :speech\_balloon: What do you think of the quality of the modelling?
+
+In the following, we use the cumulative distribution function of the
+second component to scale the attenuation coefficient, and use the
+biologists’ favorite threshold of 0.05 to highlight the confidently
+attenuated CNAs.
+
+##### :pencil2: Scale the attenuation coefficient.
+
+``` r
+# Scale the attenuation coefficient
+
+cnaCorDF$attenuation_p <- pnorm(
+    q = cnaCorDF$attenuation_coefficient,
+    mean = gmm$parameters$mean[2],
+    sd = sqrt(gmm$parameters$variance$sigmasq[2])
+)
+
+
+# Threshold at 0.05
+
+cnaCorDF$attenuation_category <- factor(
+    x = ifelse(cnaCorDF$attenuation_p <= 0.05, "Attenuated", "Background"),
+    levels = c("Attenuated", "Background")
+)
+
+
+# Gather densities in a data frame
+
+plotDF <- data.frame(
+    x = c(
+        rep(
+            x = cnaCorDF$attenuation_coefficient,
+            4
+        )
+    ),
+    y = c(
+        gmm_density_1,
+        gmm_density_2,
+        gmm_density_sum,
+        cnaCorDF$attenuation_p
+    ),
+    category = factor(
+        x = c(rep("GMM Component 1", nrow(cnaCorDF)), rep("GMM Component 2", nrow(cnaCorDF)), rep("Sum", nrow(cnaCorDF)), rep("Component 2 Cumulative", nrow(cnaCorDF))),
+        levels = c("GMM Component 1", "GMM Component 2", "Sum", "Component 2 Cumulative")
+    )
+)
+
+# Build overlayed density plot
+
+xThreshold <- qnorm(
+    p = 0.05,
+    mean = gmm$parameters$mean[2],
+    sd = sqrt(gmm$parameters$variance$sigmasq[2])
+)
+yThreshold <- gmm$parameters$pro[1] * dnorm(
+    x = xThreshold, 
+    mean = gmm$parameters$mean[1], 
+    sd = sqrt(gmm$parameters$variance$sigmasq[1])
+) +  gmm$parameters$pro[2] * dnorm(
+    x = xThreshold, 
+    mean = gmm$parameters$mean[2], 
+    sd = sqrt(gmm$parameters$variance$sigmasq[2])
+)
+
+ggplot() +
+    geom_density(
+        data = cnaCorDF,
+        mapping = aes(
+            x = attenuation_coefficient
+        ),
+        fill = "black",
+        col = NA,
+        alpha = 0.2
+    ) +
+    geom_line(
+        data = plotDF,
+        mapping = aes(
+            x = x,
+            y = y,
+            col = category,
+            linetype = category
+        )
+    ) +
+    geom_segment(
+        mapping = aes(
+            x = xThreshold,
+            xend = xThreshold,
+            y = 0,
+            yend = yThreshold
+        ),
+            linetype = "dashed"
+    ) +
+    scale_x_continuous(
+        name = "Attenuation Coefficient"
+    ) +
+    scale_y_continuous(
+        name = "Density"
+    ) +
+    scale_color_manual(
+        values = c(
+            scico(
+                n = 2,
+                palette = "cork",
+                begin = 0.2,
+                end = 0.8,
+                direction = -1
+            ),
+            "black",
+            "red"
+        )
+    ) +
+    scale_linetype_manual(
+        values = c(
+            "solid",
+            "solid",
+            "dashed",
+            "dotted"
+        )
+    ) +
+    theme(
+        legend.title = element_blank()
+    )
+```
+
+![](cna-protein_files/figure-gfm/score_scaling-1.png)<!-- -->
 
 ## References
 
