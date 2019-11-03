@@ -635,14 +635,69 @@ To inspect this, we are now going to compare the CNA attenuation evaluated previ
 
 # Complexes
 
-edgesComplexes <- read.table(
-    file = "resources/data/complexes_18.08.17_edges.gz", 
+complexesDF <- read.table(
+    file = "resources/data/complexes.03.11.19.tsv.gz", 
     header = T, 
-    sep = " ", 
+    sep = "\t", 
     stringsAsFactors = F, 
     quote = "", 
     comment.char = ""
 )
+
+
+# Extract the protein to complex link, extract protein pairs involved in the same complex
+
+complexesParticipantsList <- list()
+complexesEdgesList <- list()
+
+for (i in 1:nrow(complexesDF)) {
+    
+    complex <- complexesDF$complex_accession[i]
+    participants <- complexesDF$participants_stoichiometry[i]
+    
+    proteinsSplit <- strsplit(
+        x = participants,
+        split = "\\|"
+    )[[1]]
+    participantsList <- strsplit(
+        x = proteinsSplit,
+        split = "[\\(\\)]"
+    )
+    
+    participantsDF <- as.data.frame(
+        t(
+            unname(
+                as.data.frame(
+                    participantsList,
+                    stringsAsFactors = F
+                )
+            )
+        ),
+        stringsAsFactors = F
+    )
+    names(participantsDF) <- c("protein", "stoichiometry")
+    participantsDF$complex = complex
+    
+    complexesParticipantsList[[i]] <- participantsDF
+    
+    edgesDF <- data.frame(
+        from = rep(participantsDF$protein, times = nrow(participantsDF)),
+        to = rep(participantsDF$protein, each = nrow(participantsDF)),
+        stringsAsFactors = F
+    ) %>%
+        filter(
+            from != to
+        ) %>%
+        mutate(
+            complex = complex
+        )
+    
+    complexesEdgesList[[i]] <- edgesDF
+    
+}
+
+complexesParticipantsDF <- do.call("rbind", complexesParticipantsList)
+edgesComplexes <- do.call("rbind", complexesEdgesList)
 
 
 # Protein reactions from Reactome
@@ -782,6 +837,8 @@ Note that in the following, we exclude genes mapping to more than 100 proteins, 
 
 ```{r exclude_ambiguous_mapping}
 
+# Exclude gene mapping with more than 10 proteins per gene
+
 geneOccurenceDF <- as.data.frame(
     x = table(accessionsMapping$gene), 
     stringsAsFactors = F
@@ -794,26 +851,31 @@ excludedGenes <- geneOccurenceDF$gene[geneOccurenceDF$nProteins >= 100]
 
 ##### :pencil2: Plot the scaled CNA attenuation coefficient against the number of protein partners in the complex network
 
-```{r attenuation_per_vertex_complex}
+```{r attenuation_per_complex}
 
-# Build degree data frame
+# Get the number of complexes per gene
 
-degreeDF <- data.frame(
-    accession = V(graphComplexes)$name,
-    degree = degree(graphComplexes),
-    stringsAsFactors = F
-)
+nComplexesPerProteinDF <- complexesParticipantsDF %>%
+    group_by(
+        protein
+    ) %>%
+    summarise(
+        n = n()
+    ) %>%
+    rename(
+        accession = protein
+    )
 
-cnaDegreeDF <- accessionsMapping %>%
+cnaComplexesDF <- accessionsMapping %>%
     filter(
         !gene %in% excludedGenes
     ) %>% 
     left_join(
-        degreeDF,
+        nComplexesPerProteinDF,
         by = "accession"
     ) %>%
     mutate(
-        degree = ifelse(is.na(degree), 0, degree)
+        n = ifelse(is.na(n), 0, n)
     ) %>%
     select(
         -accession
@@ -823,7 +885,7 @@ cnaDegreeDF <- accessionsMapping %>%
         gene
     ) %>%
     summarise(
-        degree = sum(degree)
+        n = sum(n)
     ) %>% 
     ungroup() %>%
     inner_join(
@@ -834,13 +896,30 @@ cnaDegreeDF <- accessionsMapping %>%
 
 # Build plot
 
-cnaDegreeDF$degreeFactor <- factor(
-    x = ifelse(cnaDegreeDF$degree > 24, ">24", as.character(cnaDegreeDF$degree)),
-    levels = as.character(c(2*(0:12), ">24"))
+cnaComplexesDF$nFactor <- factor(
+    x = ifelse(cnaComplexesDF$n > 8, ">8", 
+               ifelse(cnaComplexesDF$n > 4, "5-8", as.character(cnaComplexesDF$n))),
+    levels = as.character(c(0:9, "5-8", ">8"))
 )
 
+levels <- levels(cnaComplexesDF$nFactor)
+
+for (i in 1:length(levels)) {
+    
+    level <- levels[i]
+    
+    n <- sum(cnaComplexesDF$nFactor == level)
+    
+    level <- paste0(level, "\n(n = ", n, ")")
+    
+    levels[i] <- level
+    
+}
+
+levels(cnaComplexesDF$nFactor) <- levels
+
 ggplot(
-    data = cnaDegreeDF
+    data = cnaComplexesDF
 ) +
     geom_hline(
         yintercept = -log10(0.05),
@@ -849,20 +928,20 @@ ggplot(
     ) +
     geom_violin(
         mapping = aes(
-            x = degreeFactor,
+            x = nFactor,
             y = -log10(attenuation_p)
         ), 
         alpha = 0.1
     ) +
     geom_boxplot(
         mapping = aes(
-            x = degreeFactor,
+            x = nFactor,
             y = -log10(attenuation_p)
         ),
         width = 0.2
     ) +
     scale_x_discrete(
-        "Number of Interactors"
+        "Number of Complexes"
     ) +
     scale_y_continuous(
         "Scaled Attenuation Coefficient [-log10]",

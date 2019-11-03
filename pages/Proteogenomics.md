@@ -63,7 +63,10 @@ You will need the following libraries, please make sure that they are installed.
 - We will use [gamlss](https://www.gamlss.com/) for normalization.
 - We will use [mclust](https://mclust-org.github.io) for Gaussian mixture modeling.
 - We will use [igraph](https://igraph.org) for graph manipulation.
+- We will use [GO.db](https://bioconductor.org/packages/release/data/annotation/html/GO.db.html) for Gene Ontology (GO) annotation.
 - We will use [conflicted](https://github.com/r-lib/conflicted) to manage conflict resolution to function names between packages.
+
+*Warning*: [GO.db](https://bioconductor.org/packages/release/data/annotation/html/GO.db.html) is part of [Bioconductor](https://bioconductor.org). You might need to update your version of R and install the Bioconductor package manager [BiocManager](https://cran.r-project.org/web/packages/BiocManager/index.html).
 
 *Warning*: [conflicted](https://github.com/r-lib/conflicted) is not available in cran yet, you will need to install it using [devtools](https://devtools.r-lib.org/). See [the installation instructions](https://github.com/r-lib/conflicted#installation) for more details.
 

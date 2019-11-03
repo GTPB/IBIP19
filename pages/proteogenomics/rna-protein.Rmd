@@ -18,9 +18,51 @@ In the [_novel peptides_](novel_peptides.md) and [_variatoin analysis_](variatio
 
 ##### [:thought_balloon:](answers.md#thought_balloon-what-are-the-advantages-and-shortcomings-of-using-transcript-sequences-instead-of-or-in-addition-to-genomic-data) _What are the advantages and shortcomings of using transcript sequences instead of or in addition to genomic data?_
 
+## Libraries
+
+We will need the following libraries, please make sure that they are installed.
+
+```{r libraries, warning=FALSE, results='hide', message=FALSE}
+
+library(conflicted)
+library(tidyr)
+library(dplyr)
+library(ggplot2)
+library(scico)
+library(gamlss)
+
+theme_set(theme_bw(base_size = 11))
+
+conflict_prefer("filter", "dplyr")
+conflict_prefer("select", "dplyr")
+
+```
+
+
+## Transcript - protein abundance relationship
+
+In addition to the identification of non-canonical genetic products, studying the relationship between transcript and protein abundance levels can inform on biological processes ongoing in the studied samples. 
+
+
+
+```{r go}
+
+xxDF <- as.data.frame(GOTERM)
+
+goTerm <- xx[["GO:0006629"]]
+
+GOID(goTerm)
+Term(goTerm)
+Synonym(goTerm)
+Secondary(goTerm)
+Definition(goTerm)
+Ontology(goTerm)
+
+
+```
 
 ## References
 
-(1) [title](https://www.ncbi.nlm.nih.gov/pubmed/pmid)
+(1) [Breast cancer quantitative proteome and proteogenomic landscape](https://www.ncbi.nlm.nih.gov/pubmed/30962452)
 
 
