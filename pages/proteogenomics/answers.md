@@ -195,6 +195,14 @@ occurrenceFrequencyDF <- as.data.frame(table(geneOccurenceDF[[2]]))
 
 When mapping the CNA results to functional databases, these genes are going to map everywhere in the proteome, reducing our ability to find meaningful information.
 
+
+## 3. RNA-protein
+
+##### [:thought_balloon:](answers.md#thought_balloon-if-we-assume-a-linear-relationship-between-number-of-alleles-and-peptide-abundance-what-should-be-the-peptide-distribution-for-each-genotype) _What are the advantages and shortcomings of using transcript sequences instead of or in addition to genomic data?_
+
+Transcript sequences have the great advantage to provide information on splicing, and might therefore prove valuable to identify splice products. However, using RNA sequencing data strongly relies on the fact that the detected proteins are being transcribed in the samples undergoing sequencing and at the time of sequencing. The strategy will thus be blind to proteins produced elsewhere, or produced long before sampling. These limitations must be taken into account when deciding to complete or replace genomic- with transcript-level data, depending on the type of samples and sampling strategy.
+
+
 ## References
 
 (1) [Anatomy and evolution of database search engines-a central component of mass spectrometry based proteomic workflows](https://www.ncbi.nlm.nih.gov/pubmed/28902424)

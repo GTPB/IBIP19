@@ -20,15 +20,19 @@ Note that establishing a proteogenomic workflow, in both wet- and dry-lab is a l
 
 When in doubt, consider running a small pilot experiment to benchmark the performance of your analytical set-up. Also, prioritize proteomics labs that have experience with proteogenomic analyses and analyzing the data.
 
+The present tutorials focus on human samples and resources. While the methods presented are generic, differences are to be expected when working with other organisms, notably on the level of genomic and proteomic data annotation. Please note that working with multiple organisms, _e.g._ in metaproteogenomic analyses [(5)](#references), is yet another level of complexity, posing multiple challenges for the interpretation of the data [(6)](#references).
+
 ## Proteogenomics Lexicon
+
+Analysing proteogenomics data requires familiarity with both genomic and proteomic fields, which can leave scientists discombobulated. We provide here a short lexicon of the terms and abbreviations the reader will encounter in the literature. Please do not hesitate to suggest terms that should be added in our issue tracker.
 
 ![From_Genes_To_Proteoforms](proteogenomics/resources/images/Insulin.png?raw=true "Insulin from gene to proteoforms")
 
-> The production of human insulin from the transcript INS-201 according to Ensembl release 97. (a) The transcript is coded by three exons on chromosome eleven, colored in yellow, orange, and dark red. The translated sequence is underlined. Sequence variation in the translated sequence can result in sequence variations in the amino acid sequence, and hence different proteoforms. (b) The sequence obtained after translation represents the raw proteoform of insulin, called preproinsulin, which requires posttranslational maturation to obtain the mature form of insulin. Amino acids are colored according to the coding exons and the residue overlapping splice site is underlined. (c) The signal peptide is cleaved, yielding proinsulin, and cysteines cross-linked by disulphide bonds, making a new proteoform of insulin. (d) Proteases cleave a large fragment of the sequence, the C-peptide. The C-peptide is often used as a proxy to measure insulin production. (e) Proteases cleave pairs of amino-acids, yielding the mature form of insulin. (f) The mature form of insulin consists of two cross-linked peptides. It can be further modified, yielding even more proteoforms. From [(5)](#references), adapted from [en.wikipedia.org/wiki/Insulin](https://en.wikipedia.org/wiki/Insulin#/media/File:Insulin_path.svg).
+> The production of human insulin from the transcript INS-201 according to Ensembl release 97. (a) The transcript is coded by three exons on chromosome eleven, colored in yellow, orange, and dark red. The translated sequence is underlined. Sequence variation in the translated sequence can result in sequence variations in the amino acid sequence, and hence different proteoforms. (b) The sequence obtained after translation represents the raw proteoform of insulin, called preproinsulin, which requires posttranslational maturation to obtain the mature form of insulin. Amino acids are colored according to the coding exons and the residue overlapping splice site is underlined. (c) The signal peptide is cleaved, yielding proinsulin, and cysteines cross-linked by disulphide bonds, making a new proteoform of insulin. (d) Proteases cleave a large fragment of the sequence, the C-peptide. The C-peptide is often used as a proxy to measure insulin production. (e) Proteases cleave pairs of amino-acids, yielding the mature form of insulin. (f) The mature form of insulin consists of two cross-linked peptides. It can be further modified, yielding even more proteoforms. From [(7)](#references), adapted from [en.wikipedia.org/wiki/Insulin](https://en.wikipedia.org/wiki/Insulin#/media/File:Insulin_path.svg).
 
 - _Variant, Mutation, Alteration_: A genetic variant or mutation refers to a variation in the genetic sequence. When the variation is not inherited, it is called alteration. Variants involving the substitution of a single nucleotide are called single-nucleotide polymorphism (SNP) or single-nucleotide variant (SNV). SNP refers to variants where each version is carried by more than 1% of the population. When a variation of one amino acid is detected in the proteome, it is referred to as single amino acid variant (SAV or SAAV). Variants involving the deletion or insertion of genetic code are called indels. Variants involving the repeat of sections of the genome are examples of structural variation, and called Copy-number variation (CNV). When the variation is not inherited, it is called copy-number alteration (CNA).
 
-- _Peptides, Proteins, isoforms, and proteoforms_: peptides and proteins are short and long chains of amino acids, respectively. Proteins are generally associated to a gene which codes their amino acid chain. Differences in splicing yield different isoforms for most proteins. During their lifetime, proteins undergo structural modification: cleavage, folding, cross-linking, post-translational modification (PTM), etc. These modifications yield very different forms for each protein, called proteoforms [(6)](#references).
+- _Peptides, Proteins, isoforms, and proteoforms_: peptides and proteins are short and long chains of amino acids, respectively. Proteins are generally associated to a gene which codes their amino acid chain. Differences in splicing yield different isoforms for most proteins. During their lifetime, proteins undergo structural modification: cleavage, folding, cross-linking, post-translational modification (PTM), etc. These modifications yield very different forms for each protein, called proteoforms [(8)](#references).
 
 - _Non-canonical genetic product_: Peptide or protein produced from regions of the genome that are canonically non-coding.
 
@@ -84,6 +88,10 @@ You will need the following libraries, please make sure that they are installed.
 
 (4) [_HiRIEF LC-MS enables deep proteome coverage and unbiased proteogenomics_](https://www.ncbi.nlm.nih.gov/pubmed/24240322)
 
-(5) [_Proteomics_](rcs.org) in [_Processing Metabolomics and Proteomics Data_](rcs.org)
+(5) [_Bioinformatic progress and applications in metaproteogenomics for bridging the gap between genomic sequences and metabolic functions in microbial communities_](https://www.ncbi.nlm.nih.gov/pubmed/23625762)
 
-(6) [_Proteoform: a single term describing protein complexity_](https://www.ncbi.nlm.nih.gov/pubmed/23443629)
+(6) [_Challenges and promise at the interface of metaproteomics and genomics: an overview of recent progress in metaproteogenomic data analysis_](https://www.ncbi.nlm.nih.gov/pubmed/31002542)
+
+(7) [_Proteomics_](rcs.org) in [_Processing Metabolomics and Proteomics Data_](rcs.org)
+
+(8) [_Proteoform: a single term describing protein complexity_](https://www.ncbi.nlm.nih.gov/pubmed/23443629)
