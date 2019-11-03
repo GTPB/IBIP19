@@ -629,7 +629,7 @@ One of the proposed mechanisms of CNA attenuation is that cells regulate the pro
 
 To inspect this, we are now going to compare the CNA attenuation evaluated previously with the involvement of proteins in complexes, biochemical reactions, and protein-protein interactions (PPI). For this, we will use complexes from the [Complex Portal](https://www.ebi.ac.uk/complexportal/home), biochemical reactions from the [Reactome Pathway Database](https://reactome.org/), and PPIs from the [String database](https://string-db.org/). Pairs of interacting proteins from each databases were extracted in R-friendly format and are availabe in [resources/data/complexes_18.08.17_edges.gz](resources/data/complexes_18.08.17_edges.gz), [resources/data/proteinInternalEdges.tsv.gz](resources/data/proteinInternalEdges.tsv.gz), and [resources/data/string_v10.5_high_edges.gz](resources/data/string_v10.5_high_edges.gz).
 
-##### :pencil2: Load all protein pairs, build corresponding biological networks, and plot the degree distribution of each network.
+##### :pencil2: Load complex, reaction, and interaction data. Build corresponding biological networks, and plot the degree distribution of each network.
 
 ```{r import_networks}
 

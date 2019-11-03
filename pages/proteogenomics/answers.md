@@ -198,9 +198,62 @@ When mapping the CNA results to functional databases, these genes are going to m
 
 ## 3. RNA-protein
 
-##### [:thought_balloon:](answers.md#thought_balloon-what-are-the-advantages-and-shortcomings-of-using-transcript-sequences-instead-of-or-in-addition-to-genomic-data) _What are the advantages and shortcomings of using transcript sequences instead of or in addition to genomic data?_
+##### [:thought_balloon:](rna-protein.md#thought_balloon-what-are-the-advantages-and-shortcomings-of-using-transcript-sequences-instead-of-or-in-addition-to-genomic-data) _What are the advantages and shortcomings of using transcript sequences instead of or in addition to genomic data?_
 
 Transcript sequences have the great advantage to provide information on splicing, and might therefore prove valuable to identify splice products. However, using RNA sequencing data strongly relies on the fact that the detected proteins are being transcribed in the samples undergoing sequencing and at the time of sequencing. The strategy will thus be blind to proteins produced elsewhere, or produced long before sampling. These limitations must be taken into account when deciding to complete or replace genomic- with transcript-level data, depending on the type of samples and sampling strategy.
+
+
+##### [:thought_balloon:](rna-protein.md#thought_balloon-what-are-the-advantages-and-shortcomings-of-using-transcript-sequences-instead-of-or-in-addition-to-genomic-data) _How does the correlation evolve relatively to the abundance of the protein? What other protein characteristics could influence the correlation?_
+
+![rna_protein_abundance](resources/images/rna_protein_cor_copy_number.png?raw=true "RNA protein correlation vs. protein abundance")
+
+```
+> lmData <- lm(formula = "mRNA_protein_correlation ~ z_protein_copy_number", data = rnaProteinCorDF)
+> summary(lmData)
+
+Call:
+lm(formula = "mRNA_protein_correlation ~ z_protein_copy_number", 
+    data = rnaProteinCorDF)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-0.8644 -0.1537  0.0228  0.1760  0.5332 
+
+Coefficients:
+                       Estimate Std. Error t value Pr(>|t|)    
+(Intercept)            0.426844   0.002363 180.602  < 2e-16 ***
+z_protein_copy_number -0.010944   0.002368  -4.622 3.84e-06 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 0.2344 on 9838 degrees of freedom
+Multiple R-squared:  0.002167,	Adjusted R-squared:  0.002066 
+F-statistic: 21.37 on 1 and 9838 DF,  p-value: 3.842e-06
+
+> lmRandom <- lm(formula = "random_correlation ~ z_protein_copy_number", data = rnaProteinCorDF)
+> summary(lmRandom)
+
+Call:
+lm(formula = "random_correlation ~ z_protein_copy_number", data = rnaProteinCorDF)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-0.53080 -0.10102  0.00126  0.10364  0.47654 
+
+Coefficients:
+                        Estimate Std. Error t value Pr(>|t|)
+(Intercept)            0.0016688  0.0015182   1.099    0.272
+z_protein_copy_number -0.0003344  0.0015209  -0.220    0.826
+
+Residual standard error: 0.1506 on 9838 degrees of freedom
+Multiple R-squared:  4.913e-06,	Adjusted R-squared:  -9.673e-05 
+F-statistic: 0.04834 on 1 and 9838 DF,  p-value: 0.826
+```
+
+As illustrated above, the correlation is inversely associated with protein abundance, albeit with high variability. One can hypothesize that the cells reduce the need for transcription and translation in maintaining high levels of proteins, hence avoiding high energy costs associated with protein production, resulting in a reduced correlation between RNA and protein levels between cells. 
+Although significant, the slope is much lower than the variance. We could scale the correlation accordingly but that would only have minimal effect on the results.
+Additional parameters often used to evaluate RNA and protein correlation are the half-life of proteins, their structural stability, their integration in complexes, and their propensity to be ubiquitinated.
+
 
 
 ## References

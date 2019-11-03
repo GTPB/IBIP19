@@ -218,5 +218,75 @@ plot(gmm, what = "BIC", legendArgs = list(x = "topright"))
 dummy <- dev.off()
 
 
+# RNA-protein correlation vs protein abundance
+
+lmData <- lm(formula = "mRNA_protein_correlation ~ z_protein_copy_number", data = rnaProteinCorDF)
+summary(lmData)
+lmRandom <- lm(formula = "random_correlation ~ z_protein_copy_number", data = rnaProteinCorDF)
+summary(lmRandom)
+
+plot <- ggplot(
+    data = rnaProteinCorLongDF
+) +
+    theme_bw(
+        base_size = 16
+    ) +
+    geom_point(
+        mapping = aes(
+            x = z_protein_copy_number,
+            y = correlation,
+            col = data
+        ),
+        alpha = 0.2
+    ) +
+    geom_density_2d(
+        mapping = aes(
+            x = z_protein_copy_number,
+            y = correlation,
+            col = data
+        )
+    ) +
+    geom_smooth(
+        mapping = aes(
+            x = z_protein_copy_number,
+            y = correlation,
+            col = data,
+            fill = data
+        ),
+        method = "loess"
+    ) +
+    scale_x_continuous(
+        name = "# proteins per cell [Z-score]",
+    ) +
+    scale_y_continuous(
+        name = "RNA-Protein Correlation"
+    ) +
+    scale_color_manual(
+        values = scico(
+            n = 2,
+            palette = "cork",
+            begin = 0.2,
+            end = 0.8,
+            direction = -1
+        )
+    ) +
+    scale_fill_manual(
+        values = scico(
+            n = 2,
+            palette = "cork",
+            begin = 0.2,
+            end = 0.8,
+            direction = -1
+        )
+    ) +
+    theme(
+        legend.position = "top",
+        legend.title = element_blank()
+    )
+
+png("pages/proteogenomics/resources/images/rna_protein_cor_copy_number.png", width = 800, height = 1200)
+plot
+dummy <- dev.off()
+
 
 
