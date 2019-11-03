@@ -24,7 +24,7 @@ The present tutorials focus on human samples and resources. While the methods pr
 
 ## Proteogenomics Lexicon
 
-Analysing proteogenomics data requires familiarity with both genomic and proteomic fields, which can leave scientists discombobulated. We provide here a short lexicon of the terms and abbreviations the reader will encounter in the literature. Please do not hesitate to suggest terms that should be added in our issue tracker.
+Analysing proteogenomics data requires familiarity with both genomic and proteomic fields, which can leave scientists discombobulated. We provide here a short lexicon of the terms and abbreviations the reader will encounter in the literature. Please do not hesitate to suggest terms that should be added in our [issue tracker](https://github.com/GTPB/IBIP19/issues).
 
 ![From_Genes_To_Proteoforms](proteogenomics/resources/images/Insulin.png?raw=true "Insulin from gene to proteoforms")
 
