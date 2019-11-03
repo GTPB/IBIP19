@@ -75,7 +75,7 @@ You will need the following libraries, please make sure that they are installed.
 
 - [3. CNA-Protein](proteogenomics/cna-protein.md): linking structural variants and protein levels to study CNA dampening/silencing.
 
-- [4. RNA-Protein](proteogenomics/rna_protein.md): comparing RNA and protein levels to identify key biological mechanisms.
+- [4. RNA-Protein](proteogenomics/rna-protein.md): comparing RNA and protein levels to identify key biological mechanisms.
 
 
 ## References
