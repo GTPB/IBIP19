@@ -63,22 +63,19 @@ You will need the following libraries, please make sure that they are installed.
 - We will use [gamlss](https://www.gamlss.com/) for normalization.
 - We will use [mclust](https://mclust-org.github.io) for Gaussian mixture modeling.
 - We will use [igraph](https://igraph.org) for graph manipulation.
-- We will use [GO.db](https://bioconductor.org/packages/release/data/annotation/html/GO.db.html) for Gene Ontology (GO) annotation.
 - We will use [conflicted](https://github.com/r-lib/conflicted) to manage conflict resolution to function names between packages.
-
-*Warning*: [GO.db](https://bioconductor.org/packages/release/data/annotation/html/GO.db.html) is part of [Bioconductor](https://bioconductor.org). You might need to update your version of R and install the Bioconductor package manager [BiocManager](https://cran.r-project.org/web/packages/BiocManager/index.html).
 
 *Warning*: [conflicted](https://github.com/r-lib/conflicted) is not available in cran yet, you will need to install it using [devtools](https://devtools.r-lib.org/). See [the installation instructions](https://github.com/r-lib/conflicted#installation) for more details.
 
 ## Tutorials
 
-- [1. Novel peptides](proteogenomics/novel_peptides.md): mapping proteomics results to non-coding regions of the genome.
+- [1. Novel peptides](proteogenomics/Novel Peptides.ipynb): mapping proteomics results to non-coding regions of the genome.
 
-- [2. Variation Analysis](proteogenomics/variation_analysis.md): studying sequence and splicing variation in proteomics data.
+- [2. Variation Analysis](proteogenomics/Variation Analysis.ipynb): studying sequence and splicing variation in proteomics data.
 
-- [3. CNA-Protein](proteogenomics/cna-protein.md): linking structural variants and protein levels to study CNA dampening/silencing.
+- [3. CNA-Protein](proteogenomics/CNA-Protein.ipynb): linking structural variants and protein levels to study CNA dampening/silencing.
 
-- [4. RNA-Protein](proteogenomics/rna-protein.md): comparing RNA and protein levels to identify key biological mechanisms.
+- [4. RNA-Protein](proteogenomics/RNA-Protein.ipynb): comparing RNA and protein levels to identify key biological mechanisms.
 
 
 ## References
