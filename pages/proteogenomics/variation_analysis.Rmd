@@ -15,7 +15,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # 1. Variation Analysis
 
-In the [previous chapter](novel_peptides.md), novel peptides were identified by Johansson _et al._ [(1)](#references) using a proteogenomic search strategy. In addition, this search allowed identifying peptides presenting single amino acid variants (SAAV). 
+In the [previous chapter](novel_peptides.md), novel peptides were identified by Johansson _et al._ [(1)](https://gtpb.github.io/IBIP19/pages/proteogenomics/references) using a proteogenomic search strategy. In addition, this search allowed identifying peptides presenting single amino acid variants (SAAV). 
 
 
 ## Libraries
@@ -45,9 +45,9 @@ Figure 7h displays the intensity of peptides produced by the reference and alter
 
 ![Figure_7h](resources/images/Fig7h.png?raw=true "Johansson et al. Fig 7h")
 
-> Figure 7h in Johansson _et al._ [(1)](#references).
+> Figure 7h in Johansson _et al._ [(1)](https://gtpb.github.io/IBIP19/pages/proteogenomics/references).
 
-##### [:thought_balloon:](answers.md#thought_balloon-if-we-assume-a-linear-relationship-between-number-of-alleles-and-peptide-abundance-what-should-be-the-peptide-distribution-for-each-genotype) _If we assume a linear relationship between number of alleles and peptide abundance, what should be the peptide distribution for each genotype?_
+##### [:thought_balloon:](https://github.com/GTPB/IBIP19/blob/master/pages/proteogenomics/answers.md#if-we-assume-a-linear-relationship-between-number-of-alleles-and-peptide-abundance-what-should-be-the-peptide-distribution-for-each-genotype) _If we assume a linear relationship between number of alleles and peptide abundance, what should be the peptide distribution for each genotype?_
 
 Note that the genotyping data corresponding to the peptide intensities were not made available, but more examples can be found in [Supplementary Figure 15](../resources/Johansson_et_al_breast_cancer_quantitative_proteome_and_proteogenomic_landscape/supplementary_information.pdf).
 
@@ -108,11 +108,11 @@ tumorDF$color <- tumorColors[tumorDF$PAM50_subtype]
 
 Note that for the sake of speed, the last columns of the genes table were skipped.
 
-##### [:thought_balloon:](answers.md#thought_balloon-how-do-we-need-to-transform-the-tables-to-compare-saav-peptide-level-intensities-to-gene-level-intensities) _How do we need to transform the tables to compare SAAV peptide-level intensities to gene-level intensities?_
+##### [:thought_balloon:](https://github.com/GTPB/IBIP19/blob/master/pages/proteogenomics/answers.md#how-do-we-need-to-transform-the-tables-to-compare-saav-peptide-level-intensities-to-gene-level-intensities) _How do we need to transform the tables to compare SAAV peptide-level intensities to gene-level intensities?_
 
 For the sake of time, this data transformation was run for you already. The proposed solution is available in [scripts/merge_table_1_6.R](resources/data/saav.gz), and the reformated SAAV peptides table is available in [resources/data/table16.gz](resources/data/table16.gz). Note that in this table one row represents a unique _{peptide sequence, gene accession}_ pair.
 
-##### [:thought_balloon:](answers.md#thought_balloon-why-can-there-be-multiple-peptide-per-gene-and-gene-per-peptide-is-it-correct-to-represent-peptides-by-their-sequence) _Why can there be multiple peptide per gene, and gene per peptide? Is it correct to represent peptides by their sequence?_
+##### [:thought_balloon:](https://github.com/GTPB/IBIP19/blob/master/pages/proteogenomics/answers.md#why-can-there-be-multiple-peptide-per-gene-and-gene-per-peptide-is-it-correct-to-represent-peptides-by-their-sequence) _Why can there be multiple peptide per gene, and gene per peptide? Is it correct to represent peptides by their sequence?_
 
 In the following, we want to compare the abundances associated to SAAV peptides to the abundances aggregated at the gene-level. For each tumor, we will therefore only retain quantified _{peptide, gene}_ pairs.
 
@@ -251,7 +251,7 @@ ggplot(
 
 ```
 
-##### [:thought_balloon:](answers.md#thought_balloon-why-are-all-intensities-at-the-bottom-how-can-we-transform-the-data-to-better-visualize-these-distributions) _Why are all intensities at the bottom? How can we transform the data to better visualize these distributions?_
+##### [:thought_balloon:](https://github.com/GTPB/IBIP19/blob/master/pages/proteogenomics/answers.md#why-are-all-intensities-at-the-bottom-how-can-we-transform-the-data-to-better-visualize-these-distributions) _Why are all intensities at the bottom? How can we transform the data to better visualize these distributions?_
 
 As you can see, the gene-level intensities are centered around one, and not for the peptide-level. You might have noticed in the paper that the gene-level data as provided in the supplementary information are centered, but this was not done for the peptides.
 
@@ -384,7 +384,7 @@ ggplot(
 
 ```
 
-##### [:thought_balloon:](answers.md#thought_balloon-why-does-the-curve-have-this-shape) _Why does the curve have this shape?_
+##### [:thought_balloon:](https://github.com/GTPB/IBIP19/blob/master/pages/proteogenomics/answers.md#why-does-the-curve-have-this-shape) _Why does the curve have this shape?_
 
 ##### :pencil2: Plot the distributions like before after normalization.
 
