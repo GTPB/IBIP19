@@ -26,15 +26,15 @@ Strictly speaking, there are no pre-requisites. Prior knowledge that will be use
 
 ### Using proteomics data
 - What is proteomics good for [Presentation]
-- If you receive some data, what do you look for, what can go wrong? [practical](pages/qc)
-- You want to reproduce the results of a paper - what do you need? [practical](pages/critical_manuscript_reviewing/check_for_ms_guidelines.ipynb)
+- If you receive some data, what do you look for, what can go wrong? [practical](qc)
+- You want to reproduce the results of a paper - what do you need? [practical](critical_manuscript_reviewing/check_for_ms_guidelines.ipynb)
 
 ### Interpreting proteomics quantitative data
-- Data screening, Multivariate analysis, Clustering [practical](pages/clustering/Multivariate analysis.ipynb)
-- Biological interpretation [practical](pages/protein_complexes/Protein complexes.ipynb)
-- Protein Complex analysis [practical](pages/biological_interpretation/blind_hackathon.ipynb)
+- Data screening, Multivariate analysis, Clustering [practical](clustering/Multivariate analysis.ipynb)
+- Biological interpretation [practical](protein_complexes/Protein complexes.ipynb)
+- Protein Complex analysis [practical](biological_interpretation/blind_hackathon.ipynb)
 
-### [Proteogenomics](pages/proteogenomics/proteogenomics.md)
+### [Proteogenomics](proteogenomics/proteogenomics.md)
 - Non-canonical peptides
 - Single amino acid variants
 - Copy number alteration attenuation
@@ -45,7 +45,7 @@ Strictly speaking, there are no pre-requisites. Prior knowledge that will be use
 
 ### Learning objectives
 
-### [Instructors](pages/instructors.md)
+### [Instructors](instructors.md)
 
 
 ---
