@@ -12,7 +12,7 @@ output:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-```{r libraries, warning=FALSE, results='hide', message=FALSE}
+```{r libraries, warning=FALSE, results='hide', message=FALSE, echo=FALSE}
 
 library(conflicted)
 library(tidyr)
@@ -25,13 +25,11 @@ theme_set(theme_bw(base_size = 11))
 
 ```
 
-# 1. Self assesment
+# How confident do you feel in...
 
-How confident do you feel in...
+### critically reading a proteomics paper?
 
-- critically reading a proteomics paper?
-
-```{r critical_understanding}
+```{r critical_understanding, warning=FALSE, results='hide', message=FALSE, echo=FALSE}
 
 # Votes
 
@@ -40,10 +38,10 @@ assesmentDF <- data.frame(
         rep(1:5, 4)
     ),
     day = c(
-        rep(paste0("Day ", 1:5), each = 4)
+        rep(paste0("Day ", 1:4), each = 5)
     ),
     votes = c(
-        0, 0, 0, 0, 0,
+        2, 5, 4, 2, 1,
         0, 0, 0, 0, 0,
         0, 0, 0, 0, 0,
         0, 0, 0, 0, 0
@@ -73,16 +71,18 @@ ggplot(
         name = "Confidence Level"
     ) +
     scale_y_continuous(
-        name = "# votes"
+        name = "# votes",
+        limits = c(0, max(assesmentDF$votes) + 1),
+        expand = c(0, 0)
     )
 
 
 ```
 
 
-- interpreting proteomics data? 
+### interpreting proteomics data? 
 
-```{r proteomics_interpretation}
+```{r proteomics_interpretation, warning=FALSE, results='hide', message=FALSE, echo=FALSE}
 
 # Votes
 
@@ -91,10 +91,10 @@ assesmentDF <- data.frame(
         rep(1:5, 4)
     ),
     day = c(
-        rep(paste0("Day ", 1:5), each = 4)
+        rep(paste0("Day ", 1:4), each = 5)
     ),
     votes = c(
-        0, 0, 0, 0, 0,
+        5, 5, 3, 1, 2,
         0, 0, 0, 0, 0,
         0, 0, 0, 0, 0,
         0, 0, 0, 0, 0
@@ -124,16 +124,18 @@ ggplot(
         name = "Confidence Level"
     ) +
     scale_y_continuous(
-        name = "# votes"
+        name = "# votes",
+        limits = c(0, max(assesmentDF$votes) + 1),
+        expand = c(0, 0)
     )
 
 
 ```
 
 
-- contextualizing data with biomedical knowledge?
+### contextualizing data with biomedical knowledge?
 
-```{r contextualiation}
+```{r contextualiation, warning=FALSE, results='hide', message=FALSE, echo=FALSE}
 
 # Votes
 
@@ -142,10 +144,10 @@ assesmentDF <- data.frame(
         rep(1:5, 4)
     ),
     day = c(
-        rep(paste0("Day ", 1:5), each = 4)
+        rep(paste0("Day ", 1:4), each = 5)
     ),
     votes = c(
-        0, 0, 0, 0, 0,
+        4, 5, 3, 4, 0,
         0, 0, 0, 0, 0,
         0, 0, 0, 0, 0,
         0, 0, 0, 0, 0
@@ -175,16 +177,18 @@ ggplot(
         name = "Confidence Level"
     ) +
     scale_y_continuous(
-        name = "# votes"
+        name = "# votes",
+        limits = c(0, max(assesmentDF$votes) + 1),
+        expand = c(0, 0)
     )
 
 
 ```
 
 
-- in jointly analyzing proteomics with genomics data? 
+### in jointly analyzing proteomics with genomics data? 
 
-```{r proteogenomics}
+```{r proteogenomics, warning=FALSE, results='hide', message=FALSE, echo=FALSE}
 
 # Votes
 
@@ -193,10 +197,10 @@ assesmentDF <- data.frame(
         rep(1:5, 4)
     ),
     day = c(
-        rep(paste0("Day ", 1:5), each = 4)
+        rep(paste0("Day ", 1:4), each = 5)
     ),
     votes = c(
-        0, 0, 0, 0, 0,
+        9, 6, 0, 1, 0,
         0, 0, 0, 0, 0,
         0, 0, 0, 0, 0,
         0, 0, 0, 0, 0
@@ -226,7 +230,9 @@ ggplot(
         name = "Confidence Level"
     ) +
     scale_y_continuous(
-        name = "# votes"
+        name = "# votes",
+        limits = c(0, max(assesmentDF$votes) + 1),
+        expand = c(0, 0)
     )
 
 

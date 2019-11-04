@@ -3,14 +3,20 @@ Self Assesment
 Marc Vaudel
 2019-10-28
 
-# 1\. Self assesment
+# How confident do you feel in…
 
-How confident do you feel in…
+### critically reading a proteomics paper?
 
-  - critically reading a proteomics paper?
+![](self_assesment_files/figure-gfm/critical_understanding-1.png)<!-- -->
 
-  - interpreting proteomics data?
+### interpreting proteomics data?
 
-  - contextualizing data with biomedical knowledge?
+![](self_assesment_files/figure-gfm/proteomics_interpretation-1.png)<!-- -->
 
-  - in jointly analyzing proteomics with genomics data?
+### contextualizing data with biomedical knowledge?
+
+![](self_assesment_files/figure-gfm/contextualiation-1.png)<!-- -->
+
+### in jointly analyzing proteomics with genomics data?
+
+![](self_assesment_files/figure-gfm/proteogenomics-1.png)<!-- -->
