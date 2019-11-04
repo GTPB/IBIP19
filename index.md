@@ -24,25 +24,24 @@ Strictly speaking, there are no pre-requisites. Prior knowledge that will be use
 
 ## Preliminary Program
 
-### [Day 1](pages/day1.md): using proteomics data
-- What is proteomics good for? What kind of questions can and cannot be answered. What is the interface/complementarity with other omics.
-- I have received results from a core facility - where do I start? How do I visualize and QC the data?
-- I don’t find what I was expecting, what could have gone wrong?
+### Day 1: using proteomics data
+- Introduction 
+- Expectations
+- What is proteomics good for [Presentation]
+- If you receive some data, what do you look for, what can go wrong? [practical](pages/qc)
+- You want to reproduce the results of a paper - what do you need? [practical](pages/critical_manuscript_reviewing/check_for_ms_guidelines.ipynb)
 
-### [Day 2](pages/day2.md): navigating quantitative proteomics data
-- What are the most important variables in my analysis?
-- How do I handle covariates and batch effects?
-- What are the quantitative clusters in my experiment?
+### Day 2: TBA
+- TBA
 
-### [Day 3](pages/day3.md): from quantities to biological insights
-- Are these clusters linked to specific pathways/biological processes?
-- Quantitative profiling of protein complexes
-- Comparison of different platforms for functional enrichment of biological pathways and their network representation
+### Day 3: [Proteogenomics](pages/proteogenomics/proteogenomics.md)
+- Non-canonical peptides
+- Single amino acid variants
+- Copy number alteration attenuation
+- RNA-protein correlation
 
-### [Day 4](pages/proteogenomics.md): back to the genome
-- How do I map my proteomics results to the genome?
-- How do I find the effect of genomic variation to the genome?
-- How do I match genomics, transcriptomics, and proteomics data and what to expect from the results?
+### Day 4: TBA
+- TBA
 
 
 ---
