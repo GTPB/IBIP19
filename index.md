@@ -26,19 +26,19 @@ Strictly speaking, there are no pre-requisites. Prior knowledge that will be use
 
 ### Using proteomics data
 - What is proteomics good for [Presentation]
-- If you receive some data, what do you look for, what can go wrong? [Practical](pages/qc)
-- You want to reproduce the results of a paper - what do you need? [Practical](pages/critical_manuscript_reviewing/check_for_ms_guidelines.ipynb)
+- If you receive some data, what do you look for, what can go wrong? [[Practical](pages/qc)
+- You want to reproduce the results of a paper - what do you need? [[Practical](pages/critical_manuscript_reviewing/check_for_ms_guidelines.ipynb)
 
 ### Interpreting proteomics quantitative data
-- Data screening, Multivariate analysis, Clustering [Practical](pages/clustering/Multivariate analysis.ipynb)
-- Biological interpretation [Practical](pages/protein_complexes/Protein complexes.ipynb)
-- Protein Complex analysis [Practical](pages/biological_interpretation/blind_hackathon.ipynb)
+- Data screening, Multivariate analysis, Clustering [[Practical]](pages/clustering/Multivariate analysis.ipynb)
+- Biological interpretation [[Practical]](pages/protein_complexes/Protein complexes.ipynb)
+- Protein Complex analysis [[Practical]](pages/biological_interpretation/blind_hackathon.ipynb)
 
-### Proteogenomics [Practical](pages/Proteogenomics.md)
-- Non-canonical peptides
-- Single amino acid variants
-- Copy number alteration attenuation
-- RNA-protein correlation
+### Proteogenomics 
+- Non-canonical peptides [[Practical]](pages/Proteogenomics.md)
+- Single amino acid variants [[Practical]](pages/Proteogenomics.md)
+- Copy number alteration attenuation [[Practical]](pages/Proteogenomics.md)
+- RNA-protein correlation [[Practical]](pages/Proteogenomics.md)
 
 
 ---
