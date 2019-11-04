@@ -1,6 +1,9 @@
 # Setting up Jupyter and R kernel in the command line
 
-This should work on a common Ubuntu Linux computer
+This should work on a common Ubuntu Linux computer.
+
+
+
 
 Open a terminal with Windows key and then write terminal
 

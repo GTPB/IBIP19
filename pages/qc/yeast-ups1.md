@@ -50,7 +50,7 @@ Additionally, you can also open the [Web interface documentation](http://www.pro
 
 ### 2.1 Connection to Proline Web
 
-Open a web browser (Chrome/Firefox) and go to: http://134.158.247.163/
+Open a web browser (Chrome/Firefox) and go to: http://134.158.247.163:443
 
 To log in, use as login/password ```userX/userX```, where X is a number from 1 to 9.
 
