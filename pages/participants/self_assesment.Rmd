@@ -1,0 +1,30 @@
+---
+title: "Self Assesment"
+author: Marc Vaudel
+date: 2019-10-28
+output: 
+    github_document:
+    toc: true
+    toc_depth: 1
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+# 1. Self assesment
+
+How confident do you feel in...
+
+- critically reading a proteomics paper?
+
+
+- interpreting proteomics data? 
+
+
+- contextualizing data with biomedical knowledge?
+
+
+- in jointly analyzing proteomics with genomics data? 
+

@@ -45,7 +45,11 @@ Strictly speaking, there are no pre-requisites. Prior knowledge that will be use
 
 ### Learning objectives
 
-### [Instructors](instructors.md)
+[Self Assesment](pages/participants/self_assesment.md)
+
+### Instructors
+
+[Description](instructors.md)
 
 
 ---
