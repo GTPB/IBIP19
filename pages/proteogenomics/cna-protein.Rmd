@@ -711,6 +711,15 @@ edgesReactome <- read.table(
     comment.char = ""
 )
 
+reactomeSearchDF <- read.table(
+    file = "resources/data/search.tsv.gz", 
+    header = T, 
+    sep = "\t", 
+    stringsAsFactors = F, 
+    quote = "", 
+    comment.char = ""
+)
+
 
 # Protein interactions from String
 
@@ -954,28 +963,40 @@ ggplot(
 ##### :speech_balloon: According to this analysis, does the participation in complexes seem to be associated with CNA attenuation?
 
 
-##### :pencil2: Plot the scaled CNA attenuation coefficient against the number of protein partners in the biochemical reactions network
+##### :pencil2: Plot the scaled CNA attenuation coefficient against the number of reactions in Reactome
 
-```{r attenuation_per_vertex_reactome}
+```{r attenuation_per_reaction}
 
-# Build degree data frame
+# Reactions per degree
 
-degreeDF <- data.frame(
-    accession = V(graphReactome)$name,
-    degree = degree(graphReactome),
-    stringsAsFactors = F
-)
+nReactionsPerProteinDF <- reactomeSearchDF %>%
+    select(
+        UNIPROT, REACTION_STID
+    ) %>%
+    rename(
+        protein = UNIPROT,
+        reaction = REACTION_STID
+    ) %>%
+    group_by(
+        protein
+    ) %>%
+    summarise(
+        n = n()
+    ) %>%
+    rename(
+        accession = protein
+    )
 
-cnaDegreeDF <- accessionsMapping %>%
+cnaReactionsDF <- accessionsMapping %>%
     filter(
         !gene %in% excludedGenes
     ) %>% 
     left_join(
-        degreeDF,
+        nReactionsPerProteinDF,
         by = "accession"
     ) %>%
     mutate(
-        degree = ifelse(is.na(degree), 0, degree)
+        n = ifelse(is.na(n), 0, n)
     ) %>%
     select(
         -accession
@@ -985,7 +1006,7 @@ cnaDegreeDF <- accessionsMapping %>%
         gene
     ) %>%
     summarise(
-        degree = sum(degree)
+        n = sum(n)
     ) %>% 
     ungroup() %>%
     inner_join(
@@ -997,7 +1018,7 @@ cnaDegreeDF <- accessionsMapping %>%
 # Build plot
 
 ggplot(
-    data = cnaDegreeDF
+    data = cnaReactionsDF
 ) +
     geom_hline(
         yintercept = -log10(0.05),
@@ -1006,14 +1027,14 @@ ggplot(
     ) +
     geom_point(
         mapping = aes(
-            x = degree,
+            x = log10(n),
             y = -log10(attenuation_p)
         ), 
         alpha = 0.1
     ) +
     geom_smooth(
         mapping = aes(
-            x = degree,
+            x = log10(n),
             y = -log10(attenuation_p)
         ),
         method = "loess"
@@ -1022,9 +1043,7 @@ ggplot(
         "Number of Interactors"
     ) +
     scale_y_continuous(
-        "Scaled Attenuation Coefficient [-log10]",
-        breaks = seq(0, 10, 5),
-        labels = paste0("10e-", seq(0, 10, 5))
+        "Scaled Attenuation Coefficient [-log10]"
     )
 
 ```
@@ -1107,7 +1126,7 @@ ggplot(
 
 ```
 
-##### :speech_balloon: According to this analysis, does the participation in PPIs seem to be associated with CNA attenuation?
+##### :speech_balloon: According to this analysis, does the participation in PPIs seem to be associated with CNA attenuation? How does this relate to the participation in reactions?
 
 
 ## Conclusion

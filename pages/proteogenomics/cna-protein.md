@@ -249,19 +249,19 @@ summary(gmm, parameters = TRUE)
     ## Mclust V (univariate, unequal variance) model with 2 components: 
     ## 
     ##  log-likelihood    n df      BIC       ICL
-    ##        935.4042 9533  5 1824.996 -5895.968
+    ##        935.3448 9533  5 1824.877 -6054.971
     ## 
     ## Mixing probabilities:
     ##         1         2 
-    ## 0.4639931 0.5360069 
+    ## 0.4781575 0.5218425 
     ## 
     ## Means:
     ##           1           2 
-    ## -0.18980655 -0.06281508 
+    ## -0.18687657 -0.06205284 
     ## 
     ## Variances:
-    ##         1         2 
-    ## 0.0704898 0.0244437
+    ##          1          2 
+    ## 0.06997916 0.02389745
 
 ##### [:thought\_balloon:](answers.md#thought_balloon-how-many-gaussian-distributions-were-suggested-by-the-model-what-do-the-mixing-probabilities-means-and-variances-represent) How many gaussian distributions were suggested by the model? What do the *Mixing probabilities*, *Means*, and *Variances* represent?
 
@@ -494,7 +494,7 @@ ggplot() +
 
 ![](cna-protein_files/figure-gfm/score_scaling-1.png)<!-- -->
 
-##### [:thought\_balloon:](answers.md#thought_balloon-what-do-the-columns-represent-what-is-the-difference-between-pearson-and-spearman-correlations) Using this threshold: What is the share of CNAs considered attenuated that would come from the component 2 distribution? What is the share of CNAs considered not attenuated that would come from the component 1? How will this influence the analyses?
+##### [:thought\_balloon:](answers.md#thought_balloon-using-this-threshold-what-is-the-share-of-cnas-considered-attenuated-that-would-come-from-the-component-2-distribution-what-is-the-share-of-cnas-considered-not-attenuated-that-would-come-from-the-component-1-how-will-this-influence-the-analyses) Using this threshold: What is the share of CNAs considered attenuated that would come from the component 2 distribution? What is the share of CNAs considered not attenuated that would come from the component 1? How will this influence the analyses?
 
 ##### :pencil2: Annotate the scaled attenuation coefficient on the scatter plot.
 
@@ -668,25 +668,89 @@ availabe in
 and
 [resources/data/string\_v10.5\_high\_edges.gz](resources/data/string_v10.5_high_edges.gz).
 
-##### :pencil2: Load all protein pairs, build corresponding biological networks, and plot the degree distribution of each network.
+##### :pencil2: Load complex, reaction, and interaction data. Build corresponding biological networks, and plot the degree distribution of each network.
 
 ``` r
 # Complexes
 
-edgesComplexes <- read.table(
-    file = "resources/data/complexes_18.08.17_edges.gz", 
+complexesDF <- read.table(
+    file = "resources/data/complexes.03.11.19.tsv.gz", 
     header = T, 
-    sep = " ", 
+    sep = "\t", 
     stringsAsFactors = F, 
     quote = "", 
     comment.char = ""
 )
 
 
+# Extract the protein to complex link, extract protein pairs involved in the same complex
+
+complexesParticipantsList <- list()
+complexesEdgesList <- list()
+
+for (i in 1:nrow(complexesDF)) {
+    
+    complex <- complexesDF$complex_accession[i]
+    participants <- complexesDF$participants_stoichiometry[i]
+    
+    proteinsSplit <- strsplit(
+        x = participants,
+        split = "\\|"
+    )[[1]]
+    participantsList <- strsplit(
+        x = proteinsSplit,
+        split = "[\\(\\)]"
+    )
+    
+    participantsDF <- as.data.frame(
+        t(
+            unname(
+                as.data.frame(
+                    participantsList,
+                    stringsAsFactors = F
+                )
+            )
+        ),
+        stringsAsFactors = F
+    )
+    names(participantsDF) <- c("protein", "stoichiometry")
+    participantsDF$complex = complex
+    
+    complexesParticipantsList[[i]] <- participantsDF
+    
+    edgesDF <- data.frame(
+        from = rep(participantsDF$protein, times = nrow(participantsDF)),
+        to = rep(participantsDF$protein, each = nrow(participantsDF)),
+        stringsAsFactors = F
+    ) %>%
+        filter(
+            from != to
+        ) %>%
+        mutate(
+            complex = complex
+        )
+    
+    complexesEdgesList[[i]] <- edgesDF
+    
+}
+
+complexesParticipantsDF <- do.call("rbind", complexesParticipantsList)
+edgesComplexes <- do.call("rbind", complexesEdgesList)
+
+
 # Protein reactions from Reactome
 
 edgesReactome <- read.table(
     file = "resources/data/proteinInternalEdges.tsv.gz", 
+    header = T, 
+    sep = "\t", 
+    stringsAsFactors = F, 
+    quote = "", 
+    comment.char = ""
+)
+
+reactomeSearchDF <- read.table(
+    file = "resources/data/search.tsv.gz", 
     header = T, 
     sep = "\t", 
     stringsAsFactors = F, 
@@ -823,6 +887,8 @@ Note that in the following, we exclude genes mapping to more than 100
 proteins, and we use the sum of edges per protein for each gene.
 
 ``` r
+# Exclude gene mapping with more than 10 proteins per gene
+
 geneOccurenceDF <- as.data.frame(
     x = table(accessionsMapping$gene), 
     stringsAsFactors = F
@@ -835,24 +901,29 @@ excludedGenes <- geneOccurenceDF$gene[geneOccurenceDF$nProteins >= 100]
 ##### :pencil2: Plot the scaled CNA attenuation coefficient against the number of protein partners in the complex network
 
 ``` r
-# Build degree data frame
+# Get the number of complexes per gene
 
-degreeDF <- data.frame(
-    accession = V(graphComplexes)$name,
-    degree = degree(graphComplexes),
-    stringsAsFactors = F
-)
+nComplexesPerProteinDF <- complexesParticipantsDF %>%
+    group_by(
+        protein
+    ) %>%
+    summarise(
+        n = n()
+    ) %>%
+    rename(
+        accession = protein
+    )
 
-cnaDegreeDF <- accessionsMapping %>%
+cnaComplexesDF <- accessionsMapping %>%
     filter(
         !gene %in% excludedGenes
     ) %>% 
     left_join(
-        degreeDF,
+        nComplexesPerProteinDF,
         by = "accession"
     ) %>%
     mutate(
-        degree = ifelse(is.na(degree), 0, degree)
+        n = ifelse(is.na(n), 0, n)
     ) %>%
     select(
         -accession
@@ -862,7 +933,7 @@ cnaDegreeDF <- accessionsMapping %>%
         gene
     ) %>%
     summarise(
-        degree = sum(degree)
+        n = sum(n)
     ) %>% 
     ungroup() %>%
     inner_join(
@@ -873,13 +944,30 @@ cnaDegreeDF <- accessionsMapping %>%
 
 # Build plot
 
-cnaDegreeDF$degreeFactor <- factor(
-    x = ifelse(cnaDegreeDF$degree > 24, ">24", as.character(cnaDegreeDF$degree)),
-    levels = as.character(c(2*(0:12), ">24"))
+cnaComplexesDF$nFactor <- factor(
+    x = ifelse(cnaComplexesDF$n > 8, ">8", 
+               ifelse(cnaComplexesDF$n > 4, "5-8", as.character(cnaComplexesDF$n))),
+    levels = as.character(c(0:9, "5-8", ">8"))
 )
 
+levels <- levels(cnaComplexesDF$nFactor)
+
+for (i in 1:length(levels)) {
+    
+    level <- levels[i]
+    
+    n <- sum(cnaComplexesDF$nFactor == level)
+    
+    level <- paste0(level, "\n(n = ", n, ")")
+    
+    levels[i] <- level
+    
+}
+
+levels(cnaComplexesDF$nFactor) <- levels
+
 ggplot(
-    data = cnaDegreeDF
+    data = cnaComplexesDF
 ) +
     geom_hline(
         yintercept = -log10(0.05),
@@ -888,20 +976,20 @@ ggplot(
     ) +
     geom_violin(
         mapping = aes(
-            x = degreeFactor,
+            x = nFactor,
             y = -log10(attenuation_p)
         ), 
         alpha = 0.1
     ) +
     geom_boxplot(
         mapping = aes(
-            x = degreeFactor,
+            x = nFactor,
             y = -log10(attenuation_p)
         ),
         width = 0.2
     ) +
     scale_x_discrete(
-        "Number of Interactors"
+        "Number of Complexes"
     ) +
     scale_y_continuous(
         "Scaled Attenuation Coefficient [-log10]",
@@ -910,31 +998,43 @@ ggplot(
     )
 ```
 
-![](cna-protein_files/figure-gfm/attenuation_per_vertex_complex-1.png)<!-- -->
+![](cna-protein_files/figure-gfm/attenuation_per_complex-1.png)<!-- -->
 
 ##### :speech\_balloon: According to this analysis, does the participation in complexes seem to be associated with CNA attenuation?
 
-##### :pencil2: Plot the scaled CNA attenuation coefficient against the number of protein partners in the biochemical reactions network
+##### :pencil2: Plot the scaled CNA attenuation coefficient against the number of reactions in Reactome
 
 ``` r
-# Build degree data frame
+# Reactions per degree
 
-degreeDF <- data.frame(
-    accession = V(graphReactome)$name,
-    degree = degree(graphReactome),
-    stringsAsFactors = F
-)
+nReactionsPerProteinDF <- reactomeSearchDF %>%
+    select(
+        UNIPROT, REACTION_STID
+    ) %>%
+    rename(
+        protein = UNIPROT,
+        reaction = REACTION_STID
+    ) %>%
+    group_by(
+        protein
+    ) %>%
+    summarise(
+        n = n()
+    ) %>%
+    rename(
+        accession = protein
+    )
 
-cnaDegreeDF <- accessionsMapping %>%
+cnaReactionsDF <- accessionsMapping %>%
     filter(
         !gene %in% excludedGenes
     ) %>% 
     left_join(
-        degreeDF,
+        nReactionsPerProteinDF,
         by = "accession"
     ) %>%
     mutate(
-        degree = ifelse(is.na(degree), 0, degree)
+        n = ifelse(is.na(n), 0, n)
     ) %>%
     select(
         -accession
@@ -944,7 +1044,7 @@ cnaDegreeDF <- accessionsMapping %>%
         gene
     ) %>%
     summarise(
-        degree = sum(degree)
+        n = sum(n)
     ) %>% 
     ungroup() %>%
     inner_join(
@@ -956,7 +1056,7 @@ cnaDegreeDF <- accessionsMapping %>%
 # Build plot
 
 ggplot(
-    data = cnaDegreeDF
+    data = cnaReactionsDF
 ) +
     geom_hline(
         yintercept = -log10(0.05),
@@ -965,14 +1065,14 @@ ggplot(
     ) +
     geom_point(
         mapping = aes(
-            x = degree,
+            x = log10(n),
             y = -log10(attenuation_p)
         ), 
         alpha = 0.1
     ) +
     geom_smooth(
         mapping = aes(
-            x = degree,
+            x = log10(n),
             y = -log10(attenuation_p)
         ),
         method = "loess"
@@ -981,13 +1081,13 @@ ggplot(
         "Number of Interactors"
     ) +
     scale_y_continuous(
-        "Scaled Attenuation Coefficient [-log10]",
-        breaks = seq(0, 10, 5),
-        labels = paste0("10e-", seq(0, 10, 5))
+        "Scaled Attenuation Coefficient [-log10]"
     )
 ```
 
-![](cna-protein_files/figure-gfm/attenuation_per_vertex_reactome-1.png)<!-- -->
+    ## Warning: Removed 3704 rows containing non-finite values (stat_smooth).
+
+![](cna-protein_files/figure-gfm/attenuation_per_reaction-1.png)<!-- -->
 
 ##### :speech\_balloon: According to this analysis, does the participation in biochemical reactions seem to be associated with CNA attenuation?
 
@@ -1066,7 +1166,7 @@ ggplot(
 
 ![](cna-protein_files/figure-gfm/attenuation_per_vertex_string-1.png)<!-- -->
 
-##### :speech\_balloon: According to this analysis, does the participation in PPIs seem to be associated with CNA attenuation?
+##### :speech\_balloon: According to this analysis, does the participation in PPIs seem to be associated with CNA attenuation? How does this relate to the participation in reactions?
 
 ## Conclusion
 

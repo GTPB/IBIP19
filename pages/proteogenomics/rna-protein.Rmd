@@ -30,6 +30,7 @@ library(dplyr)
 library(ggplot2)
 library(scico)
 library(gamlss)
+library(igraph)
 
 theme_set(theme_bw(base_size = 11))
 
@@ -298,7 +299,7 @@ excludedGenes <- geneOccurenceDF$gene[geneOccurenceDF$nProteins >= 100]
 
 ```
 
-##### :pencil2: Load complex data, plot the RNA-protein correlation based on the number of complexes a protein is involved in.
+##### :pencil2: Load complex data, plot the RNA-protein correlation against the number of complexes a protein is involved in.
 
 ```{r complexes}
 
@@ -455,10 +456,10 @@ ggplot(
         width = 0.5
     ) +
     scale_x_discrete(
-        "Number of Complexes"
+        name = "Number of Complexes"
     ) +
     scale_y_continuous(
-        "RNA-Protein correlation"
+        name = "RNA-Protein correlation"
     ) +
     scale_color_manual(
         values = c("darkblue", "black")
@@ -472,21 +473,214 @@ ggplot(
 
 ```
 
-```{r go}
+##### :speech_balloon: According to this analysis, does the participation in complexes seem to be associated with CNA attenuation? How does this compare to CNA attenuation?
 
-# xxDF <- as.data.frame(GOTERM)
+##### :pencil2: Load pathway data, plot the RNA-protein correlation against on the number of reactions a protein is involved in.
 
-# goTerm <- xx[["GO:0006629"]]
+```{r pathways}
 
-# GOID(goTerm)
-# Term(goTerm)
-# Synonym(goTerm)
-# Secondary(goTerm)
-# Definition(goTerm)
-# Ontology(goTerm)
+
+# Protein reactions from Reactome
+
+reactomeSearchDF <- read.table(
+    file = "resources/data/search.tsv.gz", 
+    header = T, 
+    sep = "\t", 
+    stringsAsFactors = F, 
+    quote = "", 
+    comment.char = ""
+)
+
+
+# Get the number of reactions per gene
+
+nReactionsPerProteinDF <- reactomeSearchDF %>%
+    select(
+        UNIPROT, REACTION_STID
+    ) %>%
+    rename(
+        protein = UNIPROT,
+        reaction = REACTION_STID
+    ) %>%
+    group_by(
+        protein
+    ) %>%
+    summarise(
+        n = n()
+    ) %>%
+    rename(
+        accession = protein
+    )
+
+rnaReactionsDF <- accessionsMapping %>%
+    filter(
+        !gene %in% excludedGenes
+    ) %>% 
+    left_join(
+        nReactionsPerProteinDF,
+        by = "accession"
+    ) %>%
+    mutate(
+        n = ifelse(is.na(n), 0, n)
+    ) %>%
+    select(
+        -accession
+    ) %>%
+    distinct() %>%
+    group_by(
+        gene
+    ) %>%
+    summarise(
+        n = sum(n)
+    ) %>% 
+    ungroup() %>%
+    inner_join(
+        rnaProteinCorLongDF,
+        by = "gene"
+    )
+
+
+# Build plot
+
+ggplot(
+    data = rnaReactionsDF
+) +
+    geom_point(
+        mapping = aes(
+            x = n,
+            y = z_correlation,
+            col = data
+        ), 
+        alpha = 0.1
+    ) +
+    geom_smooth(
+        mapping = aes(
+            x = n,
+            y = z_correlation,
+            col = data
+        ),
+        method = "loess"
+    ) +
+    scale_x_log10(
+        name = "Number of Reactions"
+    ) +
+    scale_y_continuous(
+        name = "Correlation [Z-score]"
+    ) +
+    scale_color_manual(
+        values = c("darkblue", "black")
+    ) +
+    theme(
+        legend.position = "top",
+        legend.title = element_blank()
+    )
+
 
 
 ```
+
+##### :speech_balloon: According to this analysis, does the participation in biochemical reactions seem to be associated with RNA correlation? How does this compare to CNA attenuation?
+
+##### :pencil2: Load PPI data, plot the RNA-protein correlation against on the number of interactors a protein has.
+
+```{r string}
+
+# Protein interactions from String
+
+edgesString <- read.table(
+    file = "resources/data/string_v10.5_high_edges.gz", 
+    header = T, 
+    sep = " ", 
+    stringsAsFactors = F, 
+    quote = "", 
+    comment.char = ""
+)
+
+
+# Build and clean graph
+
+graphString <- graph_from_data_frame(edgesString)
+graphString <- simplify(graphString, remove.multiple = T, remove.loops = T, edge.attr.comb = "first")
+
+
+# Build degree data frame
+
+degreeDF <- data.frame(
+    accession = V(graphString)$name,
+    degree = degree(graphString),
+    stringsAsFactors = F
+)
+
+
+# Get the number of interactors per gene
+
+rnaDegreeDF <- accessionsMapping %>%
+    filter(
+        !gene %in% excludedGenes
+    ) %>% 
+    left_join(
+        degreeDF,
+        by = "accession"
+    ) %>%
+    mutate(
+        degree = ifelse(is.na(degree), 0, degree)
+    ) %>%
+    select(
+        -accession
+    ) %>%
+    distinct() %>%
+    group_by(
+        gene
+    ) %>%
+    summarise(
+        degree = sum(degree)
+    ) %>% 
+    ungroup() %>%
+    inner_join(
+        rnaProteinCorLongDF,
+        by = "gene"
+    )
+
+
+# Build plot
+
+ggplot(
+    data = rnaDegreeDF
+) +
+    geom_point(
+        mapping = aes(
+            x = log10(degree),
+            y = z_correlation,
+            col = data
+        ), 
+        alpha = 0.1
+    ) +
+    geom_smooth(
+        mapping = aes(
+            x = log10(degree),
+            y = z_correlation,
+            col = data
+        ),
+        method = "loess"
+    ) +
+    scale_x_continuous(
+        name = "Number of Interactors"
+    ) +
+    scale_y_continuous(
+        name = "Correlation [Z-score]"
+    ) +
+    scale_color_manual(
+        values = c("darkblue", "black")
+    ) +
+    theme(
+        legend.position = "top",
+        legend.title = element_blank()
+    )
+
+```
+
+##### :speech_balloon: According to this analysis, does the number of interactors seem to be associated with RNA correlation? How does this compare to reactions? To CNA attenuation?
+
 
 ## References
 
