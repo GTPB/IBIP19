@@ -49,7 +49,7 @@ Strictly speaking, there are no pre-requisites. Prior knowledge that will be use
 
 ### Instructors
 
-[Description](instructors.md)
+[Description](pages/instructors.md)
 
 
 ---
