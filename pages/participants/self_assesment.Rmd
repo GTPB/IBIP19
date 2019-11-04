@@ -186,7 +186,7 @@ ggplot(
 ```
 
 
-### in jointly analyzing proteomics with genomics data? 
+### in jointly analyzing proteomics with other omics data? 
 
 ```{r proteogenomics, warning=FALSE, results='hide', message=FALSE, echo=FALSE}
 

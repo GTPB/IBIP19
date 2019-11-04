@@ -17,6 +17,6 @@ Marc Vaudel
 
 ![](self_assesment_files/figure-gfm/contextualiation-1.png)<!-- -->
 
-### in jointly analyzing proteomics with genomics data?
+### in jointly analyzing proteomics with other omics data?
 
 ![](self_assesment_files/figure-gfm/proteogenomics-1.png)<!-- -->
