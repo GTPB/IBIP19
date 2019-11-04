@@ -34,7 +34,7 @@ Strictly speaking, there are no pre-requisites. Prior knowledge that will be use
 - Biological interpretation [Practical](pages/protein_complexes/Protein complexes.ipynb)
 - Protein Complex analysis [Practical](pages/biological_interpretation/blind_hackathon.ipynb)
 
-### Proteogenomics [Practical](pages/proteogenomics/proteogenomics.md)
+### Proteogenomics [Practical](pages/Proteogenomics.md)
 - Non-canonical peptides
 - Single amino acid variants
 - Copy number alteration attenuation
