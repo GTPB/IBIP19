@@ -13,7 +13,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 
-# 1. Variation Analysis
+# Variation Analysis
 
 In the [previous chapter](novel_peptides.md), novel peptides were identified by Johansson _et al._ [(1)](https://gtpb.github.io/IBIP19/pages/proteogenomics/references) using a proteogenomic search strategy. In addition, this search allowed identifying peptides presenting single amino acid variants (SAAV). 
 
