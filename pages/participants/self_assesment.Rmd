@@ -1,0 +1,240 @@
+---
+title: "Self Assesment"
+author: Marc Vaudel
+date: 2019-10-28
+output: 
+    github_document:
+    toc: true
+    toc_depth: 1
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r libraries, warning=FALSE, results='hide', message=FALSE, echo=FALSE}
+
+library(conflicted)
+library(tidyr)
+library(dplyr)
+library(ggplot2)
+
+conflict_prefer("filter", "dplyr")
+
+theme_set(theme_bw(base_size = 11))
+
+```
+
+# How confident do you feel in...
+
+### critically reading a proteomics paper?
+
+```{r critical_understanding, warning=FALSE, results='hide', message=FALSE, echo=FALSE}
+
+# Votes
+
+assesmentDF <- data.frame(
+    levels = c(
+        rep(1:5, 4)
+    ),
+    day = c(
+        rep(paste0("Day ", 1:4), each = 5)
+    ),
+    votes = c(
+        2, 5, 4, 2, 1,
+        0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0
+    ),
+    stringsAsFactors = F
+) %>%
+    mutate(
+        day = factor(day, levels = c(paste0("Day ", 1:5)))
+    )
+
+
+# Plot
+
+ggplot(
+    data = assesmentDF
+) +
+    geom_col(
+        mapping = aes(
+            x = levels,
+            y = votes
+        )
+    ) +
+    facet_grid(
+        day ~ .
+    ) +
+    scale_x_discrete(
+        name = "Confidence Level"
+    ) +
+    scale_y_continuous(
+        name = "# votes",
+        limits = c(0, max(assesmentDF$votes) + 1),
+        expand = c(0, 0)
+    )
+
+
+```
+
+
+### interpreting proteomics data? 
+
+```{r proteomics_interpretation, warning=FALSE, results='hide', message=FALSE, echo=FALSE}
+
+# Votes
+
+assesmentDF <- data.frame(
+    levels = c(
+        rep(1:5, 4)
+    ),
+    day = c(
+        rep(paste0("Day ", 1:4), each = 5)
+    ),
+    votes = c(
+        5, 5, 3, 1, 2,
+        0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0
+    ),
+    stringsAsFactors = F
+) %>%
+    mutate(
+        day = factor(day, levels = c(paste0("Day ", 1:5)))
+    )
+
+
+# Plot
+
+ggplot(
+    data = assesmentDF
+) +
+    geom_col(
+        mapping = aes(
+            x = levels,
+            y = votes
+        )
+    ) +
+    facet_grid(
+        day ~ .
+    ) +
+    scale_x_discrete(
+        name = "Confidence Level"
+    ) +
+    scale_y_continuous(
+        name = "# votes",
+        limits = c(0, max(assesmentDF$votes) + 1),
+        expand = c(0, 0)
+    )
+
+
+```
+
+
+### contextualizing data with biomedical knowledge?
+
+```{r contextualiation, warning=FALSE, results='hide', message=FALSE, echo=FALSE}
+
+# Votes
+
+assesmentDF <- data.frame(
+    levels = c(
+        rep(1:5, 4)
+    ),
+    day = c(
+        rep(paste0("Day ", 1:4), each = 5)
+    ),
+    votes = c(
+        4, 5, 3, 4, 0,
+        0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0
+    ),
+    stringsAsFactors = F
+) %>%
+    mutate(
+        day = factor(day, levels = c(paste0("Day ", 1:5)))
+    )
+
+
+# Plot
+
+ggplot(
+    data = assesmentDF
+) +
+    geom_col(
+        mapping = aes(
+            x = levels,
+            y = votes
+        )
+    ) +
+    facet_grid(
+        day ~ .
+    ) +
+    scale_x_discrete(
+        name = "Confidence Level"
+    ) +
+    scale_y_continuous(
+        name = "# votes",
+        limits = c(0, max(assesmentDF$votes) + 1),
+        expand = c(0, 0)
+    )
+
+
+```
+
+
+### in jointly analyzing proteomics with other omics data? 
+
+```{r proteogenomics, warning=FALSE, results='hide', message=FALSE, echo=FALSE}
+
+# Votes
+
+assesmentDF <- data.frame(
+    levels = c(
+        rep(1:5, 4)
+    ),
+    day = c(
+        rep(paste0("Day ", 1:4), each = 5)
+    ),
+    votes = c(
+        9, 6, 0, 1, 0,
+        0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0
+    ),
+    stringsAsFactors = F
+) %>%
+    mutate(
+        day = factor(day, levels = c(paste0("Day ", 1:5)))
+    )
+
+
+# Plot
+
+ggplot(
+    data = assesmentDF
+) +
+    geom_col(
+        mapping = aes(
+            x = levels,
+            y = votes
+        )
+    ) +
+    facet_grid(
+        day ~ .
+    ) +
+    scale_x_discrete(
+        name = "Confidence Level"
+    ) +
+    scale_y_continuous(
+        name = "# votes",
+        limits = c(0, max(assesmentDF$votes) + 1),
+        expand = c(0, 0)
+    )
+
+
+```
+
