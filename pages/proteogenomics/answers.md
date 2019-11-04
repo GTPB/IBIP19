@@ -7,11 +7,11 @@ title: Answers-Proteogenomics
 
 ## 1. Novel Peptides
 
-##### [:thought_balloon:](novel_peptides.md#thought_balloon-based-on-you-knowledge-of-peptide-and-protein-identification-can-you-anticipate-challenges-posed-by-these-proteogenomic-databases) _Based on your knowledge of peptide and protein identification, can you anticipate challenges posed by these proteogenomic databases?_
+##### Based on your knowledge of peptide and protein identification, can you anticipate challenges posed by these proteogenomic databases?
 
 The first challenge posed by proteogenomic databases is that they are very large, and therefore require much more computational power. The inflation in the collection of possible sequences, called search space, also increases the probability that two peptide sequences are similar, hence reducing the discrimination power of search engines. Thus reduced discrimination power results in a reduced identification rate at fixed error rate [(1)](#references). The estimation of error rates in proteomics usually relies on the target-decoy approach [(2)](#references), which is very reliable to track random matches, but not the errors due to partial matches [(3)](#references). Consequently, error rate estimation is very challenging in proteogenomic databases and requires spectrum-level inspection of the matches [(4)](#references). Finally, the increased number of similar sequences reduces the probability to find peptides unique to a protein, hence complexifying protein inference [(5)](#references).
 
-##### [:thought_balloon:](novel_peptides.md#thought_balloon-what-do-the-different-columns-in-the-table-represent) _What do the different columns in the table represent?_
+##### What do the different columns in the table represent?
 
 This document contains two tables, a list of novel peptides and a list of peptides containing single amino acid variants (SAAV).
 
@@ -61,11 +61,11 @@ This document contains two tables, a list of novel peptides and a list of peptid
 | TMT intensity | Intensity of the fragment ions from the different TMT channels. |
 
 
-##### [:thought_balloon:](novel_peptides.md#thought_balloon-can-you-speculate-on-how-these-different-classes-of-loci-can-yield-novel-peptides) _Can you speculate on how these different classes of loci can yield novel peptides?_
+##### Can you speculate on how these different classes of loci can yield novel peptides?
 
 Mutations can yield new coding regions through alteration of start, stop, and splicing information. Exons can hence be extended by upstream and downstream regions, extending canonical sequences and disrupting splicing. Alternatively, completely new peptides or proteins can be created from intergenic regions.
 
-##### [:thought_balloon:](novel_peptides.md#thought_balloon-what-do-these-categories-represent) _What do these categories represent?_
+##### What do these categories represent?
 
 | Category | # Peptides | Description |
 | -------- | ---------- | ----------- |
@@ -81,23 +81,23 @@ Mutations can yield new coding regions through alteration of start, stop, and sp
 
 ## 2. Variation Analysis
 
-##### [:thought_balloon:](variation_analysis.md#thought_balloon-if-we-assume-a-linear-relationship-between-number-of-alleles-and-peptide-abundance-what-should-be-the-peptide-distribution-for-each-genotype) _If we assume a linear relationship between number of alleles and peptide abundance, what should be the peptide distribution for each genotype?_
+##### If we assume a linear relationship between number of alleles and peptide abundance, what should be the peptide distribution for each genotype?
 
 ![peptide_per_allele](resources/images/peptideAllelePlot.png?raw=true "Peptide abundance vs genotype")
 
 Under this hypothesis: (1) if the genotype is homozygous for the reference allele, _AA_, one would expect only peptides carrying the reference amino acid; (2) if the genotype is heterozygous, _AB_, one would expect a 50-50 distribution between peptides carrying the reference and alternative amino acids; (3) if the genotype is homozygous for the alternative allele, _BB_, one would expect only peptides carrying the alternative amino acid.
 
-##### [:thought_balloon:](answers.md#thought_balloon-how-do-we-need-to-transform-the-tables-to-compare-saav-peptide-level-intensities-to-gene-level-intensities) _How do we need to transform the tables to compare SAAV peptide-level intensities to gene-level intensities?_
+##### How do we need to transform the tables to compare SAAV peptide-level intensities to gene-level intensities?
 
 The data in the SAAV peptides table are not normalized. Thus, we need to scale all intensities using the reference channel (131). Each line represents a PSM, peptides might therefore be present multiple times, we need to aggregate these different measurements per peptide in order to have a peptide-level table. Then, the different TMT batches need to be aligned and linked to the different tumors. Finally, the gene-level intensities need to be extracted for each peptide. Note that one peptide might map to multiple genes.
 
-##### [:thought_balloon:](answers.md#thought_balloon-why-can-there-be-multiple-peptide-per-gene-and-gene-per-peptide-is-it-correct-to-represent-peptides-by-their-sequence) _Why can there be multiple peptide per gene, and gene per peptide? Is it correct to represent peptides by their sequence?_
+##### Why can there be multiple peptide per gene, and gene per peptide? Is it correct to represent peptides by their sequence?
 
 A gene can contain multiple peptides with different SAAV. Conversely, a peptide carrying an SAAV can be shared between different genes. Consequently genes and peptides can appear multiple times in the table and their quantification values as well.
 
 If a protein carries a post-translational modification (PTM), its abundance and function will differ from the non-modified counterpart. Therefore, modifications ough to be considered when comparing peptides. In the data set of this tutorial, modifications were not accounted for.
 
-##### [:thought_balloon:](answers.md#thought_balloon-why-are-all-intensities-at-the-bottom-how-can-we-transform-the-data-to-better-visualize-these-distributions) _Why are all intensities at the bottom? How can we transform the data to better visualize these distributions?_
+##### Why are all intensities at the bottom? How can we transform the data to better visualize these distributions?
 
 On a proteome-wide scale, measured peptide and protein abundances generally distribute log-normally. This means that they span several orders of magnitude, with most abundances are low, with a long tail towards high abundances, and a short tail towards lower abundances. Note that the detectability and quantification performance strongly influence this distribution, and it can be that the distribution of protein abundances in the sample differ from what we measure.
 
@@ -105,7 +105,7 @@ In order to visualize such distributions, you can transform the intensities loga
 
 ![abundance_distribution](resources/images/peptideProteinDistribution.png?raw=true "Peptide and Protein abundance distributions")
 
-##### [:thought_balloon:](answers.md#thought_balloon-why-does-the-curve-have-this-shape) _Why does the curve have this shape?_
+##### _Why does the curve have this shape?_
 
 The model used for normalization is based on a log-Normal distribution, see the `family` argument provided to _GAMLSS_:
 ```
@@ -124,7 +124,7 @@ This accounts for the log-normal distribution of the intensities observed in the
 
 ## 3. CNA-protein
 
-##### [:thought_balloon:](cna-protein.md#thought_balloon-what-do-the-columns-represent-what-is-the-difference-between-pearson-and-spearman-correlations) What do the columns represent? What is the difference between Pearson and Spearman correlations?
+##### What do the columns represent? What is the difference between Pearson and Spearman correlations?
 
 | Column Name | Description |
 | ----------- | ----------- |
@@ -137,7 +137,7 @@ This accounts for the log-normal distribution of the intensities observed in the
 
 The Spearman correlation is a Pearson correlation of the ranks of the values. Working on the ranks is more robust, especially towards outliers. See the R help on _cor_ for more details: `?cor`.
 
-##### [:thought_balloon:](cna-protein.md#thought_balloon-how-many-gaussian-distributions-were-suggested-by-the-model-what-do-the-mixing-probabilities-means-and-variances-represent) What do the _Mixing probabilities_, _Means_, and _Variances_ represent?
+##### What do the _Mixing probabilities_, _Means_, and _Variances_ represent?
 
 The Model suggested using two gaussian distributions. This is based on the [Bayesian Information Criterion (BIC)](https://en.wikipedia.org/wiki/Bayesian_information_criterion), which evaluates the quality of the fitting relatively to the model complexity: an overly complex model will fit very well training data but is likely to overfit, while an overly simple model is unlikely to overfit but is likely to underperform. Optimizing the BIC allows finding a trade-off between the two. Below, the BIC is plotted against the number of components.
 
@@ -148,17 +148,17 @@ For each Gaussian distribution, mclust returns the following paramters:
 - Mean: the mean of the distribution.
 - Variance: the variance of the distribution.
 
-##### [:thought_balloon:](cna-protein.md#thought_balloon-based-on-this-how-many-cnas-are-considered-attenuated) Based on this, how many CNAs are considered attenuated?
+##### Based on this, how many CNAs are considered attenuated?
 
 The mixing probability of the distribution with lowest mean (_i.e._ most attenuated) is approx 45.6%, considering 9533 CNAs this makes 4343 CNAs attenuated.
 
-##### [:thought_balloon:](cna-protein.md#thought_balloon-which-component-represents-the-attenuated-distribution-how-can-we-classify-cnas-based-on-these-distributions) Which component represents the attenuated distribution? How can we classify CNAs based on these distributions?
+##### Which component represents the attenuated distribution? How can we classify CNAs based on these distributions?
 
 The distribution to the left, i.e. lowest mean, is the one representing the attenuated population. 
 
 It is possible to use the ratio of a distribution to the sum to estimate the probability at a given attenuation score to belong from either category. Alternatively, it is possible to use the cumulative distribution function to evaluate the appartenance to a population.
 
-##### [:thought_balloon:](cna-protein.md#thought_balloon-using-this-threshold-what-is-the-share-of-cnas-considered-attenuated-that-would-come-from-the-component-2-distribution-what-is-the-share-of-cnas-considered-not-attenuated-that-would-come-from-the-component-1-how-will-this-influence-the-analyses) Using this threshold: What is the share of CNAs considered attenuated that would come from the component 2 distribution? What is the share of CNAs considered not attenuated that would come from the component 1? How will this influence the analyses?
+##### Using this threshold: What is the share of CNAs considered attenuated that would come from the component 2 distribution? What is the share of CNAs considered not attenuated that would come from the component 1? How will this influence the analyses?
 
 | Category | Component 1 | Component 2 |
 | -------- | ----------- | ----------- |
@@ -167,7 +167,7 @@ It is possible to use the ratio of a distribution to the sum to estimate the pro
 
 Approximately 16% of the CNAs considered attenuated are derived from the second component. Approximately 39% of the CNAs considered not attenuated are derived from the first component. This means that our classification has many false positives/negatives, which will reduce our ability to find association with biological features.
 
-##### [:thought_balloon:](cna-protein.md#thought_balloon-what-is-the-number-of-proteins-per-gene-reported-in-the-cna-table-how-is-this-going-to-influence-the-analysis) What is the number of proteins per gene reported in the CNA table? How is this going to influence the analysis?
+##### What is the number of proteins per gene reported in the CNA table? How is this going to influence the analysis?
 
 According to the UniProt mapping, the number of proteins per gene ranges from 1 to approx. 8000. The genes mapping to most proteins are listed in the table below.
 
@@ -198,12 +198,12 @@ When mapping the CNA results to functional databases, these genes are going to m
 
 ## 3. RNA-protein
 
-##### [:thought_balloon:](rna-protein.md#thought_balloon-what-are-the-advantages-and-shortcomings-of-using-transcript-sequences-instead-of-or-in-addition-to-genomic-data) _What are the advantages and shortcomings of using transcript sequences instead of or in addition to genomic data?_
+##### _What are the advantages and shortcomings of using transcript sequences instead of or in addition to genomic data?_
 
 Transcript sequences have the great advantage to provide information on splicing, and might therefore prove valuable to identify splice products. However, using RNA sequencing data strongly relies on the fact that the detected proteins are being transcribed in the samples undergoing sequencing and at the time of sequencing. The strategy will thus be blind to proteins produced elsewhere, or produced long before sampling. These limitations must be taken into account when deciding to complete or replace genomic- with transcript-level data, depending on the type of samples and sampling strategy.
 
 
-##### [:thought_balloon:](rna-protein.md#thought_balloon-what-are-the-advantages-and-shortcomings-of-using-transcript-sequences-instead-of-or-in-addition-to-genomic-data) _How does the correlation evolve relatively to the abundance of the protein? What other protein characteristics could influence the correlation?_
+##### _How does the correlation evolve relatively to the abundance of the protein? What other protein characteristics could influence the correlation?_
 
 ![rna_protein_abundance](resources/images/rna_protein_cor_copy_number.png?raw=true "RNA protein correlation vs. protein abundance")
 
