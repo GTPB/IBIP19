@@ -25,7 +25,7 @@ theme_set(theme_bw(base_size = 11))
 
 ```
 
-# How confident do you feel in...
+# How confident do you feel with...
 
 ### critically reading a proteomics paper?
 
@@ -42,7 +42,7 @@ assesmentDF <- data.frame(
     ),
     votes = c(
         2, 5, 4, 2, 1,
-        0, 0, 0, 0, 0,
+        0, 0, 12, 3, 0,
         0, 0, 0, 0, 0,
         0, 0, 0, 0, 0
     ),
@@ -95,7 +95,7 @@ assesmentDF <- data.frame(
     ),
     votes = c(
         5, 5, 3, 1, 2,
-        0, 0, 0, 0, 0,
+        0, 2, 10, 3, 0,
         0, 0, 0, 0, 0,
         0, 0, 0, 0, 0
     ),
@@ -148,7 +148,7 @@ assesmentDF <- data.frame(
     ),
     votes = c(
         4, 5, 3, 4, 0,
-        0, 0, 0, 0, 0,
+        1, 7, 6, 2, 0,
         0, 0, 0, 0, 0,
         0, 0, 0, 0, 0
     ),
@@ -186,7 +186,7 @@ ggplot(
 ```
 
 
-### in jointly analyzing proteomics with other omics data? 
+### in jointly analyzing proteomics with other omics data (esp. genomics)? 
 
 ```{r proteogenomics, warning=FALSE, results='hide', message=FALSE, echo=FALSE}
 
@@ -201,7 +201,7 @@ assesmentDF <- data.frame(
     ),
     votes = c(
         9, 6, 0, 1, 0,
-        0, 0, 0, 0, 0,
+        9, 6, 0, 1, 0,
         0, 0, 0, 0, 0,
         0, 0, 0, 0, 0
     ),

@@ -254,6 +254,11 @@ As illustrated above, the correlation is inversely associated with protein abund
 Although significant, the slope is much lower than the variance. We could scale the correlation accordingly but that would only have minimal effect on the results.
 Additional parameters often used to evaluate RNA and protein correlation are the half-life of proteins, their structural stability, their integration in complexes, and their propensity to be ubiquitinated.
 
+##### _What can influence the distribution of p-values?_
+
+![qq_plot](resources/images/qqPlot.png?raw=true "QQ Plot")
+
+The Q-Q plot shows an inflation of p-values and a plateau in observed p-values. The relationship and overlap between pathways can result in distortion of the p-value distribution.
 
 
 ## References
