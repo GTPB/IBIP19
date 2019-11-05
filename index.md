@@ -32,6 +32,7 @@ Strictly speaking, there are no pre-requisites. Prior knowledge that will be use
 - You want to reproduce the results of a paper - what do you need? [[Practical](pages/critical_manuscript_reviewing/check_for_ms_guidelines.ipynb)
 
 ### Interpreting proteomics quantitative data
+- Wrap-up [[Pdf]](pages/resources/Wrap-up_Tuesday.pdf)
 - Data screening, Multivariate analysis, Clustering [[Practical]](pages/clustering/Multivariate analysis.ipynb)
 - Biological interpretation [[Practical]](pages/protein_complexes/Protein complexes.ipynb)
 - Protein Complex analysis [[Practical]](pages/biological_interpretation/blind_hackathon.ipynb)
