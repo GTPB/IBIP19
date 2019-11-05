@@ -9,6 +9,8 @@ Proteogenomics is the scientific field at the interface between proteomics and g
 
 Due to the novelty of the field, the complexity of the analyses, and the volume of data involved, proteogenomics poses multiple bioinformatic challenges [(3)](#references). These tutorials present methods that can be used to analyse results from proteogenomic pipelines. 
 
+Introduction slides are available [here](proteogenomics/resources/slides/day2.pptx)
+
 ## A word of caution
 
 Please note that this tutorial starts from the results of proteomic and genomic analyses, and does not cover the details of respective bioinformatic pipelines, like the calling of variants. Please note also that the generation and analysis of proteomic data for proteogenomic application differ from standard proteomic analyses, requiring specific methods and expertise. Notably, the identification of non-canonical genetic products of transcription/translation and the calling of variants in proteomics data require high coverage and high resolution proteomic analyses. These analyses also require the use of complex bioinformatic workflows in high performance environments. Finally, they can benefit from tailoring the experimental workflow in relationship to the bioinformatic analysis [(4)](#references).
