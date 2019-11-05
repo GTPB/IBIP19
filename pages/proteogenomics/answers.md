@@ -256,8 +256,6 @@ Additional parameters often used to evaluate RNA and protein correlation are the
 
 ##### _What can influence the distribution of p-values?_
 
-![qq_plot](resources/images/qqPlot.png?raw=true "QQ Plot")
-
 The Q-Q plot shows an inflation of p-values and a plateau in observed p-values. The relationship and overlap between pathways can result in distortion of the p-value distribution.
 
 
