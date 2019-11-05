@@ -28,8 +28,8 @@ Strictly speaking, there are no pre-requisites. Prior knowledge that will be use
 
 ### Using proteomics data
 - What is proteomics good for [Presentation]
-- If you receive some data, what do you look for, what can go wrong? [[Practical](pages/qc)
-- You want to reproduce the results of a paper - what do you need? [[Practical](pages/critical_manuscript_reviewing/check_for_ms_guidelines.ipynb)
+- If you receive some data, what do you look for, what can go wrong? [[Practical]](pages/qc)
+- You want to reproduce the results of a paper - what do you need? [[Practical]](pages/critical_manuscript_reviewing/check_for_ms_guidelines.ipynb)
 
 ### Interpreting proteomics quantitative data
 - Wrap-up [[Pdf]](pages/resources/Wrap-up_Tuesday.pdf)
@@ -57,4 +57,4 @@ Strictly speaking, there are no pre-requisites. Prior knowledge that will be use
 
 ---
 
-The source for this course webpage is [on github](https://github.com/GTPB/Web_course_template).
+The source for this course webpage is [on github](https://github.com/GTPB/IBIP19).
