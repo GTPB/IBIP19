@@ -323,32 +323,7 @@ ggplot(
 
 View(pathwaysDF)
 
-expectedPvalues <- -log10(sort(runif(n = nrow(pathwaysDF))))
-observedPvalues <- -log10(sort(pathwaysDF$p))
 
-maxP <- max(c(expectedPvalues, observedPvalues))
-
-qqPlot <- ggplot() +
-    geom_abline(
-        slope = 1,
-        intercept = 0,
-        linetype = "dotted"
-    ) +
-    geom_point(
-        mapping = aes(
-            x = expectedPvalues,
-            y = observedPvalues
-        ),
-        alpha = 0.1
-    ) +
-    scale_x_continuous(
-        name = "Expected p-value [-log10]",
-        limits = c(0, maxP)
-    ) +
-    scale_y_continuous(
-        name = "Observed p-value [-log10]",
-        limits = c(0, maxP)
-    )
 
 png(
     filename = "resources/images/qqPlot.png",
