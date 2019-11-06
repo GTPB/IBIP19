@@ -1,7 +1,7 @@
 
 GTPB (http://gtpb.igc.gulbenkian.pt) is the **Gulbenkian Training Programme in Bioinformatics** (since 1999) 
 
-rdquo;[GTPB](https://github.com/GTPB)&rdquo; repositories in GitHub are licensed so that the training materiables are fully reusable, while proper acknowledgement is given to the authors.
+[GTPB](https://github.com/GTPB) repositories in GitHub are licensed so that the training materiables are fully reusable, while proper acknowledgement is given to the authors.
 
 This work is published from Oeiras, Portugal.
 
