@@ -14,7 +14,7 @@ This training course is aimed at researchers who are not expert in proteomics an
 After the training, participants will be able to critically interpret results, troubleshoot analyses, and will be ready to successfully attend more specialized training _e.g._ in proteogenomics or biological network analysis.
 
 
-# Prerequisites
+## Prerequisites
 
 Strictly speaking, there are no pre-requisites. Prior knowledge that will be useful, but not required:
 - Acquaintance with bottom-up proteomics workflow (sample preparation, LC-MS, terminology)
