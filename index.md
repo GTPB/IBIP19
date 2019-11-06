@@ -24,7 +24,7 @@ Strictly speaking, there are no pre-requisites. Prior knowledge that will be use
 - Basics of scripting in R/Python
 
 
-## Preliminary Program
+# Program
 
 ### Using proteomics data
 - What is proteomics good for [Presentation]
