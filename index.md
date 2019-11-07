@@ -27,8 +27,10 @@ Strictly speaking, there are no pre-requisites. Prior knowledge that will be use
 # Program
 
 ### Using proteomics data
-- What is proteomics good for [Presentation]
-- If you receive some data, what do you look for, what can go wrong? [[Notebook Practical]](pages/qc/raw-data-qc.ipynb)
+- What is proteomics good for [[Presentation]](pages/resources/slides/IBIP19%20-%20Introduction%20-%20What%20is%20proteomics%20good%20for.pdf)
+- If you receive some data, what do you look for, what can go wrong? [[Presentation]](pages/resources/slides/IBIP19%20-%20Quality%20Control.pdf) [[Notebook Practical]](pages/qc/raw-data-qc.ipynb)
+- Quantitative data analysis: concepts and performance evaluation [[Presentation]](pages/resources/slides/IBIP19%20-%20Introduction%20-%20What%20is%20proteomics%20good%20for.pdf) [[Notebook Practical]](pages/qc/yeast-ups1.md)
+
 - You want to reproduce the results of a paper - what do you need? [[Notebook Practical]](pages/critical_manuscript_reviewing/check_for_ms_guidelines.ipynb)
 
 ### Interpreting proteomics quantitative data
