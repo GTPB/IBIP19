@@ -14,7 +14,7 @@ This training course is aimed at researchers who are not expert in proteomics an
 After the training, participants will be able to critically interpret results, troubleshoot analyses, and will be ready to successfully attend more specialized training _e.g._ in proteogenomics or biological network analysis.
 
 
-# Prerequisites
+## Prerequisites
 
 Strictly speaking, there are no pre-requisites. Prior knowledge that will be useful, but not required:
 - Acquaintance with bottom-up proteomics workflow (sample preparation, LC-MS, terminology)
@@ -24,17 +24,17 @@ Strictly speaking, there are no pre-requisites. Prior knowledge that will be use
 - Basics of scripting in R/Python
 
 
-## Preliminary Program
+# Program
 
 ### Using proteomics data
 - What is proteomics good for [Presentation]
-- If you receive some data, what do you look for, what can go wrong? [[Practical]](pages/qc)
-- You want to reproduce the results of a paper - what do you need? [[Practical]](pages/critical_manuscript_reviewing/check_for_ms_guidelines.ipynb)
+- If you receive some data, what do you look for, what can go wrong? [[Notebook Practical]](pages/qc/raw-data-qc.ipynb)
+- You want to reproduce the results of a paper - what do you need? [[Notebook Practical]](pages/critical_manuscript_reviewing/check_for_ms_guidelines.ipynb)
 
 ### Interpreting proteomics quantitative data
-- Data screening, Multivariate analysis, Clustering [[Practical]](pages/clustering/Multivariate analysis.ipynb)
-- Biological interpretation [[Practical]](pages/protein_complexes/Protein complexes.ipynb)
-- Protein Complex analysis [[Practical]](pages/biological_interpretation/blind_hackathon.ipynb)
+- Data screening, Multivariate analysis, Clustering [[Notebook Practical]](pages/clustering/Multivariate analysis.ipynb)
+- Biological interpretation [[Notebook Practical]](pages/protein_complexes/Protein complexes.ipynb)
+- Protein Complex analysis [[Notebook Practical]](pages/biological_interpretation/blind_hackathon.ipynb)
 
 ### Proteogenomics
 - Non-canonical peptides [[Practical]](pages/Proteogenomics.md)
@@ -62,3 +62,5 @@ Strictly speaking, there are no pre-requisites. Prior knowledge that will be use
 ---
 
 The source for this course webpage is [on github](https://github.com/GTPB/IBIP19).
+
+<a rel="license" href="http://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by/4.0/88x31.png" /></a><br /><span xmlns:dct="http://purl.org/dc/terms/" property="dct:title">IBIP19</span> by <span xmlns:cc="http://creativecommons.org/ns#" property="cc:attributionName">GTPB</span> is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.
