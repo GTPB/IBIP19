@@ -44,7 +44,7 @@ assesmentDF <- data.frame(
         2, 5, 4, 2, 1,
         0, 0, 12, 3, 0,
         0, 0, 14, 2, 0,
-        0, 0, 0, 0, 0
+        0, 0, 13, 3, 0
     ),
     stringsAsFactors = F
 ) %>%
@@ -97,7 +97,7 @@ assesmentDF <- data.frame(
         5, 5, 3, 1, 2,
         0, 2, 10, 3, 0,
         0, 1, 13, 1, 0,
-        0, 0, 0, 0, 0
+        0, 0, 7, 9, 0
     ),
     stringsAsFactors = F
 ) %>%
@@ -150,7 +150,7 @@ assesmentDF <- data.frame(
         4, 5, 3, 4, 0,
         1, 7, 6, 2, 0,
         0, 2, 11, 2, 0,
-        0, 0, 0, 0, 0
+        0, 2, 10, 4, 0
     ),
     stringsAsFactors = F
 ) %>%
@@ -203,7 +203,7 @@ assesmentDF <- data.frame(
         9, 6, 0, 1, 0,
         9, 6, 0, 1, 0,
         1, 9, 5, 1, 0,
-        0, 0, 0, 0, 0
+        0, 4, 11, 1, 0
     ),
     stringsAsFactors = F
 ) %>%
