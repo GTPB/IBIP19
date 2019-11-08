@@ -6,11 +6,11 @@
 
 #### Co-Authorship
 
-The following co-authors contributed for the development of the training material.
+The following co-authors contributed to the development of the training material.
 
-* Veit Schwämmle - [veitveit](https://github.com/veitveit)
-* David Bouyssié - [david-bouyssie](https://github.com/david-bouyssie)
-* Marc Vaudel - [mvaudel](https://github.com/mvaudel)
+* [Veit Schwämmle](https://github.com/veitveit)
+* [David Bouyssié](https://github.com/david-bouyssie)
+* [Marc Vaudel](https://github.com/mvaudel)
 
 #### Course Webpage
 This is the link to the [course webpage](http://gtpb.igc.gulbenkian.pt/bicourses/2019/IBIP19/), for further information about the course.
