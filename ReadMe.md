@@ -4,7 +4,9 @@
 
 <br/>
 
-#### Co-authors
+#### Co-Authorship
+
+The following co-authors contributed for the development of the training material.
 
 * Veit Schwämmle - [veitveit](https://github.com/veitveit)
 * David Bouyssié - [david-bouyssie](https://github.com/david-bouyssie)
