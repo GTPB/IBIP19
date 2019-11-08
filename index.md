@@ -24,7 +24,9 @@ Strictly speaking, there are no pre-requisites. Prior knowledge that will be use
 - Basics of scripting in R/Python
 
 
-# Program
+# Course Materials
+
+To replicate and use the materials on Jupyter Notebook, please follow these [instructions](./pages/Installation.md).
 
 ### Using proteomics data
 - What is proteomics good for [[Presentation]](pages/resources/slides/IBIP19%20-%20Introduction%20-%20What%20is%20proteomics%20good%20for.pdf)
@@ -52,17 +54,15 @@ Strictly speaking, there are no pre-requisites. Prior knowledge that will be use
 
 ---
 
-### Learning objectives
+### [Self Assesment](pages/participants/self_assesment.md)
 
-[Self Assesment](pages/participants/self_assesment.md)
-
-### Instructors
-
-[Description](pages/instructors.md)
+### [Instructors](pages/instructors.md)
 
 
 ---
 
 The source for this course webpage is [on github](https://github.com/GTPB/IBIP19).
+
+<br>
 
 <a rel="license" href="http://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by/4.0/88x31.png" /></a><br /><span xmlns:dct="http://purl.org/dc/terms/" property="dct:title">IBIP19</span> by <span xmlns:cc="http://creativecommons.org/ns#" property="cc:attributionName">GTPB</span> is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.

@@ -1,13 +1,13 @@
-# Setting up Jupyter and R kernel in the command line
+---
+layout: page
+title: Setting up Jupyter and R kernel in the command line
+---
 
 This should work on a common Ubuntu Linux computer.
 
-
-
-
 Open a terminal with Windows key and then write terminal
 
-Create folder for Training material 
+Create folder for Training material
 `mkdir Training`  
 `cd Training`
 
@@ -27,12 +27,17 @@ Create the links to jupyter
 `IRkernel::installspec()`
 
 Get out of R
-`q()` 
+`q()`
 and press "n"
 
 
 Now the Jupter environment with R kernel should work.
 
-Write 
+Write
 `jupyter notebook`
 and press the "new" button to see whether "R" appears
+
+
+### Back
+
+Back to [main page](../index.md).
