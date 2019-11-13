@@ -21,7 +21,7 @@ Open R
 `R`
 
 Then install the IRkernel package and install it
-`install.packages("IRkernel)"`
+`install.packages("IRkernel")
 
 Create the links to jupyter
 `IRkernel::installspec()`
