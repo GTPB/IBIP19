@@ -6,7 +6,7 @@ schemadotorg:
   "@type": CreativeWork
   "genre": TrainingMaterial
   isPartOf:
-      url: "https//:github.com/GTPB/IBIP19"
+      url: "https://gtpb.github.io/IBIP19/"
       name: "IBIP19 - Integrative Biological Interpretation using Proteomics"
 ---
 

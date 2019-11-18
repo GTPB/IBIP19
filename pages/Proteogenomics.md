@@ -6,13 +6,13 @@ schemadotorg:
   "@type": CreativeWork
   "genre": TrainingMaterial
   isPartOf:
-      url: "https//:github.com/GTPB/IBIP19"
+      url: "https://gtpb.github.io/IBIP19/"
       name: "IBIP19 - Integrative Biological Interpretation using Proteomics"
 ---
 
 Proteogenomics is the scientific field at the interface between proteomics and genomics [(1)](#references). First, proteogenomic applications focused on improving genomic annotation through the use of proteomics data [(2)](#references). Over the years, proteogenomics rapidly developed as a rich scientific field for the joint analysis of genomic and proteomic information, generating fundamental knowledge on the interplay between genome and proteome.
 
-Due to the novelty of the field, the complexity of the analyses, and the volume of data involved, proteogenomics poses multiple bioinformatic challenges [(3)](#references). These tutorials present methods that can be used to analyse results from proteogenomic pipelines. 
+Due to the novelty of the field, the complexity of the analyses, and the volume of data involved, proteogenomics poses multiple bioinformatic challenges [(3)](#references). These tutorials present methods that can be used to analyse results from proteogenomic pipelines.
 
 Introduction slides are available [here](proteogenomics/resources/slides/day2.pptx)
 

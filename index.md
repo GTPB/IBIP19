@@ -13,7 +13,7 @@ schemadotorg:
   description: "Training Material aimed at researchers who are not expert in proteomics and want to integrate quantitative proteomics results into wider biomedical experiments."
 
   # Keywords -> Consult EDAM:Topic
-  keywords: ["http://edamontology.org/data_3669", "http://edamontology.org/topic_0121"]
+  keywords:  "http://edamontology.org/topic_0121"
 
   # Audience -> Following Elixir-Tess input
   audience: ["Academia/ Research Institution", "Industry", "Non-Profit Organisation", "Healthcare"]
@@ -22,7 +22,7 @@ schemadotorg:
   author:
     - "@type": Organization
       name: "The Gulbenkian Training Programme in Bioinformatics"
-      alternateName: GTPB
+      alternateName: "GTPB"
       sameAs: "gtpb.igc.gulbenkian.pt/bicourses/index.html"
 
   # predominant type of learning resources
@@ -40,7 +40,7 @@ schemadotorg:
   # License & Language & url
   license: https://creativecommons.org/licenses/by/4.0/
   inLanguage: "en-us"
-  url: "https//:github.com/GTPB/IBIP19"
+  url: "https://gtpb.github.io/IBIP19/"
 ---
 
 ![](./assets/IBIP19_index_image.png)
