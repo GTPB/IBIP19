@@ -1,6 +1,18 @@
+---
+layout: page
+title: Quality control of label-free quantification MS data
+schemadotorg:
+  "@context": http://schema.org/
+  "@type": CreativeWork
+  "genre": TrainingMaterial
+  isPartOf:
+      url: "https//:github.com/GTPB/IBIP19"
+      name: "IBIP19 - Integrative Biological Interpretation using Proteomics"
+---
+
 David Bouyssié
 
-# Quality control of label-free quantification MS data
+<br/>
 
 In this chapter, you will use a published DDA label-free dataset to learn some key aspects of quality control of such analyses. This will cover the quality of chromatographic alignment and of signal detection, as the well as the impact of shared peptides and data normalization on the final selection of significant hits.
 

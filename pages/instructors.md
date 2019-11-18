@@ -1,6 +1,13 @@
 ---
 layout: page
 title: Instructors
+schemadotorg:
+  "@context": http://schema.org/
+  "@type": CreativeWork
+  "genre": TrainingMaterial
+  isPartOf:
+      url: "https//:github.com/GTPB/IBIP19"
+      name: "IBIP19 - Integrative Biological Interpretation using Proteomics"
 ---
 
 <table>

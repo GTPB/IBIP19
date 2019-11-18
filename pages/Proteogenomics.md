@@ -1,9 +1,14 @@
 ---
 layout: page
-title: Proteogenomics
+title: Proteogeonomics
+schemadotorg:
+  "@context": http://schema.org/
+  "@type": CreativeWork
+  "genre": TrainingMaterial
+  isPartOf:
+      url: "https//:github.com/GTPB/IBIP19"
+      name: "IBIP19 - Integrative Biological Interpretation using Proteomics"
 ---
-
-# Proteogenomics
 
 Proteogenomics is the scientific field at the interface between proteomics and genomics [(1)](#references). First, proteogenomic applications focused on improving genomic annotation through the use of proteomics data [(2)](#references). Over the years, proteogenomics rapidly developed as a rich scientific field for the joint analysis of genomic and proteomic information, generating fundamental knowledge on the interplay between genome and proteome.
 
