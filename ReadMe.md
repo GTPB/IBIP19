@@ -25,11 +25,11 @@ This project is licensed under CC-BY 4.0 - see the [License.md](License.md) for 
 
 #### Host & Co-Sponsor
 
-<a href="http://www.igc.gulbenkian.pt/"><img src="./assets/readme_img/Logo_IGC_2014.png" alt="Instituto Gulbenkian de Ciência" style="width:250px;border:0px"></a>
+<a href="http://www.igc.gulbenkian.pt/"><img src="./assets/readme_img/Logo_IGC_2014.png" alt="Instituto Gulbenkian de Ciência" width="250px"></a>
 
 #### Contributors
 
-<a href="https://biodata.pt/"><img src="./assets/readme_img/BIoData_and_co-financiadores.png" alt="Instituto Gulbenkian de Ciência" style="width:500px;border:0px"></a>
+<a href="https://biodata.pt/"><img src="./assets/readme_img/BIoData_and_co-financiadores.png" alt="Instituto Gulbenkian de Ciência" width="500px"></a>
 
 ---
 
