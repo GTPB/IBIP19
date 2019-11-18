@@ -10,7 +10,7 @@ schemadotorg:
       name: "IBIP19 - Integrative Biological Interpretation using Proteomics"
 ---
 
-David Bouyssié
+By David Bouyssié
 
 <br/>
 
@@ -207,3 +207,9 @@ Go back to the proteins tab and search for the protein named "LSB3_YEAS7". This 
 In the "Exported files" node of the project tree, download the ```.xlsx``` file on your computer. We will now use some R scripts to generate and inspect quality control reports.
 
 TODO: add links to results from Coralie's scripts
+
+<br/>
+
+### Back
+
+Back to [main page](../../index.md).
