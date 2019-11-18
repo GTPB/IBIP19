@@ -61,6 +61,7 @@ Strictly speaking, there are no pre-requisites. Prior knowledge that will be use
 - Awareness of protein inference issues in proteomics identification and quantification
 - Basics of scripting in R/Python
 
+---
 
 # Course Materials
 
@@ -87,8 +88,6 @@ To replicate and use the materials on Jupyter Notebook, please follow these [ins
 ### Wrap-up sessions
 - Wrap-up [[Pdf]](pages/resources/Wrap-up_Tuesday.pdf)
 - Wrap-up [[Pdf]](pages/resources/Wrap-up_Wednesday.pdf)
-
-
 
 ---
 
