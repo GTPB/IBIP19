@@ -1,4 +1,5 @@
 ## IBIP19 - Integrative Biological Interpretation using Proteomics
+[![DOI](https://zenodo.org/badge/211552447.svg)](https://zenodo.org/badge/latestdoi/211552447)
 
 ###  Instituto Gulbenkian de Ciência (IGC) - Oeiras, Portugal - November 4<sup>th</sup> - November 7<sup>th</sup> 2019
 
